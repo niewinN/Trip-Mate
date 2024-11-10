@@ -1,0 +1,21 @@
+.icons {
+    display: flex;
+    justify-content: center;
+    /* margin-top: 20px; */
+    padding: 20px;
+  }
+  
+  .icon {
+    margin: 0 15px;
+  }
+  
+  .icon img {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.2s ease;
+  }
+  
+  .icon img:hover {
+    transform: scale(1.1);
+  }
+  

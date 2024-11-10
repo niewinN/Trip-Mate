@@ -1,0 +1,15 @@
+.box {
+	width: 90%;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 12px;
+	margin-bottom: 50px;
+	padding-bottom: 50px;
+	margin: 0 auto;
+	max-width: 900px;
+
+	@media (min-width: 992px) {
+		/* max-width: 1000px; */
+		margin: 0;
+	}
+}
+

@@ -1,0 +1,14 @@
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	width: 100vw;
+	font-size: 62.5%;
+	overflow-x: hidden;
+}

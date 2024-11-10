@@ -1,0 +1,25 @@
+.searchField {
+	display: flex;
+	flex-direction: column;
+	font-size: 1.6rem;
+	background-color: rgb(212, 212, 212);
+	margin: 0.5rem 0;
+	border-radius: 12px;
+	padding: 1rem;
+
+	@media (min-width: 992px) {
+		/* margin: 0 5px; */
+		/* max-width: 210px; */
+	}
+}
+
+.searchField label {
+	font-weight: bold;
+	margin-bottom: 0.5rem;
+}
+
+.searchField input {
+	background-color: rgb(212, 212, 212);
+	border: none;
+	font-size: 2rem;
+}
