@@ -1,0 +1,46 @@
+{
+    "hotels": [
+      {
+        "title": "Popular filters",
+        "filters": [
+          { "id": "swimming_pool", "label": "Swimming Pool" },
+          { "id": "apartments", "label": "Apartments" },
+          { "id": "free_wifi", "label": "Free WiFi" },
+          { "id": "private_bathroom", "label": "Private Bathroom" },
+          { "id": "hotels", "label": "Hotels" },
+          { "id": "kitchen", "label": "Kitchen/Kitchenette" },
+          { "id": "parking", "label": "Parking" },
+          { "id": "stars", "label": "4 stars" }
+        ]
+      },
+      {
+        "title": "Facilities",
+        "filters": [
+          { "id": "parking", "label": "Parking" },
+          { "id": "free_wifi", "label": "Free WiFi" },
+          { "id": "restaurant", "label": "Restaurant" },
+          { "id": "pets_allowed", "label": "Pets Allowed" },
+          { "id": "room_service", "label": "Room Service" }
+        ]
+      }
+    ],
+    "flights": [
+      {
+        "title": "Airlines",
+        "filters": [
+          { "id": "delta", "label": "Delta Airlines" },
+          { "id": "american", "label": "American Airlines" },
+          { "id": "united", "label": "United Airlines" }
+        ]
+      },
+      {
+        "title": "Stops",
+        "filters": [
+          { "id": "non_stop", "label": "Non-stop" },
+          { "id": "one_stop", "label": "1 stop" },
+          { "id": "two_stops", "label": "2+ stops" }
+        ]
+      }
+    ]
+  }
+  

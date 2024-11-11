@@ -1,0 +1,64 @@
+.verticalNav {
+    position: fixed; /* Ustawienie elementu względem okna przeglądarki */
+    right: 30px; /* Odległość od prawej krawędzi */
+    top: 65%; /* Wyśrodkowanie w pionie */
+    transform: translateY(-50%); /* Dokładne wyśrodkowanie elementu w pionie */
+    display: flex;
+    flex-direction: column; /* Ikonki jedna pod drugą */
+    align-items: center; /* Wyśrodkowanie ikon poziomo */
+    gap: 40px; /* Odstęp między ikonami */
+    z-index: 1000; /* Gwarancja, że będzie nad innymi elementami */
+
+    @media (max-width: 992px) {
+        display: none;
+    }
+}
+
+.navItem {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    border: 2px solid white;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.navItem:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.icon {
+    color: white;
+    font-size: 36px;
+    transition: transform 0.3s ease;
+}
+
+.navItem:hover .icon {
+    transform: scale(1.2);
+}
+
+.tooltip {
+    position: absolute;
+    right: 80px; /* Wyświetl tooltip po lewej stronie ikonki */
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 1.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.navItem:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+}

@@ -2,11 +2,16 @@
 	position: relative;
 	background-image: url("../../assets//main/background.jpg");
 	min-height: 100vh;
+	overflow: hidden;
 	width: 100vw;
 	background-position: right;
 	background-size: cover;
 	display: flex;
 	flex-direction: column;
+
+	@media (min-width: 992px) {
+		max-height: 100vh;
+	}
 }
 
 .overlay {
@@ -20,8 +25,25 @@
 	justify-content: flex-start;
 }
 
-.left {
+/* .left {
 	@media (min-width: 992px) {
 		max-width: 950px;
 	}
 }
+
+.flex {} */
+.flex {
+	display: flex;
+	justify-content: space-between; /* Space between the main content and the nav */
+	align-items: flex-start;
+	margin-top: 50px; /* Adjust as needed */
+	gap: 20px; /* Add spacing between left and VerticalNav */
+  }
+  
+  .left {
+	display: flex;
+	flex-direction: column;
+	 /* Space between elements */
+	max-width: 950px; /* Ensure it doesn’t stretch too wide */
+	color: white; /* Ensure text is readable on a dark background */
+  }

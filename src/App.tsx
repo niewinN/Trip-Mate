@@ -7,6 +7,7 @@ import {
 } from "react-router-dom"
 import Main from "./pages/Main/Main"
 import Login from "./pages/Login/Login"
+import Hotels from "./pages/Hotels/Hotels"
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 				<Routes>
 					<Route path='/' element={<Main />} />
 					<Route path='/login' element={<Login />} />{" "}
+					<Route path='/hotels' element={<Hotels/>}/>
 					<Route path='*' element={<Navigate to='/' />} />{" "}
 				</Routes>
 			</Router>
