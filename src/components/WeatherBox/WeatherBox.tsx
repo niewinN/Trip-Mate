@@ -13,9 +13,16 @@ const WeatherBox = () => {
 
 	return (
 		<div className={styles.box}>
-			<WeatherForm city={city} onCityChange={handleCityChange} />
-			<WeatherIcon />
-			<WeatherInfo />
+			<div>
+				<WeatherForm city={city} onCityChange={handleCityChange} />
+				<div className={styles.icon}>
+				    <WeatherIcon />
+				</div>
+				<WeatherInfo />
+			</div>
+			<div className={styles.secondIcon}>
+			    <WeatherIcon />
+			</div>
 		</div>
 	)
 }

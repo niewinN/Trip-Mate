@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+    /* gap: 10px; Odstęp między ikoną a tekstem */
+  }
+  
+  .icon {
+    font-size: 4rem; /* Rozmiar ikonki */
+    color: #007bff; /* Kolor ikonki */
+    text-align: right;
+    margin-right: 20px;
+  }
+  
+  .title {
+    font-size: 4rem; /* Rozmiar tekstu */
+    font-weight: bold;
+    color: #007bff; /* Kolor tekstu */
+    text-transform: uppercase; /* Duże litery */
+  }
+  

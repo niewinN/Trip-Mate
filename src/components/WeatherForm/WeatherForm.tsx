@@ -7,19 +7,23 @@ interface WeatherFormProps {
 }
 
 const WeatherForm: React.FC<WeatherFormProps> = ({ city, onCityChange }) => {
-	const [inputValue, setInputValue] = useState<string>(city)
+	const [labelValue, setLabelValue] = useState<string>("Warsaw")
+	const [inputValue, setInputValue] = useState<string>("")
 
 	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
 		if (event.key === "Enter") {
 			event.preventDefault()
-			onCityChange(inputValue)
-			setInputValue("")
+			if (inputValue.trim() !== "") {
+				setLabelValue(inputValue)
+				onCityChange(inputValue) 
+				setInputValue("") 
+			}
 		}
 	}
 
 	return (
 		<form className={styles.form}>
-			<label htmlFor='city-input'>{city}</label>
+			<label htmlFor='city-input'>{labelValue}</label>
 			<input
 				type='text'
 				id='city-input'

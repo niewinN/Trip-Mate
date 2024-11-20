@@ -1,0 +1,61 @@
+.container {
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .form {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .input {
+    padding: 10px;
+    width: 100%;
+    max-width: 300px;
+    font-size: 16px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .loading {
+    font-size: 1rem;
+  }
+  
+  .error {
+    color: red;
+  }
+  
+  .flightList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .flightCard {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .flightTitle {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .flightInfo {
+    margin: 5px 0;
+  }
+  

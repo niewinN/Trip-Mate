@@ -3,13 +3,35 @@
 	background-color: rgba(0, 0, 0, 0.5);
 	border-radius: 12px;
 	margin-bottom: 50px;
-	padding-bottom: 50px;
 	margin: 0 auto;
 	max-width: 900px;
 
 	@media (min-width: 992px) {
 		/* max-width: 1000px; */
 		margin: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 }
 
+.box div {
+	@media (min-width: 992px) {
+		flex-basis: 70%;
+	}
+	
+}
+
+.box .icon {
+	@media (min-width: 992px) {
+		display: none;
+	}
+}
+
+.box .secondIcon {
+	flex-basis: 30%;
+
+	@media (max-width: 992px) {
+		display: none;
+	}
+}

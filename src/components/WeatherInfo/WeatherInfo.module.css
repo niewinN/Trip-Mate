@@ -1,4 +1,4 @@
-.container {
+/* .container {
 	position: relative;
 	display: flex;
 	flex-direction: row;
@@ -28,4 +28,66 @@
 	height: 2px;
 	width: 95%;
 	background-color: #fff;
+}
+
+.container div {
+	text-align: center;
+} */
+.container {
+	display: flex;
+	flex-direction: column;
+	color: #fff;
+	font-size: 1.6rem;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	width: 100%;
+}
+
+.headers {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+	position: relative; /* Potrzebne dla ::before i ::after */
+	padding: 1rem 0;
+
+	@media (min-width: 992px) {
+		/* margin-left: 30px; */
+	}
+}
+
+.headers::before,
+.headers::after {
+	content: "";
+	position: absolute;
+	height: 2px;
+	width: 95%;
+	background-color: #fff;
+	/* left: 0; */
+	margin: 0 auto;
+}
+
+.headers::before {
+	top: 0; /* Linia na górze */
+}
+
+.headers::after {
+	bottom: 0; /* Linia na dole */
+}
+
+.headers div {
+	text-align: center;
+	flex: 1; /* Rozkład przestrzeni */
+}
+
+.values {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+	margin-top: 1rem;
+}
+
+.values div {
+	text-align: center;
+	flex: 1; /* Rozkład przestrzeni */
 }

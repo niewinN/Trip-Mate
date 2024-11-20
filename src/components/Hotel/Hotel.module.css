@@ -1,0 +1,67 @@
+.hotelCard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hotelHeader {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .thumbnail {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .hotelDetails {
+    flex: 1;
+  }
+  
+  .hotelTitle {
+    margin: 0 0 5px;
+  }
+  
+  .hotelInfo {
+    margin: 0 0 5px;
+    color: #555;
+  }
+  
+  .hotelPrice {
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .amenities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .amenity {
+    padding: 5px 10px;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    font-size: 12px;
+  }
+  
+  .pricesButton {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+  }
+  

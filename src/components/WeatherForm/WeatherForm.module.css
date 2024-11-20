@@ -3,6 +3,11 @@
 	flex-direction: column;
 	width: 80%;
 	margin: 0 auto;
+
+	@media (min-width: 992px) {
+		margin: 30px auto;
+		width: 95%;
+	}
 }
 
 .form label {

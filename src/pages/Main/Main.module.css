@@ -46,4 +46,8 @@
 	 /* Space between elements */
 	max-width: 950px; /* Ensure it doesn’t stretch too wide */
 	color: white; /* Ensure text is readable on a dark background */
+
+	@media (min-width: 992px) {
+		padding-left: 20px;
+	}
   }
