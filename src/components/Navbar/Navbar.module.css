@@ -3,6 +3,19 @@
 	align-items: center;
 	justify-content: space-between;
 	height: 8vh;
+	/* width: 100%; */
+	
+}
+
+
+.fullWidth {
 	width: 100%;
 	background-color: var(--background-color, #007bff);
+}
+
+.right {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
 }

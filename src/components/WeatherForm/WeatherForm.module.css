@@ -30,3 +30,21 @@
 .form input::placeholder {
 	color: #fff;
 }
+
+/* WeatherForm.module.css */
+
+.form {
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .errorInput {
+	border: 1px solid red; /* Czerwony border, gdy występuje błąd */
+  }
+  
+  .errorMessage {
+	color: red;
+	font-size: 0.875rem;
+	margin-top: 0.5rem;
+  }
+  

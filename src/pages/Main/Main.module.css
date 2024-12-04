@@ -43,6 +43,7 @@
   .left {
 	display: flex;
 	flex-direction: column;
+	padding-bottom: 2rem;
 	 /* Space between elements */
 	max-width: 950px; /* Ensure it doesn’t stretch too wide */
 	color: white; /* Ensure text is readable on a dark background */

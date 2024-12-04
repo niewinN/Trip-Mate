@@ -2,10 +2,11 @@
     width: 90%;
     margin: 30px auto;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 10px;
     background-color: #fff;
     padding: 10px;
     font-family: Arial, sans-serif;
+    box-shadow: 0 2px 15px #646464;
   }
 
   @media (min-width: 992px) {

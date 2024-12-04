@@ -3,6 +3,10 @@
     width: 100vw;
 }
 
+.displayDesktop {
+    display: none;
+}
+
 
 @media (min-width: 992px) {
     .flex {
@@ -16,6 +20,14 @@
     }
     
     .flex div:nth-of-type(2) {
-        flex-basis: 70%;
+        flex-basis: 75%;
+    }
+
+    .displayMobile {
+        display: none;
+    }
+
+    .displayDesktop {
+        display: block;
     }
 }

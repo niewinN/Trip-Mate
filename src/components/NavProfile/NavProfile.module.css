@@ -1,8 +1,14 @@
 .logo {
-	padding-right: 20px;
+	/* padding-right: 20px; */
 	cursor: pointer;
 }
 
 .logo img {
 	width: 40px;
+}
+
+@media (min-width: 992px) {
+	.logo {
+		margin-right: 20px;
+	}
 }
