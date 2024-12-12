@@ -1,46 +1,86 @@
 {
-    "hotels": [
-      {
-        "title": "Popular filters",
-        "filters": [
-          { "id": "swimming_pool", "label": "Swimming Pool" },
-          { "id": "apartments", "label": "Apartments" },
-          { "id": "free_wifi", "label": "Free WiFi" },
-          { "id": "private_bathroom", "label": "Private Bathroom" },
-          { "id": "hotels", "label": "Hotels" },
-          { "id": "kitchen", "label": "Kitchen/Kitchenette" },
-          { "id": "parking", "label": "Parking" },
-          { "id": "stars", "label": "4 stars" }
-        ]
-      },
-      {
-        "title": "Facilities",
-        "filters": [
-          { "id": "parking", "label": "Parking" },
-          { "id": "free_wifi", "label": "Free WiFi" },
-          { "id": "restaurant", "label": "Restaurant" },
-          { "id": "pets_allowed", "label": "Pets Allowed" },
-          { "id": "room_service", "label": "Room Service" }
-        ]
-      }
-    ],
-    "flights": [
-      {
-        "title": "Airlines",
-        "filters": [
-          { "id": "delta", "label": "Delta Airlines" },
-          { "id": "american", "label": "American Airlines" },
-          { "id": "united", "label": "United Airlines" }
-        ]
-      },
-      {
-        "title": "Stops",
-        "filters": [
-          { "id": "non_stop", "label": "Non-stop" },
-          { "id": "one_stop", "label": "1 stop" },
-          { "id": "two_stops", "label": "2+ stops" }
-        ]
-      }
-    ]
-  }
-  
+  "hotels": [
+    {
+      "title": "Popular filters",
+      "filters": [
+        { "id": "swimming_pool", "label": "Swimming Pool" },
+        { "id": "apartments", "label": "Apartments" },
+        { "id": "free_wifi", "label": "Free WiFi" },
+        { "id": "private_bathroom", "label": "Private Bathroom" },
+        { "id": "hotels", "label": "Hotels" },
+        { "id": "kitchen", "label": "Kitchen/Kitchenette" },
+        { "id": "parking", "label": "Parking" },
+        { "id": "stars", "label": "4 stars" }
+      ]
+    },
+    {
+      "title": "Facilities",
+      "filters": [
+        { "id": "parking", "label": "Parking" },
+        { "id": "free_wifi", "label": "Free WiFi" },
+        { "id": "restaurant", "label": "Restaurant" },
+        { "id": "pets_allowed", "label": "Pets Allowed" },
+        { "id": "room_service", "label": "Room Service" }
+      ]
+    }
+  ],
+  "flights": [
+    {
+      "title": "Airlines",
+      "filters": [
+        { "id": "delta", "label": "Delta Airlines" },
+        { "id": "american", "label": "American Airlines" },
+        { "id": "united", "label": "United Airlines" }
+      ]
+    },
+    {
+      "title": "Stops",
+      "filters": [
+        { "id": "non_stop", "label": "Non-stop" },
+        { "id": "one_stop", "label": "1 stop" },
+        { "id": "two_stops", "label": "2+ stops" }
+      ]
+    }
+  ],
+  "attractions": [
+    {
+      "title": "Attraction Types",
+      "filters": [
+        { "id": "museums", "label": "Museums" },
+        { "id": "parks", "label": "Parks" },
+        { "id": "beaches", "label": "Beaches" },
+        { "id": "historical_sites", "label": "Historical Sites" },
+        { "id": "adventure", "label": "Adventure Activities" }
+      ]
+    },
+    {
+      "title": "Attraction Features",
+      "filters": [
+        { "id": "family_friendly", "label": "Family Friendly" },
+        { "id": "wheelchair_accessible", "label": "Wheelchair Accessible" },
+        { "id": "guided_tours", "label": "Guided Tours" }
+      ]
+    }
+  ],
+  "restaurants": [
+    {
+      "title": "Cuisine Types",
+      "filters": [
+        { "id": "italian", "label": "Italian" },
+        { "id": "chinese", "label": "Chinese" },
+        { "id": "indian", "label": "Indian" },
+        { "id": "mexican", "label": "Mexican" },
+        { "id": "vegetarian", "label": "Vegetarian" }
+      ]
+    },
+    {
+      "title": "Restaurant Features",
+      "filters": [
+        { "id": "outdoor_seating", "label": "Outdoor Seating" },
+        { "id": "live_music", "label": "Live Music" },
+        { "id": "pet_friendly", "label": "Pet Friendly" },
+        { "id": "kids_menu", "label": "Kids' Menu" }
+      ]
+    }
+  ]
+}

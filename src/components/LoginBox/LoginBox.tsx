@@ -5,6 +5,7 @@ import SignUpForm from '../SignUpForm/SignUpForm';
 import SocialIcons from '../SocialIcons/SocialIcons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+// import Wrapper from '../Wrapper/Wrapper';
 
 const LoginBox: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -14,6 +15,7 @@ const LoginBox: React.FC = () => {
   };
 
   return (
+    // <Wrapper>
     <div className={styles.container}>
       <div className={styles.arrow} onClick={toggleForm}>
         <FontAwesomeIcon icon={faChevronRight} className={styles.icon} />
@@ -25,6 +27,7 @@ const LoginBox: React.FC = () => {
       )}
       <SocialIcons />
     </div>
+    // </Wrapper>
   );
 };
 

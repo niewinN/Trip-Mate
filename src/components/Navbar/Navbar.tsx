@@ -12,17 +12,15 @@ const Navbar: React.FC<NavbarProps> = ({background = "blue"}) => {
 	return (
 		<div className={styles.fullWidth}
 		style={{ "--background-color": background } as React.CSSProperties}>
-			<Wrapper>
-				<div
-				className={styles.navbar}
-			>
+			<div className={styles.wrapper}>
+				<div className={styles.navbar}>
 					<NavLogo />
 					<div className={styles.right}>
 						<NavProfile />
 						<HamburgerMenu/>
 					</div>
 				</div>
-			</Wrapper>
+			</div>
 		</div>
 	)
 }

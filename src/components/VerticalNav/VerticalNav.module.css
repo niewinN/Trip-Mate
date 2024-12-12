@@ -1,17 +1,13 @@
 .verticalNav {
-    position: fixed; /* Ustawienie elementu względem okna przeglądarki */
-    right: 30px; /* Odległość od prawej krawędzi */
-    top: 65%; /* Wyśrodkowanie w pionie */
-    transform: translateY(-50%); /* Dokładne wyśrodkowanie elementu w pionie */
+    position: absolute; /* Teraz jest pozycjonowane względem rodzica (Wrapper) */
+    right: 1%; /* Przyklej do prawej strony kontenera */
+    bottom: 8%; /* Wyśrodkowanie w pionie */
+    /* transform: translateY(-50%); */
     display: flex;
     flex-direction: column; /* Ikonki jedna pod drugą */
     align-items: center; /* Wyśrodkowanie ikon poziomo */
     gap: 40px; /* Odstęp między ikonami */
-    z-index: 1000; /* Gwarancja, że będzie nad innymi elementami */
-
-    @media (max-width: 992px) {
-        display: none;
-    }
+    z-index: 10; /* Zapewnienie, że będzie nad innymi elementami w obrębie Wrappera */
 }
 
 .navItem {
@@ -61,4 +57,11 @@
 .navItem:hover .tooltip {
     opacity: 1;
     visibility: visible;
+}
+
+/* Zasadniczo ukryj VerticalNav na mniejszych ekranach */
+@media (max-width: 992px) {
+    .verticalNav {
+        display: none;
+    }
 }

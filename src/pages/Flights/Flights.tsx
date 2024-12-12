@@ -1,33 +1,3 @@
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import FilterPanel from "../../components/FilterPanel/FilterPanel";
-// import FlightList from "../../components/FlightList/FlightList";
-// import HeaderIcon from "../../components/HeaderIcon/HeaderIcon";
-// import Navbar from "../../components/Navbar/Navbar";
-// import Wrapper from "../../components/Wrapper/Wrapper";
-// import filters from "../../data/filters.json"
-// import styles from "./Flights.module.css"
-// import { faPlane } from "@fortawesome/free-solid-svg-icons";
-
-// const Flights = () => {
-//     const flightFilters = filters.flights;
-
-//   return (
-//     <div className={styles.flights}>
-//         <Navbar background="#007bff"/>
-//         <Wrapper>
-//           <div className={styles.flex}>
-//             <div>
-//               <HeaderIcon icon={<FontAwesomeIcon icon={faPlane} />} title="Flights" />
-//             </div>
-//           </div>    
-//             <FilterPanel sections={flightFilters}/>
-//             <FlightList/>
-//         </Wrapper>
-//     </div>
-//   )
-// }
-
-// export default Flights
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FilterPanel from "../../components/FilterPanel/FilterPanel";
 import FlightList from "../../components/FlightList/FlightList";

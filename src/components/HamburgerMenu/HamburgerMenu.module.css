@@ -16,7 +16,7 @@ html, body {
   /* Hamburger wrapper z przyciskiem */
   .hamburgerWrapper {
     position: relative;
-    padding-right: 20px;
+    /* padding-right: 20px; */
     z-index: 1001;  /* Hamburger na wierzchu */
   }
   

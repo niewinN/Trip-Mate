@@ -10,6 +10,7 @@ import Login from "./pages/Login/Login"
 import Hotels from "./pages/Hotels/Hotels"
 import Flights from "./pages/Flights/Flights"
 import Restaurants from "./pages/Restaurants/Restaurants"
+import Attractions from "./pages/Attractions/Attractions"
 
 function App() {
 	return (
@@ -22,6 +23,7 @@ function App() {
 					<Route path='*' element={<Navigate to='/' />} />{" "}
 					<Route path='/flights' element={<Flights/>}/>
 					<Route path='/restaurants' element={<Restaurants/>}/>
+					<Route path='/attractions' element={<Attractions/>}/>
 				</Routes>
 			</Router>
 		</>

@@ -39,8 +39,8 @@ const HamburgerMenu: React.FC = () => {
           <ul>
             <li><a href="/flights">Flights</a></li>
             <li><a href="/hotels">Hotels</a></li>
-            <li><a href="#">Attractions</a></li>
-            <li><a href="#">Restaurants</a></li>
+            <li><a href="/attractions">Attractions</a></li>
+            <li><a href="/restaurants">Restaurants</a></li>
           </ul>
         </nav>
       </div>

@@ -103,27 +103,178 @@ app.get('/api/flights', async (req, res) => {
 });
 
 
+// // Endpoint do wyszukiwania restauracji
+// app.get('/api/restaurants', async (req, res) => {
+//   const { location = 'Warsaw' } = req.query;
+
+//   try {
+//     const response = await axios.get('https://serpapi.com/search', {
+//       params: {
+//         engine: 'google_local',
+//         q: 'restaurant',
+//         location,
+//         api_key: process.env.SERPAPI_KEY,
+//       },
+//     });
+
+//     // Mapowanie danych restauracji
+//     const restaurants = (response.data.local_results || []).map((restaurant) => ({
+//       title: restaurant.title,
+//       rating: restaurant.rating,
+//       reviews_original: restaurant.reviews_original,
+//       reviews: restaurant.reviews,
+//       price: restaurant.price || 'No price data',
+//       type: restaurant.type || 'No type specified',
+//       address: restaurant.address || 'No address provided',
+//       description: restaurant.description || 'No description available.',
+//       thumbnail: extractGoogleImage(restaurant),
+//     }));
+
+//     res.json(restaurants);
+//   } catch (error) {
+//     console.error('Error fetching restaurants:', error.message);
+//     res.status(500).json({ error: 'Failed to fetch restaurants' });
+//   }
+// });
+
+// // Funkcja do wyboru najlepszego obrazu
+// function extractGoogleImage(restaurant) {
+//   const serpapiThumbnail = restaurant.thumbnail || null;
+
+//   // Sprawdź, czy istnieją linki do `lh3.googleusercontent.com`
+//   if (serpapiThumbnail && serpapiThumbnail.includes('googleusercontent.com')) {
+//     return adjustGoogleImageSize(serpapiThumbnail, 500, 500); // Zwiększamy rozdzielczość
+//   }
+
+//   // Jeśli brak linku do `googleusercontent.com`, użyj domyślnego thumbnail
+//   return serpapiThumbnail || 'https://via.placeholder.com/500x500?text=No+Image+Available';
+// }
+
+// // Funkcja zmieniająca rozmiar obrazka
+// function adjustGoogleImageSize(url, width, height) {
+//   return url.replace(/w\d+-h\d+/g, `w${width}-h${height}`);
+// }
+// app.get('/api/restaurants', async (req, res) => {
+//   const { location = 'Warsaw', start = 0 } = req.query;
+
+//   try {
+//     const response = await axios.get('https://serpapi.com/search', {
+//       params: {
+//         engine: 'google_local',
+//         q: 'restaurant',
+//         location,
+//         start,
+//         api_key: process.env.SERPAPI_KEY,
+//       },
+//     });
+
+//     // Sprawdź, czy dane są dostępne
+//     if (!response.data || !response.data.local_results) {
+//       return res.status(404).json({ error: 'No local results found' });
+//     }
+
+//     // Mapowanie danych restauracji
+//     const restaurants = response.data.local_results.map((restaurant) => ({
+//       title: restaurant.title,
+//       rating: restaurant.rating,
+//       reviews_original: restaurant.reviews_original,
+//       reviews: restaurant.reviews,
+//       price: restaurant.price || 'No price data',
+//       type: restaurant.type || 'No type specified',
+//       address: restaurant.address || 'No address provided',
+//       description: restaurant.description || 'No description available.',
+//       thumbnail: extractGoogleImage(restaurant),
+//     }));
+
+//     res.json(restaurants);
+//   } catch (error) {
+//     console.error('Error fetching restaurants:', error.message);
+//     res.status(500).json({ error: 'Failed to fetch restaurants' });
+//   }
+// });
+
+// // Funkcja do wyboru najlepszego obrazu
+// function extractGoogleImage(restaurant) {
+//   const serpapiThumbnail = restaurant.thumbnail || null;
+
+//   // Sprawdź, czy istnieją linki do `lh3.googleusercontent.com` lub `lh5.googleusercontent.com`
+//   if (serpapiThumbnail && /lh[3-6]\.googleusercontent\.com/.test(serpapiThumbnail)) {
+//     return adjustGoogleImageSize(serpapiThumbnail, 500, 500); // Zwiększamy rozdzielczość
+//   }
+
+//   // Jeśli brak linku do `googleusercontent.com`, użyj domyślnego thumbnail
+//   return serpapiThumbnail || 'https://via.placeholder.com/500x500?text=No+Image+Available';
+// }
+
+// // Funkcja zmieniająca rozmiar obrazka
+// function adjustGoogleImageSize(url, width, height) {
+//   return url.replace(/w\d+-h\d+/g, `w${width}-h${height}`);
+// }
 // Endpoint do wyszukiwania restauracji
 app.get('/api/restaurants', async (req, res) => {
-  try {
-    const { q = 'Coffee', lat = 30.267153, lng = -97.7430608 } = req.query;
+  const { location = 'Warsaw', start = 0 } = req.query;
 
+  try {
     const response = await axios.get('https://serpapi.com/search', {
       params: {
-        engine: 'google_food',
-        q,
-        lat,
-        lng,
-        api_key: API_KEY,
+        engine: 'google_local',
+        q: 'restaurant',
+        location,
+        start,
+        api_key: process.env.SERPAPI_KEY,
       },
     });
 
-    const restaurants = response.data.local_results || [];
+    // Mapowanie danych restauracji
+    const restaurants = (response.data.local_results || []).map((restaurant) => ({
+      title: restaurant.title || 'No title available',
+      rating: restaurant.rating || 'No rating',
+      reviews_original: restaurant.reviews_original || 'No reviews',
+      reviews: restaurant.reviews || 0,
+      price: restaurant.price || 'No price data',
+      type: restaurant.type || 'No type specified',
+      address: restaurant.address || 'No address provided',
+      description: restaurant.description || 'No description available.',
+      thumbnail: restaurant.thumbnail || 'https://via.placeholder.com/500x500?text=No+Image',
+    }));
+
     res.json(restaurants);
   } catch (error) {
-    handleError(res, error, 'Błąd podczas pobierania restauracji');
+    console.error('Error fetching restaurants:', error.message);
+    res.status(500).json({ error: 'Failed to fetch restaurants' });
   }
 });
+
+app.get('/api/attractions', async (req, res) => {
+  const { location = 'New York' } = req.query;
+
+  try {
+    const response = await axios.get('https://serpapi.com/search', {
+      params: {
+        engine: 'google_local',
+        q: 'attractions',
+        location,
+        api_key: process.env.SERPAPI_KEY,
+      },
+    });
+
+    // Mapowanie danych atrakcji
+    const attractions = (response.data.local_results || []).map((attraction) => ({
+      title: attraction.title,
+      description: attraction.description || 'No description available.',
+      thumbnail: attraction.thumbnail || 'https://via.placeholder.com/500x500?text=No+Image+Available',
+    }));
+
+    res.json(attractions);
+  } catch (error) {
+    console.error('Error fetching attractions:', error.message);
+    res.status(500).json({ error: 'Failed to fetch attractions' });
+  }
+});
+
+
+
+
 
 // Funkcja obsługi błędów
 function handleError(res, error, defaultMessage) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import FilterPanel from "../../components/FilterPanel/FilterPanel";
 import HeaderIcon from "../../components/HeaderIcon/HeaderIcon";
 import HotelList from "../../components/HotelList/HotelList";
@@ -78,7 +78,7 @@ const Hotels = () => {
                 setCheckOutDate={setCheckOutDate}
                 setGuests={setGuests}
                 setRooms={setRooms}
-                onSearch={handleSearch}  // Wywołanie funkcji po kliknięciu przycisku
+                onSearch={handleSearch} 
               />
             </div>
             <FilterPanel sections={hotelFilters} />
