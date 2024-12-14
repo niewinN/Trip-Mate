@@ -1,28 +1,61 @@
+// import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
+// import NavLinks from "../NavLinks/NavLinks";
+// import NavLogo from "../NavLogo/NavLogo"
+// import NavProfile from "../NavProfile/NavProfile"
+// import styles from "./Navbar.module.css"
+
+// interface NavbarProps {
+// 	background?: "#007bff" | "transparent"; // Allow only "blue" or "transparent"
+//   }
+
+// const Navbar: React.FC<NavbarProps> = ({background = "blue"}) => {
+// 	return (
+// 		<div className={styles.fullWidth}
+// 		style={{ "--background-color": background } as React.CSSProperties}>
+// 			<div className={styles.wrapper}>
+// 				<div className={styles.navbar}>
+// 					<NavLogo />
+// 					<div className={styles.right}>
+// 						<NavLinks/>
+// 						<NavProfile />
+// 						<HamburgerMenu/>
+// 					</div>
+// 				</div>
+// 			</div>
+// 		</div>
+// 	)
+// }
+
+// export default Navbar
 import HamburgerMenu from "../HamburgerMenu/HamburgerMenu";
-import NavLogo from "../NavLogo/NavLogo"
-import NavProfile from "../NavProfile/NavProfile"
-import Wrapper from "../Wrapper/Wrapper";
-import styles from "./Navbar.module.css"
+import NavLinks from "../NavLinks/NavLinks";
+import NavLogo from "../NavLogo/NavLogo";
+import NavProfile from "../NavProfile/NavProfile";
+import styles from "./Navbar.module.css";
 
 interface NavbarProps {
-	background?: "#007bff" | "transparent"; // Allow only "blue" or "transparent"
-  }
-
-const Navbar: React.FC<NavbarProps> = ({background = "blue"}) => {
-	return (
-		<div className={styles.fullWidth}
-		style={{ "--background-color": background } as React.CSSProperties}>
-			<div className={styles.wrapper}>
-				<div className={styles.navbar}>
-					<NavLogo />
-					<div className={styles.right}>
-						<NavProfile />
-						<HamburgerMenu/>
-					</div>
-				</div>
-			</div>
-		</div>
-	)
+  background?: "#007bff" | "transparent"; // Allow only "blue" or "transparent"
+  showNavLinks?: boolean; // Control whether NavLinks is visible
 }
 
-export default Navbar
+const Navbar: React.FC<NavbarProps> = ({ background = "blue", showNavLinks = true }) => {
+  return (
+    <div
+      className={styles.fullWidth}
+      style={{ "--background-color": background } as React.CSSProperties}
+    >
+      <div className={styles.wrapper}>
+        <div className={styles.navbar}>
+          <NavLogo />
+          <div className={styles.right}>
+            {showNavLinks && <NavLinks />} {/* Render NavLinks only if showNavLinks is true */}
+            <NavProfile />
+            <HamburgerMenu />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Navbar;

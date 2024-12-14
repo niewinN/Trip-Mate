@@ -15,6 +15,21 @@
 .inputWrapper {
   display: flex;
   flex-direction: column;
+  flex: 1;
+}
+
+.inputWrapper:first-child {
+  flex: 3;
+}
+
+.inputWrapper:nth-child(2),
+.inputWrapper:nth-child(3) {
+  flex: 1.5; /* 'Check in' i 'Check out' są mniejsze */
+}
+
+.inputWrapper:nth-child(4),
+.inputWrapper:nth-child(5) {
+  flex: 1; /* 'Guests' i 'Rooms' zajmują najmniej miejsca */
 }
 
 .inputNumber {
@@ -33,6 +48,7 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   height: 39px;
+  width: 100%;
 }
 
 .button {
@@ -49,12 +65,26 @@
   .form {
       flex-direction: row;
       justify-content: space-between;
-      width: 100%;
+      /* width: 100%; */
       margin: 2rem 0;
   }
 
   .inputWrapper {
       width: 100%;
+  }
+
+  .inputWrapper:first-child {
+    flex: 3; /* 'City' zachowuje większą szerokość */
+  }
+
+  .inputWrapper:nth-child(2),
+  .inputWrapper:nth-child(3) {
+    flex: 1.5; /* 'Check in' i 'Check out' są mniejsze */
+  }
+
+  .inputWrapper:nth-child(4),
+  .inputWrapper:nth-child(5) {
+    flex: 1; /* 'Guests' i 'Rooms' są najmniejsze */
   }
 
   /* Przyciski */
@@ -63,7 +93,7 @@
       justify-content: flex-end;
       align-items: flex-end;
       margin: 5px;
-      min-width: 120px;
+      min-width: 100px;
       margin: 5px 0;
   }
 }

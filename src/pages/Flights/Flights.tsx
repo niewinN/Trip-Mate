@@ -64,7 +64,7 @@ const Flights = () => {
       <Navbar background="#007bff" />
       <Wrapper>
         <div className={styles.flex}>
-          <div>
+          <div className={styles.first}>
             <HeaderIcon icon={<FontAwesomeIcon icon={faPlane} />} title="Flights" />
             <div className={styles.displayMobile}>
               <FlightSearchPanel
@@ -83,7 +83,7 @@ const Flights = () => {
             </div>
             <FilterPanel sections={flightFilters} />
           </div>
-          <div>
+          <div className={styles.second}>
             <div className={styles.displayDesktop}>
               <FlightSearchPanel
                 departureCity={departureCity}

@@ -1,155 +1,227 @@
-/* .flightCard {
-    display: flex;
-    justify-content: space-between;
+.flightCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* padding: 20px; */
+  border: 1px solid #ddd;
+  border-radius: 16px;
+  margin-bottom: 16px;
+  background-color: #fff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  width: 100%; /* Brak ograniczenia szerokości */
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+
+.airline {
+  flex: 0 0 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.airlineName {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+}
+
+.flightDetails {
+  /* flex: 1; */
+  display: flex;
+  flex-direction: column;
+  /* gap: 16px; */
+  /* padding: 0 16px; */
+}
+
+.segment {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+  /* align-items: center;
+  justify-content: space-between; */
+}
+
+.flightInfo {
+  text-align: center;
+  flex-basis: 30%;
+}
+
+.airport {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+}
+
+.time {
+  font-size: 20px;
+  color: #555;
+  font-weight: bold;
+}
+
+.arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 40%;
+  font-size: 16px;
+}
+
+.line {
+  width: 120px;
+  height: 2px;
+  background-color: #007bff;
+  margin: 4px 0;
+}
+
+.duration {
+  font-size: 0.9em;
+  color: #666;
+}
+
+.priceSection {
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  flex-direction: column;
+  align-items: center;
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.price {
+  width: 100%;
+  text-align: right;
+}
+
+
+.price {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #333;
+}
+
+.selectButton {
+  margin-top: 8px;
+  padding: 10px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.selectButton:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.selectButton:active {
+  transform: scale(1);
+}
+
+@media (min-width: 768px) {
+  .flightCard {
+    flex-direction: row;
+    justify-content: space-around;
     align-items: center;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 15px;
   }
-  
-  .details {
-    display: flex;
-    flex: 1;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+
+  .arline {
+    flex-basis: 10%;
   }
-  
-  .airline {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333;
+
+  .flightDetails {
+    margin: 20px 0;
   }
-  
+
   .segment {
-    text-align: center;
+    flex-basis: 80%;
+    justify-content: center;
+    align-items: center;
   }
-  
-  .time {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .airport {
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  .info {
-    text-align: center;
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  .actions {
-    text-align: right;
-  }
-  
-  .price {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #28a745;
-    margin-bottom: 10px;
-  }
-  
-  .selectButton {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .selectButton:hover {
-    background-color: #0056b3;
-  }
-   */
-   .flightCard {
+
+  .priceSection {
+    flex-basis: 10%;
+    margin: 0;
     display: flex;
-    flex-direction: column;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    gap: 20px;
-    transition: transform 0.2s;
+    justify-content: flex-end;
   }
-  
-  .flightCard:hover {
-    transform: translateY(-5px);
+}
+
+@media (min-width: 768px) {
+  .flightCard {
+    flex-direction: row;
+    justify-content: space-between; /* Równomierne rozmieszczenie elementów */
+    align-items: center;
+    padding: 16px; /* Zmniejszono padding */
+    margin-bottom: 8px; /* Mniejszy odstęp między kartami */
   }
-  
+
   .airline {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333;
+    flex-basis: 15%; /* Zmniejszono szerokość sekcji linii lotniczej */
+    margin-right: 12px; /* Dodano odstęp między logo a resztą karty */
   }
-  
-  .logo {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
+
+  .flightDetails {
+    flex-basis: 60%; /* Zwiększono przestrzeń na szczegóły lotów */
+    margin: 0 8px; /* Zmniejszono odstępy po bokach */
   }
-  
-  .details {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
+
   .segment {
-    text-align: center;
+    justify-content: space-around; /* Zmniejszono odstępy między segmentami */
+    margin-bottom: 8px; /* Mniejszy odstęp między wierszami */
   }
-  
-  .time {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #333;
+
+  .arrow {
+    flex-basis: 20%; /* Więcej przestrzeni dla linii łączącej */
+    margin: 0 12px; /* Zmniejszono marginesy boczne */
   }
-  
-  .airport {
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  .info {
-    text-align: center;
-    font-size: 0.9rem;
-    color: #555;
-  }
-  
-  .actions {
-    text-align: right;
-  }
-  
-  .price {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #28a745;
-    margin-bottom: 10px;
-  }
-  
-  .selectButton {
-    padding: 10px 15px;
+
+  .line {
+    width: 100%; /* Skrócono linię łączącą */
+    height: 2px;
     background-color: #007bff;
-    color: white;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
   }
-  
-  .selectButton:hover {
-    background-color: #0056b3;
+
+  .priceSection {
+    height: 100%;
+    flex-basis: 20%; /* Zmniejszono szerokość sekcji ceny */
+    text-align: right;
+    /* justify-content: flex-end; */
+    align-items: flex-end;
+    margin: 0; /* Usunięto zbędne marginesy */
+    padding: 0; /* Usunięto padding */
   }
-  
+
+  .selectButton {
+    padding: 8px 16px; /* Zmniejszono rozmiar przycisku */
+    font-size: 0.9em; /* Mniejsza czcionka w przycisku */
+    width: 80%; /* Przycisk zajmuje tylko tyle miejsca, ile potrzeba */
+  }
+
+  .price {
+    font-size: 1.5em; /* Mniejsza czcionka ceny */
+    margin-bottom: 8px; /* Dodano odstęp między ceną a przyciskiem */
+  }
+}
+
+

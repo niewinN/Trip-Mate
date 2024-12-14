@@ -64,7 +64,7 @@ const Hotels = () => {
       <Navbar background="#007bff" />
       <Wrapper>
         <div className={styles.flex}>
-          <div>
+          <div className={styles.first}>
             <HeaderIcon icon={<FontAwesomeIcon icon={faHotel} />} title="Hotels" />
             <div className={styles.displayMobile}>
               <HotelSearchPanel
@@ -83,7 +83,7 @@ const Hotels = () => {
             </div>
             <FilterPanel sections={hotelFilters} />
           </div>
-          <div>
+          <div className={styles.second}>
             <div className={styles.displayDesktop}>
               <HotelSearchPanel
                 query={query}

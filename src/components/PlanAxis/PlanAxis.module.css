@@ -1,0 +1,60 @@
+.container {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #0056b3;
+    margin-bottom: 50px;
+  }
+  
+  .axis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* justify-content: space-between; */
+    width: 100%;
+    /* max-width: 800px; */
+    /* margin: 0 auto; */
+    position: relative;
+    height: 4px;
+    background-color: #ccc;
+    border-radius: 2px;
+  }
+  
+  .segment {
+    position: relative;
+    width: 20%; /* Adjusts spacing evenly for 5 segments */
+    text-align: center;
+  }
+  
+  .segment::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+  }
+  
+  .segment.active::before {
+    background-color: #0056b3; /* Active segment color */
+    z-index: 1;
+  }
+  
+  .label {
+    position: absolute;
+    top: -25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #555;
+    white-space: nowrap;
+  }
+  
+  .segment.active .label {
+    color: #0056b3;
+  }
+  

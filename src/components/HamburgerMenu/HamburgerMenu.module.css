@@ -24,7 +24,7 @@ html, body {
   .overlay {
     position: fixed;
     top: 0;
-    right: -100%; /* Początkowa pozycja, poza ekranem */
+    right: -110%; /* Początkowa pozycja, poza ekranem */
     width: 100vw; /* Użyj 100vw, aby szerokość była dokładnie na szerokość okna */
     height: 100vh; /* Użyj 100vh, aby wysokość była dokładnie na wysokość okna */
     background-color: rgba(42, 47, 211, 0.92);

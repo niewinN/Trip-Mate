@@ -49,168 +49,81 @@ app.get('/api/hotels', async (req, res) => {
 });
 
 
-app.get('/api/flights', async (req, res) => {
-  const { departure_id, arrival_id, outbound_date, return_date } = req.query;
+// Mapa miast na kody lotnisk
+const cityToAirportCode = {
+  Warsaw: "WAW",
+  London: "LHR",
+  Paris: "CDG",
+  NewYork: "JFK",
+  Barcelona: "BCN",
+  // Add more cities as needed
+};
 
-  // Sprawdzanie wymaganych parametrów
-  if (!departure_id || !arrival_id || !outbound_date || !return_date) {
-    return res.status(400).json({ error: 'Brak wymaganych parametrów' });
+const getAirportCode = async (city) => {
+  if (cityToAirportCode[city]) {
+    return cityToAirportCode[city];
+  }
+  throw new Error(`Nie znaleziono kodu lotniska dla miasta: ${city}`);
+};
+
+// Endpoint do wyszukiwania lotów
+app.get("/api/flights", async (req, res) => {
+  const { departure_city, arrival_city, departure_date, return_date, passengers } = req.query;
+
+  if (!departure_city || !arrival_city || !departure_date || !return_date || !passengers) {
+    return res.status(400).json({ error: "Brak wymaganych parametrów" });
   }
 
   try {
-    console.log('Zapytanie do API z parametrami:', { departure_id, arrival_id, outbound_date, return_date });
+    const departure_id = await getAirportCode(departure_city);
+    const arrival_id = await getAirportCode(arrival_city);
 
-    // Zapytanie do zewnętrznego API
-    const response = await axios.get('https://serpapi.com/search', {
+    const flightsResponse = await axios.get("https://serpapi.com/search.json", {
       params: {
-        engine: 'google_flights',
+        engine: "google_flights",
         departure_id,
         arrival_id,
-        outbound_date,
+        outbound_date: departure_date,
         return_date,
+        passengers,
+        currency: "PLN",
+        hl: "en",
         api_key: process.env.SERPAPI_KEY,
       },
     });
 
-    console.log('Odpowiedź API:', response.data);
-
-    if (!response.data.best_flights) {
-      return res.status(404).json({ error: 'Nie znaleziono lotów' });
-    }
-
-    // Przetwarzanie wyników
-    const flights = response.data.best_flights.map((flight) => ({
-      airline: flight.flights[0].airline,
-      airline_logo: flight.flights[0].airline_logo,
-      departure: {
-        airport: flight.flights[0].departure_airport.name,
-        time: flight.flights[0].departure_airport.time,
-      },
-      arrival: {
-        airport: flight.flights[flight.flights.length - 1].arrival_airport.name,
-        time: flight.flights[flight.flights.length - 1].arrival_airport.time,
-      },
-      stops: flight.flights.length - 1,
+    const bestFlights = flightsResponse.data.best_flights?.map((flight) => ({
+      airline: flight.flights[0]?.airline || "Unknown",
+      airline_logo: flight.airline_logo,
       totalDuration: flight.total_duration,
       price: flight.price,
+      segments: flight.flights.map((segment) => ({
+        departure: {
+          airport: segment.departure_airport.name,
+          time: segment.departure_airport.time,
+        },
+        arrival: {
+          airport: segment.arrival_airport.name,
+          time: segment.arrival_airport.time,
+        },
+        duration: segment.duration,
+      })),
     }));
 
-    res.json(flights);
+    if (!bestFlights || bestFlights.length === 0) {
+      return res.status(404).json({ error: "Brak wyników dla podanych parametrów." });
+    }
+
+    res.json(bestFlights);
   } catch (error) {
-    console.error('Błąd podczas pobierania lotów:', error.message);
-    res.status(500).json({ error: 'Błąd podczas pobierania lotów' });
+    console.error("Błąd podczas przetwarzania lotów:", error.message);
+    res.status(500).json({ error: "Nie udało się pobrać lotów." });
   }
 });
 
 
-// // Endpoint do wyszukiwania restauracji
-// app.get('/api/restaurants', async (req, res) => {
-//   const { location = 'Warsaw' } = req.query;
 
-//   try {
-//     const response = await axios.get('https://serpapi.com/search', {
-//       params: {
-//         engine: 'google_local',
-//         q: 'restaurant',
-//         location,
-//         api_key: process.env.SERPAPI_KEY,
-//       },
-//     });
 
-//     // Mapowanie danych restauracji
-//     const restaurants = (response.data.local_results || []).map((restaurant) => ({
-//       title: restaurant.title,
-//       rating: restaurant.rating,
-//       reviews_original: restaurant.reviews_original,
-//       reviews: restaurant.reviews,
-//       price: restaurant.price || 'No price data',
-//       type: restaurant.type || 'No type specified',
-//       address: restaurant.address || 'No address provided',
-//       description: restaurant.description || 'No description available.',
-//       thumbnail: extractGoogleImage(restaurant),
-//     }));
-
-//     res.json(restaurants);
-//   } catch (error) {
-//     console.error('Error fetching restaurants:', error.message);
-//     res.status(500).json({ error: 'Failed to fetch restaurants' });
-//   }
-// });
-
-// // Funkcja do wyboru najlepszego obrazu
-// function extractGoogleImage(restaurant) {
-//   const serpapiThumbnail = restaurant.thumbnail || null;
-
-//   // Sprawdź, czy istnieją linki do `lh3.googleusercontent.com`
-//   if (serpapiThumbnail && serpapiThumbnail.includes('googleusercontent.com')) {
-//     return adjustGoogleImageSize(serpapiThumbnail, 500, 500); // Zwiększamy rozdzielczość
-//   }
-
-//   // Jeśli brak linku do `googleusercontent.com`, użyj domyślnego thumbnail
-//   return serpapiThumbnail || 'https://via.placeholder.com/500x500?text=No+Image+Available';
-// }
-
-// // Funkcja zmieniająca rozmiar obrazka
-// function adjustGoogleImageSize(url, width, height) {
-//   return url.replace(/w\d+-h\d+/g, `w${width}-h${height}`);
-// }
-// app.get('/api/restaurants', async (req, res) => {
-//   const { location = 'Warsaw', start = 0 } = req.query;
-
-//   try {
-//     const response = await axios.get('https://serpapi.com/search', {
-//       params: {
-//         engine: 'google_local',
-//         q: 'restaurant',
-//         location,
-//         start,
-//         api_key: process.env.SERPAPI_KEY,
-//       },
-//     });
-
-//     // Sprawdź, czy dane są dostępne
-//     if (!response.data || !response.data.local_results) {
-//       return res.status(404).json({ error: 'No local results found' });
-//     }
-
-//     // Mapowanie danych restauracji
-//     const restaurants = response.data.local_results.map((restaurant) => ({
-//       title: restaurant.title,
-//       rating: restaurant.rating,
-//       reviews_original: restaurant.reviews_original,
-//       reviews: restaurant.reviews,
-//       price: restaurant.price || 'No price data',
-//       type: restaurant.type || 'No type specified',
-//       address: restaurant.address || 'No address provided',
-//       description: restaurant.description || 'No description available.',
-//       thumbnail: extractGoogleImage(restaurant),
-//     }));
-
-//     res.json(restaurants);
-//   } catch (error) {
-//     console.error('Error fetching restaurants:', error.message);
-//     res.status(500).json({ error: 'Failed to fetch restaurants' });
-//   }
-// });
-
-// // Funkcja do wyboru najlepszego obrazu
-// function extractGoogleImage(restaurant) {
-//   const serpapiThumbnail = restaurant.thumbnail || null;
-
-//   // Sprawdź, czy istnieją linki do `lh3.googleusercontent.com` lub `lh5.googleusercontent.com`
-//   if (serpapiThumbnail && /lh[3-6]\.googleusercontent\.com/.test(serpapiThumbnail)) {
-//     return adjustGoogleImageSize(serpapiThumbnail, 500, 500); // Zwiększamy rozdzielczość
-//   }
-
-//   // Jeśli brak linku do `googleusercontent.com`, użyj domyślnego thumbnail
-//   return serpapiThumbnail || 'https://via.placeholder.com/500x500?text=No+Image+Available';
-// }
-
-// // Funkcja zmieniająca rozmiar obrazka
-// function adjustGoogleImageSize(url, width, height) {
-//   return url.replace(/w\d+-h\d+/g, `w${width}-h${height}`);
-// }
-// Endpoint do wyszukiwania restauracji
 app.get('/api/restaurants', async (req, res) => {
   const { location = 'Warsaw', start = 0 } = req.query;
 
