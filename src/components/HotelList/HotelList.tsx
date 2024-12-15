@@ -9,16 +9,18 @@ interface HotelListProps {
   checkOutDate: string;
   guests: number;
   rooms: number;
+  onSelect: (hotel: any) => void;
 }
 
-const HotelList: React.FC<HotelListProps> = ({ hotels }) => {
+
+const HotelList: React.FC<HotelListProps> = ({ hotels, onSelect }) => {
   return (
     <div className={styles.hotelList}>
       {hotels.length === 0 ? (
         <p>Brak wyników wyszukiwania.</p>
       ) : (
         hotels.map((hotel, index) => (
-          <Hotel key={index} hotel={hotel} />
+          <Hotel key={index} hotel={hotel} onSelect={onSelect} />
         ))
       )}
     </div>

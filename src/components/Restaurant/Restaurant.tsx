@@ -1,30 +1,29 @@
 import React from "react";
 import styles from "./Restaurant.module.css";
 
-interface Restaurant {
-  title: string;
-  rating: number;
-  reviews_original: string;
-  reviews: number;
-  price: string;
-  type: string;
-  address: string;
-  description: string;
-  thumbnail: string; // Link do zdjęcia
+interface RestaurantProps {
+  restaurant: {
+    title: string;
+    rating: number;
+    reviews_original: string;
+    reviews: number;
+    price: string;
+    type: string;
+    address: string;
+    description: string;
+    thumbnail: string;
+  };
+  onSelect: (restaurant: any) => void; // Dodanie prop dla obsługi "Add"
 }
 
-const Restaurant: React.FC<{ restaurant: Restaurant }> = ({ restaurant }) => {
-  const handleAddToPlan = () => {
-    console.log(`Added ${restaurant.title} to the plan!`);
-    // Możesz dodać tutaj logikę do dodawania restauracji do planu
-  };
+const Restaurant: React.FC<RestaurantProps> = ({ restaurant, onSelect }) => {
 
   return (
     <div className={styles.restaurantCard}>
       {/* Dodaj przycisk */}
       <button
         className={styles.addToPlan}
-        onClick={handleAddToPlan}
+        onClick={() => onSelect(restaurant)} 
         aria-label={`Add ${restaurant.title} to the plan`}
       >
         +

@@ -15,9 +15,10 @@ interface HotelProps {
     nearby_places: string[];
     images: { thumbnail: string }[];
   };
+  onSelect: (hotel: any) => void;
 }
 
-const Hotel: React.FC<HotelProps> = ({ hotel }) => {
+const Hotel: React.FC<HotelProps> = ({ hotel, onSelect }) => {
   return (
     <div className={styles.hotelCard}>
       {/* Obrazek hotelu */}
@@ -51,7 +52,7 @@ const Hotel: React.FC<HotelProps> = ({ hotel }) => {
         </div>
 
         {/* Przycisk "Zobacz ceny" */}
-        <button className={styles.pricesButton}>Zobacz ceny</button>
+        <button className={styles.pricesButton} onClick={() => onSelect(hotel)}>Select</button>
       </div>
     </div>
   );

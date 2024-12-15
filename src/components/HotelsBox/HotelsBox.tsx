@@ -9,7 +9,7 @@ import { faHotel } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import filters from "../../data/filters.json"
 
-const HotelsBox = () => {
+const HotelsBox = ({ onHotelSelect }: { onHotelSelect: (hotel: any) => void }) => {
     const hotelFilters = filters.hotels;
 
   // Stan dla formularza wyszukiwania
@@ -50,6 +50,10 @@ const HotelsBox = () => {
   // Funkcja wywoływana po kliknięciu przycisku "Szukaj"
   const handleSearch = () => {
     fetchHotels();
+  };
+
+  const handleSelectHotel = (hotel: any) => {
+    onHotelSelect(hotel); // Wywołanie funkcji przekazanej z Plan do zapisania hotelu
   };
 
   // Wywołanie wyszukiwania po załadowaniu komponentu z domyślnymi parametrami
@@ -104,6 +108,7 @@ const HotelsBox = () => {
               checkOutDate={checkOutDate}
               guests={guests}
               rooms={rooms}
+              onSelect={handleSelectHotel}
             />
           </div>
         </div>

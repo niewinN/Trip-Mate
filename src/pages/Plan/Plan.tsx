@@ -8,6 +8,8 @@ import TripName from "../../components/TripName/TripName";
 import TripPerson from "../../components/TripPerson/TripPerson";
 import FlightsBox from "../../components/FlightsBox/FlightsBox";
 import HotelsBox from "../../components/HotelsBox/HotelsBox";
+import RestaurantsBox from "../../components/RestaurantsBox/RestaurantsBox";
+import AttractionsBox from "../../components/AttractionsBox/AttractionsBox";
 
 interface TripPersonData {
   name: string;
@@ -31,6 +33,8 @@ const Plan = () => {
     Array(passengers).fill({ name: "", image: null })
   );
   const [selectedFlight, setSelectedFlight] = useState<any>(null);
+  const [selectedHotel, setSelectedHotel] = useState<any>(null);
+  const [selectedRestaurant, setSelectedRestaurant] = useState<any>(null);
 
   // Funkcja do aktualizacji danych TripPerson
   const updateTripPerson = (index: number, field: "name" | "image", value: any) => {
@@ -79,6 +83,16 @@ const Plan = () => {
     setCurrentStep(3); // Przejście do kroku 3 (HotelsBox)
   };
 
+  const handleHotelSelect = (hotel: any) => {
+    setSelectedHotel(hotel); // Zapisanie wybranego hotelu
+    setCurrentStep(4); // Przejście do kroku 4 (Restauracje)
+  }
+
+  const handleRestaurantSelect = (restaurant: any) => {
+    setSelectedRestaurant(restaurant); // Zapisanie wybranej restauracji
+    setCurrentStep(5); // Przejście do kroku 5 (AttractionsBox)
+  };
+
   return (
     <div className={styles.plan}>
       <Navbar background="#007bff" />
@@ -124,7 +138,13 @@ const Plan = () => {
         <FlightsBox onFlightSelect={handleFlightSelect} />
       )}
         {currentStep === 3 && (
-          <HotelsBox />
+          <HotelsBox onHotelSelect={handleHotelSelect} />
+        )}
+         {currentStep === 4 && (
+          <RestaurantsBox onRestaurantSelect={handleRestaurantSelect} />
+        )}
+        {currentStep === 5 && (
+        <AttractionsBox />
         )}
       </Wrapper>
     </div>
