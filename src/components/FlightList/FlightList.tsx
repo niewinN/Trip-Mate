@@ -14,16 +14,17 @@ interface FlightListProps {
       duration: number;
     }[];
   }[];
+  onSelect: (flight: any) => void; // Prop do obsługi wybranego lotu
 }
 
-const FlightList: React.FC<FlightListProps> = ({ flights }) => {
+const FlightList: React.FC<FlightListProps> = ({ flights, onSelect }) => {
   return (
     <div className={styles.flightList}>
       {flights.length === 0 ? (
         <p>Brak wyników wyszukiwania.</p>
       ) : (
         flights.map((flight, index) => (
-          <Flight key={index} flight={flight} />
+          <Flight key={index} flight={flight} onSelect={onSelect} />
         ))
       )}
     </div>

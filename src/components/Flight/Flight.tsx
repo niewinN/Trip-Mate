@@ -14,9 +14,10 @@ interface FlightProps {
     price: number;
     currency: string;
   };
+  onSelect: (flight: any) => void; // Dodanie prop dla obsługi "Select"
 }
 
-const Flight: React.FC<FlightProps> = ({ flight }) => {
+const Flight: React.FC<FlightProps> = ({ flight, onSelect }) => {
   return (
     <div className={styles.flightCard}>
       {/* Logo i nazwa linii lotniczej */}
@@ -50,7 +51,7 @@ const Flight: React.FC<FlightProps> = ({ flight }) => {
         <div className={styles.price}>
           <span>{flight.currency} {flight.price} zł</span>
         </div>
-        <button className={styles.selectButton}>Select →</button>
+        <button className={styles.selectButton} onClick={() => onSelect(flight)}>Select →</button>
       </div>
     </div>
   );

@@ -1,0 +1,29 @@
+.displayDesktop {
+    display: none;
+}
+
+
+@media (min-width: 992px) {
+    .flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .first {
+        flex-basis: 25%;
+    }
+    
+    .second {
+        flex-basis: 72%;
+    }
+
+    .displayMobile {
+        display: none;
+    }
+
+    .displayDesktop {
+        display: block;
+    }
+}

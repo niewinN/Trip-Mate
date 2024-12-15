@@ -1,6 +1,7 @@
 .card {
     /* width: 200px; */
     height: 500px;
+    min-width: 300px;
     border-radius: 8px;
     background-color: #e0e0e0;
     display: flex;
@@ -12,10 +13,16 @@
     position: relative;
     margin-bottom: 30px;
   }
+
+  @media (min-width: 768px) {
+    .card {
+        height: 450px;
+    }
+  }
   
   .header {
     width: 100%;
-    background-color: #0056b3;
+    background-color: #007bff;
     padding: 10px 0;
     text-align: center;
     border-top-left-radius: 8px;
