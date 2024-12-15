@@ -13,6 +13,7 @@ interface FlightSearchPanelProps {
   setReturnDate: (date: string) => void;
   setPassengers: (count: number) => void;
   onSearch: () => void; // Funkcja wyszukiwania po kliknięciu "Szukaj"
+  showButton?: boolean;
 }
 
 const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
@@ -27,7 +28,10 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
   setReturnDate,
   setPassengers,
   onSearch,
+  showButton = true,
+  
 }) => {
+  
   return (
     <form
       onSubmit={(e) => {
@@ -94,9 +98,11 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
         />
       </div>
 
-      <div className={styles.btn}>
-        <button type="submit" className={styles.button}>Search</button> {/* Kliknięcie przycisku "Search" */}
-      </div>
+      {showButton && (
+        <div className={styles.btn}>
+          <button type="submit" className={styles.button}>Search</button>
+        </div>
+      )}
     </form>
   );
 };
