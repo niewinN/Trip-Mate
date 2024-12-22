@@ -18,6 +18,9 @@ interface FlightProps {
 }
 
 const Flight: React.FC<FlightProps> = ({ flight, onSelect }) => {
+  const handleSelect = () => {
+    onSelect(flight);
+  };
   return (
     <div className={styles.flightCard}>
       {/* Logo i nazwa linii lotniczej */}
@@ -51,7 +54,7 @@ const Flight: React.FC<FlightProps> = ({ flight, onSelect }) => {
         <div className={styles.price}>
           <span>{flight.currency} {flight.price} zł</span>
         </div>
-        <button className={styles.selectButton} onClick={() => onSelect(flight)}>Select →</button>
+        <button className={styles.selectButton} onClick={handleSelect}>Select →</button>
       </div>
     </div>
   );

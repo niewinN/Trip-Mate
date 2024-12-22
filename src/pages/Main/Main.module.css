@@ -25,27 +25,36 @@
 	justify-content: flex-start;
 }
 
-/* .left {
-	@media (min-width: 992px) {
-		max-width: 950px;
-	}
+.searchPanel {
+	background-color: #fff;
+	color: #000;
+	/* border-radius: 10px; */
+    /* padding: 1rem; */
+    /* margin-bottom: 1rem 0 2rem; */
 }
 
-.flex {} */
 .flex {
 	display: flex;
-	justify-content: space-between; /* Space between the main content and the nav */
+	/* Space between the main content and the nav */
 	align-items: flex-start;
+	justify-content: center;
 	/* margin-top: 50px; */
 	gap: 20px; /* Add spacing between left and VerticalNav */
+  }
+
+  @media (min-width: 992px) {
+	.flex {
+		justify-content: space-between; 
+	}
   }
   
   .left {
 	display: flex;
 	flex-direction: column;
 	padding-bottom: 2rem;
+	max-width: 900px;
 	 /* Space between elements */
-	max-width: 950px; /* Ensure it doesn’t stretch too wide */
+	/* max-width: 950px; Ensure it doesn’t stretch too wide */
 	color: white; /* Ensure text is readable on a dark background */
 
 	@media (min-width: 992px) {

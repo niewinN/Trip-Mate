@@ -9,7 +9,7 @@ const Attractions = () => {
     <div className={styles.attractions}>
       <Navbar background="#007bff" />
       <Wrapper>
-        <AttractionsBox/>
+        <AttractionsBox />
       </Wrapper>
     </div>
   );

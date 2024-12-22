@@ -1,5 +1,35 @@
+// import React from "react";
+// import Restaurant from "../Restaurant/Restaurant";
+
+// interface RestaurantProps {
+//   title: string;
+//   rating: number;
+//   reviews_original: string;
+//   reviews: number;
+//   price: string;
+//   type: string;
+//   address: string;
+//   description: string;
+//   thumbnail: string;
+// }
+
+// const RestaurantList: React.FC<{
+//   restaurants: RestaurantProps[];
+//   onSelect: (restaurant: any) => void;
+// }> = ({ restaurants, onSelect }) => {
+//   return (
+//     <div>
+//       {restaurants.map((restaurant, index) => (
+//         <Restaurant key={index} restaurant={restaurant} onSelect={onSelect} />
+//       ))}
+//     </div>
+//   );
+// };
+
+// export default RestaurantList;
 import React from "react";
 import Restaurant from "../Restaurant/Restaurant";
+import styles from "./RestaurantList.module.css";
 
 interface RestaurantProps {
   title: string;
@@ -13,14 +43,26 @@ interface RestaurantProps {
   thumbnail: string;
 }
 
-const RestaurantList: React.FC<{
+interface RestaurantListProps {
   restaurants: RestaurantProps[];
   onSelect: (restaurant: any) => void;
-}> = ({ restaurants, onSelect }) => {
+  selectedRestaurants: RestaurantProps[];
+}
+
+const RestaurantList: React.FC<RestaurantListProps> = ({
+  restaurants,
+  onSelect,
+  selectedRestaurants,
+}) => {
   return (
-    <div>
+    <div className={styles.restaurantList}>
       {restaurants.map((restaurant, index) => (
-        <Restaurant key={index} restaurant={restaurant} onSelect={onSelect} />
+        <Restaurant
+          key={index}
+          restaurant={restaurant}
+          onSelect={onSelect}
+          isSelected={selectedRestaurants.some((r) => r.title === restaurant.title)}
+        />
       ))}
     </div>
   );

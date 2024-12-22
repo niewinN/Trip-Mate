@@ -1,34 +1,41 @@
-// import styles from "./RestaurantSearchPanel.module.css"
-
-// const RestaurantSearchPanel = () => {
-//   return (
-//     <div className={styles.box}>
-//         <input className={styles.input} type="text" placeholder="Enter city"/>
-//     </div>  
-//   )
-// }
-
-// export default RestaurantSearchPanel
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './RestaurantSearchPanel.module.css';
 
-const RestaurantSearchPanel: React.FC<{ onSearch: (city: string) => void }> = ({ onSearch }) => {
-  const [city, setCity] = React.useState<string>('');
+interface RestaurantSearchPanelProps {
+  city: string;
+  setCity: (value: string) => void;
+  onSearch: (city: string) => void;
+}
 
+const RestaurantSearchPanel: React.FC<RestaurantSearchPanelProps> = ({ city, setCity, onSearch }) => {
+  const [inputValue, setInputValue] = useState<string>(city); // Lokalny stan inputu
+
+  // Synchronizacja wartości inputu z miastem początkowym
+  useEffect(() => {
+    setInputValue(city);
+  }, [city]);
+
+  // Obsługa zmiany wartości inputu
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  // Obsługa klawisza Enter
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && city.trim() !== '') {
-      onSearch(city);
+    if (e.key === 'Enter' && inputValue.trim() !== '') {
+      setCity(inputValue); // Ustawienie wartości miasta w głównym stanie
+      onSearch(inputValue); // Wykonanie wyszukiwania
     }
   };
 
   return (
     <div className={styles.box}>
       <input
-      className={styles.input}
+        className={styles.input}
         type="text"
         placeholder="Enter city"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
+        value={inputValue}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
     </div>

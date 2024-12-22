@@ -70,6 +70,8 @@ const getAirportCode = async (city) => {
 app.get("/api/flights", async (req, res) => {
   const { departure_city, arrival_city, departure_date, return_date, passengers } = req.query;
 
+  console.log("Received query params:", req.query);
+
   if (!departure_city || !arrival_city || !departure_date || !return_date || !passengers) {
     return res.status(400).json({ error: "Brak wymaganych parametrów" });
   }
@@ -77,6 +79,13 @@ app.get("/api/flights", async (req, res) => {
   try {
     const departure_id = await getAirportCode(departure_city);
     const arrival_id = await getAirportCode(arrival_city);
+
+    if (!departure_id || !arrival_id) {
+      return res.status(400).json({ error: "Nieprawidłowe miasta w zapytaniu." });
+    }
+
+    console.log("Departure ID:", departure_id);
+    console.log("Arrival ID:", arrival_id);
 
     const flightsResponse = await axios.get("https://serpapi.com/search.json", {
       params: {
@@ -92,25 +101,37 @@ app.get("/api/flights", async (req, res) => {
       },
     });
 
+    console.log("Request params for SerpAPI:", {
+      departure_id,
+      arrival_id,
+      outbound_date: departure_date,
+      return_date,
+      passengers,
+    });
+
+    console.log("API Response Data:", JSON.stringify(flightsResponse.data, null, 2));
+
     const bestFlights = flightsResponse.data.best_flights?.map((flight) => ({
       airline: flight.flights[0]?.airline || "Unknown",
-      airline_logo: flight.airline_logo,
-      totalDuration: flight.total_duration,
-      price: flight.price,
+      airline_logo: flight.airline_logo || "Unknown",
+      totalDuration: flight.total_duration || 0,
+      price: flight.price || "N/A",
       segments: flight.flights.map((segment) => ({
         departure: {
-          airport: segment.departure_airport.name,
-          time: segment.departure_airport.time,
+          airport: segment.departure_airport?.name || "Unknown Airport",
+          time: segment.departure_airport?.time || "N/A",
         },
         arrival: {
-          airport: segment.arrival_airport.name,
-          time: segment.arrival_airport.time,
+          airport: segment.arrival_airport?.name || "Unknown Airport",
+          time: segment.arrival_airport?.time || "N/A",
         },
-        duration: segment.duration,
+        duration: segment.duration || 0,
       })),
     }));
+    
 
     if (!bestFlights || bestFlights.length === 0) {
+      console.log("No flights found for these parameters.");
       return res.status(404).json({ error: "Brak wyników dla podanych parametrów." });
     }
 

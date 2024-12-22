@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "./Restaurant.module.css";
+import React from 'react';
+import styles from './Restaurant.module.css';
 
 interface RestaurantProps {
   restaurant: {
@@ -13,32 +13,25 @@ interface RestaurantProps {
     description: string;
     thumbnail: string;
   };
-  onSelect: (restaurant: any) => void; // Dodanie prop dla obsługi "Add"
+  onSelect: (restaurant: any) => void;
+  isSelected: boolean;
 }
 
-const Restaurant: React.FC<RestaurantProps> = ({ restaurant, onSelect }) => {
-
+const Restaurant: React.FC<RestaurantProps> = ({ restaurant, onSelect, isSelected }) => {
   return (
-    <div className={styles.restaurantCard}>
-      {/* Dodaj przycisk */}
+    <div
+      className={`${styles.restaurantCard} ${isSelected ? styles.selected : ''}`}
+      onClick={() => onSelect(restaurant)}
+    >
       <button
         className={styles.addToPlan}
-        onClick={() => onSelect(restaurant)} 
         aria-label={`Add ${restaurant.title} to the plan`}
       >
         +
       </button>
-
-      {/* Obrazek restauracji */}
       <div className={styles.thumbnailContainer}>
-        <img
-          src={restaurant.thumbnail}
-          alt={restaurant.title}
-          className={styles.thumbnail}
-        />
+        <img src={restaurant.thumbnail} alt={restaurant.title} className={styles.thumbnail} />
       </div>
-
-      {/* Szczegóły restauracji */}
       <div className={styles.details}>
         <h3 className={styles.title}>{restaurant.title}</h3>
         <div className={styles.rating}>

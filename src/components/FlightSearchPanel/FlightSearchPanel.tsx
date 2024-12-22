@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './FlightSearchPanel.module.css';
+import { useNavigate } from 'react-router-dom';
 
 interface FlightSearchPanelProps {
   departureCity: string;
@@ -14,6 +15,7 @@ interface FlightSearchPanelProps {
   setPassengers: (count: number) => void;
   onSearch: () => void; // Funkcja wyszukiwania po kliknięciu "Szukaj"
   showButton?: boolean;
+  redirectToPlan?: boolean;
 }
 
 const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
@@ -29,14 +31,32 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
   setPassengers,
   onSearch,
   showButton = true,
+  redirectToPlan = false,
   
 }) => {
+
+  const navigate = useNavigate()
+
+  const handleSearch = () => {
+    console.log("Triggering search with values:", {
+      departureCity,
+      arrivalCity,
+      departureDate,
+      returnDate,
+      passengers,
+    });
+
+    onSearch(); // Wywołanie funkcji wyszukiwania
+    if (redirectToPlan) {
+      navigate('/plan'); // Przekierowanie na podstronę /plan
+    }
+  };
   
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        onSearch(); // Wywołanie wyszukiwania po kliknięciu "Search"
+        handleSearch(); // Wywołanie wyszukiwania po kliknięciu "Search"
       }}
       className={styles.form}
     >
