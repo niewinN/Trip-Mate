@@ -1,5 +1,5 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Flight from "../../components/Flight/Flight";
 import Hotel from "../../components/Hotel/Hotel";
 import Restaurant from "../../components/Restaurant/Restaurant";
@@ -11,12 +11,23 @@ import MultimediaCard from "../../components/MultimediaCard/MultimediaCard";
 
 const Summary: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { flight, hotel, restaurants, attractions, tripName, tripPersons, departureCity, arrivalCity, departureDate, returnDate } = location.state || {};
 
   console.log("📝 Summary Data:", { flight, hotel, restaurants, attractions, tripName, tripPersons, departureCity, arrivalCity, departureDate, returnDate });
 
+  const [multimediaCards, setMultimediaCards] = useState<number>(4); // Początkowa liczba kart
+
   const handleMediaUpload = (file: File) => {
     console.log('🖼️ Uploaded File:', file.name);
+  };
+
+  const addMoreCards = () => {
+    setMultimediaCards((prev) => prev + 4); // Dodaje 4 kolejne karty
+  };
+
+  const handleArrowClick = () => {
+    navigate('/profile');
   };
 
   return (
@@ -26,8 +37,10 @@ const Summary: React.FC = () => {
       {/* Tytuł Wycieczki */}
       <div className={styles.container}>
       <div className={styles.details}>
-      <h1 className={styles.title}>📋 {tripName || "Trip Summary"}</h1>
-      
+      <div className={styles.titleContainer}>
+              <h1 className={styles.title}>📋 {tripName || "Trip Summary"}</h1>
+              <span className={styles.arrowMobile} onClick={handleArrowClick}>➔</span>
+            </div>
       {/* Sekcja trasy i dat */}
       <div className={styles.routeDetails}>
         <p>
@@ -61,7 +74,10 @@ const Summary: React.FC = () => {
       <div className={styles.cards}>
       {/* Sekcja Lotu */}
       <section className={styles.section}>
-        <h2>✈️ Flight</h2>
+      <div className={styles.flightHeader}>
+                <h2>✈️ Flight</h2>
+                <span className={styles.arrowDesktop} onClick={handleArrowClick}>➔</span>
+              </div>
         {flight ? (
           <div className={styles.card}>
             <Flight flight={flight} onSelect={() => {}} />
@@ -128,8 +144,20 @@ const Summary: React.FC = () => {
       
       </div>
       {/* <MultimediaCard onUpload={handleMediaUpload} /> */}
-      {/* <MultimediaCard onUpload={handleMediaUpload} /> */}
-      <MultimediaCard onUpload={handleMediaUpload} />
+      {/* Kontener dla MultimediaCard */}
+      <section className={styles.multimediaSection}>
+            <h2>📹 Multimedia</h2>
+            <div className={styles.multimediaContainer}>
+              {Array.from({ length: multimediaCards }).map((_, index) => (
+                <MultimediaCard key={index} onUpload={handleMediaUpload} />
+              ))}
+            </div>
+            <div className={styles.btnContainer}>
+              <button className={styles.addMoreButton} onClick={addMoreCards}>
+                ➕ Dodaj więcej
+              </button>
+            </div>
+          </section>
       </Wrapper>
     </div>
   );

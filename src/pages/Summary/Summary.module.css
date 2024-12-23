@@ -78,4 +78,109 @@ h2 {
         flex-basis: 75%;
     }
 }
+
+.multimediaSection h2 {
+    border-top: 2px solid #007bff;
+    border-bottom: 2px solid #007bff;
+    margin: 30px 0;
+}
+
+.addMoreButton {
+    background-color: #007bff;
+    width: 100%;
+    font-size: 1.6rem;
+    color: #fff;
+}
+
+.multimediaSection {
+    margin-bottom: 30px;
+}
+
+@media (min-width: 768px) {
+    .multimediaContainer {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .btnContainer {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .addMoreButton {
+        width: 300px;
+    }
+}
+
+/* --- Tytuł z ikonką strzałki dla mobile --- */
+.titleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
   
+  .title {
+    text-align: center;
+    font-size: 2.2rem;
+    padding: 10px;
+  }
+  
+  .arrowMobile {
+    position: absolute;
+    right: 10px;
+    /* font-size: 1.8rem; */
+    color: #007bff;
+    cursor: pointer;
+    display: block;
+    font-size: 30px;
+  }
+  
+  .arrowMobile:hover {
+    color: #005ea2;
+  }
+  
+  /* --- Strzałka przy Flight dla desktop --- */
+  .flightHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .flightHeader h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    padding: 10px;
+  }
+  
+  .arrowDesktop {
+    position: absolute;
+    right: 10px;
+    /* font-size: 1.8rem; */
+    color: #007bff;
+    cursor: pointer;
+    display: none;
+    font-size: 30px
+  }
+  
+  .arrowDesktop:hover {
+    color: #005ea2;
+  }
+
+  /* --- Desktop - Strzałka tylko w Flight --- */
+@media (min-width: 992px) {
+    .arrowMobile {
+      display: none;
+      
+    }
+  
+    .arrowDesktop {
+      display: block;
+    }
+  
+    .titleContainer .title {
+      text-align: center;
+    }
+  }
