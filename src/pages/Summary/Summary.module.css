@@ -1,0 +1,81 @@
+.summary {
+    min-height: 100vh;
+    width: 100vw;
+  }
+
+.container {
+    margin: 20px 0;
+}
+
+.title {
+    text-align: center;
+    font-size: 2.2rem;
+    padding: 10px;
+}
+
+.routeDetails {
+    font-size: 16px;
+    margin: 10px 0;
+    box-shadow: 0 2px 15px #646464;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.routeDetails p {
+    color: #007bff;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.routeDetails strong {
+    color: #000;
+    font-weight: 400;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    padding: 10px;
+}
+
+.participantCard {
+    border-radius: 10px;
+    overflow: hidden;
+    height: 500px;
+}
+
+.participantName {
+    background-color: #007bff;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+}
+
+.participantImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (min-width: 992px) {
+    .container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .participantCard {
+        height: 450px;
+    }
+
+    .details {
+        flex-basis: 25%;
+        /* max-width: 500px; */
+    }
+
+    .cards {
+        flex-basis: 75%;
+    }
+}
+  
