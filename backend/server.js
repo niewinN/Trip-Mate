@@ -206,8 +206,40 @@ app.get('/api/attractions', async (req, res) => {
   }
 });
 
+// Endpoint pobierania obrazka miasta z SerpAPI
+app.get('/api/city-image', async (req, res) => {
+  const { q } = req.query;
 
+  if (!q) {
+    return res.status(400).json({ error: 'Brak nazwy miasta w zapytaniu' });
+  }
 
+  try {
+    const response = await axios.get('https://serpapi.com/search.json', {
+      params: {
+        engine: 'google_images',
+        q,
+        ijn: '0',
+        api_key: process.env.SERPAPI_KEY,
+      },
+    });
+
+    const imageResults = response.data.images_results;
+
+    if (imageResults && imageResults.length > 0) {
+      const imageUrl = imageResults[0]?.original || imageResults[0]?.thumbnail;
+      return res.json({ image: imageUrl });
+    } else {
+      return res.json({ image: 'https://via.placeholder.com/800x600?text=No+Image+Available' });
+    }
+  } catch (error) {
+    console.error('Błąd pobierania obrazka miasta z SerpAPI:', error.message);
+    return res.status(500).json({
+      error: 'Nie udało się pobrać obrazka miasta z SerpAPI',
+      image: 'https://via.placeholder.com/800x600?text=No+Image+Available',
+    });
+  }
+});
 
 
 // Funkcja obsługi błędów

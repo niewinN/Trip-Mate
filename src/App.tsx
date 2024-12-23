@@ -14,6 +14,7 @@ import Attractions from "./pages/Attractions/Attractions"
 import Plan from "./pages/Plan/Plan"
 import { FlightSearchProvider } from "./contexts/FlightSearchContext"
 import Summary from "./pages/Summary/Summary"
+import Profile from "./pages/Profile/Profile"
 
 function App() {
 	return (
@@ -30,6 +31,7 @@ function App() {
 					<Route path='/attractions' element={<Attractions/>}/>
 					<Route path='/plan' element={<Plan/>}/>
 					<Route path='/summary' element={<Summary/>} />
+					<Route path='profile' element={<Profile/>} />
 				</Routes>
 			</Router>
 			</FlightSearchProvider>
