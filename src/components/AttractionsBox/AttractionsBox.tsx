@@ -57,13 +57,9 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
     });
   };
 
-  // const handleFinish = () => {
-  //   onAttractionSelect(selectedAttractions); // Przekazanie wybranych atrakcji do Plan
-  //   onFinish();
-  // };
   const handleFinish = () => {
     console.log("🏁 Final Selected Attractions (AttractionsBox.tsx):", selectedAttractions);
-    onAttractionSelect([...selectedAttractions]); // Upewnij się, że przekazywana jest kopia tablicy
+    onAttractionSelect([...selectedAttractions]);
     onFinish();
   };
   

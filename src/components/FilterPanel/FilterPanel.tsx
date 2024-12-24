@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './FilterPanel.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
@@ -19,6 +19,28 @@ interface FilterPanelProps {
 
 const FilterPanel: React.FC<FilterPanelProps> = ({ sections }) => {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({});
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
+
+  const handleResize = () => {
+    const desktop = window.innerWidth >= 992;
+    setIsDesktop(desktop);
+
+    setOpenSections(
+      sections.reduce((acc, section) => {
+        acc[section.title] = desktop; 
+        return acc;
+      }, {} as { [key: string]: boolean })
+    );
+  };
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [sections]);
 
   const toggleSection = (title: string) => {
     setOpenSections((prev) => ({

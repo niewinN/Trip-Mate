@@ -9,10 +9,16 @@
     font-size: 16px;
     font-weight: bold;
     padding: 1.5rem;
+    display: inline-block;
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out; 
   }
   
-  .link:hover {
-    color: #0070f3;
+  .link:hover,
+  .link:focus,
+  .link:active {
+    color: #fff;
+    text-decoration: none;
+    transform: translateY(-3px);
   }
 
 @media (min-width: 768px) {

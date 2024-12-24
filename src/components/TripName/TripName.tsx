@@ -10,7 +10,7 @@ interface TripNameProps {
 const TripName: React.FC<TripNameProps> = ({tripName, setTripName, onNext}) => {
   return (
     <div className={styles.tripName}>
-        <input type="text" placeholder='Name your trip' value={tripName} onChange={(e) => setTripName(e.target.value)} />
+        <input type="text" placeholder='Name your trip...' value={tripName} onChange={(e) => setTripName(e.target.value)} />
         <button className={styles.btn} onClick={onNext}>Next</button>
     </div>
   )

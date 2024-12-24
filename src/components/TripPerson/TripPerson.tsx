@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import styles from './TripPerson.module.css';
 import PhotoToast from '../PhotoToast/PhotoToast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 interface TripPersonProps {
-  initialName?: string; // Opcjonalna początkowa nazwa
-  onNameChange: (name: string) => void; // Funkcja do przekazania zmienionego imienia
-  onImageChange: (image: string) => void; // Funkcja do przekazania zmienionego zdjęcia
+  initialName?: string;
+  onNameChange: (name: string) => void;
+  onImageChange: (image: string) => void;
 }
 
 const TripPerson: React.FC<TripPersonProps> = ({ initialName = 'Name...', onNameChange, onImageChange }) => {
@@ -13,10 +15,9 @@ const TripPerson: React.FC<TripPersonProps> = ({ initialName = 'Name...', onName
   const [image, setImage] = useState<string | null>(null);
   const [showToast, setShowToast] = useState(false);
 
-  // Obsługa zmiany imienia
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
-    onNameChange(e.target.value); // Przekazanie zmienionego imienia do głównego komponentu
+    onNameChange(e.target.value);
   };
 
   // Obsługa robienia zdjęcia
@@ -81,6 +82,7 @@ const TripPerson: React.FC<TripPersonProps> = ({ initialName = 'Name...', onName
       <div className={styles.header}>
         <input
           type="text"
+          placeholder='Name...'
           value={name}
           onChange={handleNameChange}
           className={styles.input}
@@ -93,7 +95,7 @@ const TripPerson: React.FC<TripPersonProps> = ({ initialName = 'Name...', onName
           <div className={styles.cameraIcon} />
         )}
         <div className={styles.addButton} onClick={() => setShowToast(true)}>
-          +
+          <FontAwesomeIcon icon={faPlus} className={styles.plusIcon} />
         </div>
       </div>
 

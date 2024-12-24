@@ -26,8 +26,8 @@ const Main: React.FC = () => {
   return (
     <div className={styles.main}>
       <div className={styles.overlay}>
+      <Navbar background="transparent" showNavLinks={false} />
         <Wrapper>
-          <Navbar background="transparent" showNavLinks={false} />
           <div className={styles.flex}>
             <div className={styles.left}>
               <MainQuote />

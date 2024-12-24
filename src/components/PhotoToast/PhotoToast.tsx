@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './PhotoToast.module.css';
+import photoToast from "../../assets/plan/photoToast.png"
 
 interface PhotoToastProps {
   onTakePhoto: () => void;
@@ -12,6 +13,7 @@ const PhotoToast: React.FC<PhotoToastProps> = ({ onTakePhoto, onUploadPhoto, onC
     <div className={styles.overlay}>
       <div className={styles.toast}>
         <h2 className={styles.title}>Add Photo</h2>
+        <img className={styles.photo} src={photoToast} alt="Photos image" />
         <div className={styles.buttons}>
           <button className={styles.button} onClick={onTakePhoto}>
             Take Photo

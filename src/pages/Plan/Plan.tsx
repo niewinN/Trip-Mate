@@ -12,6 +12,8 @@ import RestaurantsBox from "../../components/RestaurantsBox/RestaurantsBox";
 import AttractionsBox from "../../components/AttractionsBox/AttractionsBox";
 import { useFlightSearchContext } from "../../contexts/FlightSearchContext";
 import { useNavigate } from "react-router-dom";
+import errorToast from "../../assets/plan/errorToast.png"
+import ErrorToast from "../../components/ErrorToast/ErrorToast";
 
 interface TripPersonData {
   name: string;
@@ -34,7 +36,7 @@ const Plan = () => {
   } = useFlightSearchContext();
 
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [tripName, setTripName] = useState<string>("My Trip");
+  const [tripName, setTripName] = useState<string>("");
   const [tripPersons, setTripPersons] = useState<TripPersonData[]>(
     Array(passengers).fill({ name: "", image: null })
   );
@@ -42,6 +44,7 @@ const Plan = () => {
   const [selectedHotel, setSelectedHotel] = useState<any>(null);
   const [selectedRestaurants, setSelectedRestaurants] = useState<any[]>([]);
   const [selectedAttractions, setSelectedAttractions] = useState<any[]>([]);
+  const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
   const hasFetchedInitial = useRef(false);
   const navigate = useNavigate();
 
@@ -71,7 +74,7 @@ const Plan = () => {
       fetchFlights();
       hasFetchedInitial.current = true;
     } else {
-      alert("Please complete all fields, including trip name and passenger details.");
+      setShowErrorToast(true)
     }
   };
 
@@ -232,6 +235,15 @@ const Plan = () => {
             onAttractionSelect={handleAttractionSelect}
             onFinish={handleFinish}
             showFinishButton={true}
+          />
+        )}
+
+        {/* Error Toast */}
+        {showErrorToast && (
+          <ErrorToast
+            message="Please complete all fields, including trip name and passenger details!"
+            imageSrc={errorToast}
+            onClose={() => setShowErrorToast(false)}
           />
         )}
       </Wrapper>

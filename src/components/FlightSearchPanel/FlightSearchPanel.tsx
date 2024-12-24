@@ -13,7 +13,7 @@ interface FlightSearchPanelProps {
   setDepartureDate: (date: string) => void;
   setReturnDate: (date: string) => void;
   setPassengers: (count: number) => void;
-  onSearch: () => void; // Funkcja wyszukiwania po kliknięciu "Szukaj"
+  onSearch: () => void;
   showButton?: boolean;
   redirectToPlan?: boolean;
 }
@@ -46,9 +46,9 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
       passengers,
     });
 
-    onSearch(); // Wywołanie funkcji wyszukiwania
+    onSearch();
     if (redirectToPlan) {
-      navigate('/plan'); // Przekierowanie na podstronę /plan
+      navigate('/plan'); 
     }
   };
   
@@ -56,7 +56,7 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        handleSearch(); // Wywołanie wyszukiwania po kliknięciu "Search"
+        handleSearch();
       }}
       className={styles.form}
     >
@@ -66,7 +66,7 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
           id="departureCity"
           type="text"
           value={departureCity}
-          onChange={(e) => setDepartureCity(e.target.value)} // Zmiana miasta wylotu
+          onChange={(e) => setDepartureCity(e.target.value)}
           placeholder="Enter departure city"
           className={styles.input}
         />
@@ -78,7 +78,7 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
           id="arrivalCity"
           type="text"
           value={arrivalCity}
-          onChange={(e) => setArrivalCity(e.target.value)} // Zmiana miasta docelowego
+          onChange={(e) => setArrivalCity(e.target.value)}
           placeholder="Enter arrival city"
           className={styles.input}
         />
@@ -90,7 +90,7 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
           id="departureDate"
           type="date"
           value={departureDate}
-          onChange={(e) => setDepartureDate(e.target.value)} // Zmiana daty wylotu
+          onChange={(e) => setDepartureDate(e.target.value)}
           className={styles.input}
         />
       </div>
@@ -101,7 +101,7 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
           id="returnDate"
           type="date"
           value={returnDate}
-          onChange={(e) => setReturnDate(e.target.value)} // Zmiana daty powrotu
+          onChange={(e) => setReturnDate(e.target.value)}
           className={styles.input}
         />
       </div>
@@ -112,7 +112,7 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
           id="passengers"
           type="number"
           value={passengers}
-          onChange={(e) => setPassengers(Number(e.target.value))} // Zmiana liczby pasażerów
+          onChange={(e) => setPassengers(Number(e.target.value))}
           className={`${styles.input} ${styles.inputNumber}`}
           min="1"
         />
