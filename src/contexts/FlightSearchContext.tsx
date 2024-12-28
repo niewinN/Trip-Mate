@@ -113,7 +113,7 @@ export const FlightSearchProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setError(null);
 
     try {
-      const response = await axios.get("http://localhost:5000/api/flights", {
+      const response = await axios.get("http://localhost:5000/api/data/flights", {
         params: {
           departure_city: departureCity,
           arrival_city: arrivalCity,

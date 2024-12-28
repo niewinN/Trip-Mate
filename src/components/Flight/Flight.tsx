@@ -31,7 +31,8 @@ const Flight: React.FC<FlightProps> = ({ flight, onSelect }) => {
 
       {/* Szczegóły lotów */}
       <div className={styles.flightDetails}>
-        {flight.segments.map((segment, index) => (
+        {/* {flight.segments.map((segment, index) => ( */}
+        {flight.segments?.map((segment, index) => (
           <div key={index} className={styles.segment}>
             <div className={styles.flightInfo}>
               <p className={styles.airport}>{segment.departure.airport}</p>

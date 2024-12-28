@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './AccountData.module.css';
+import { useNavigate } from 'react-router-dom';
 
 const AccountData: React.FC = () => {
   const [email, setEmail] = useState('peter.charles@gmail.com');
@@ -7,6 +8,7 @@ const AccountData: React.FC = () => {
   const [lastName, setLastName] = useState('Charles');
   const [phone, setPhone] = useState('743983293');
   const [isEditable, setIsEditable] = useState(false);
+  const navigate = useNavigate()
 
   const toggleEditable = () => {
     setIsEditable(!isEditable);
@@ -14,6 +16,8 @@ const AccountData: React.FC = () => {
 
   const handleLogout = () => {
     console.log('User logged out');
+    localStorage.removeItem('token'); // Usuń token z localStorage
+    navigate('/login'); // Przekierowanie na stronę logowania
     // Tutaj możesz dodać logikę wylogowania
   };
 

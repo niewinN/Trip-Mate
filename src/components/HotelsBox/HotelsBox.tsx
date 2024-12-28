@@ -58,7 +58,7 @@ const HotelsBox: React.FC<HotelsBoxProps> = ({
     setError(null);
 
     try {
-      const response = await axios.get('http://localhost:5000/api/hotels', {
+      const response = await axios.get('http://localhost:5000/api/data/hotels', {
         params: {
           q: query,
           check_in_date: checkInDate,

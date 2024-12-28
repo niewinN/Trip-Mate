@@ -12,7 +12,7 @@ const TripCard: React.FC<TripCardProps> = ({ tripName, arrivalCity }) => {
   useEffect(() => {
     const fetchCityImage = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/city-image?q=${encodeURIComponent(arrivalCity)}`);
+        const response = await fetch(`http://localhost:5000/api/data/city-image?q=${encodeURIComponent(arrivalCity)}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

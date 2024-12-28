@@ -40,7 +40,7 @@ const RestaurantsBox: React.FC<RestaurantsBoxProps> = ({
   const handleSearch = async (city: string) => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/restaurants?location=${city}`);
+      const response = await fetch(`http://localhost:5000/api/data/restaurants?location=${city}`);
       const data = await response.json();
       setRestaurants(data);
     } catch (error) {

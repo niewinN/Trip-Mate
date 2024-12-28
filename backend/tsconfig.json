@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "CommonJS",
+      "rootDir": "./",
+      "outDir": "./dist",
+      "esModuleInterop": true,
+      "strict": true,
+      "moduleResolution": "Node",
+      "skipLibCheck": true,
+      "types": ["node", "express", "cors", "dotenv"]
+    },
+    "include": ["server.ts", "routes/**/*", "controllers/**/*", "middleware/**/*", "utils/**/*"],
+    "exclude": ["node_modules"]
+  }
+  

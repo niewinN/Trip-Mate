@@ -36,7 +36,7 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/api/attractions?location=${searchCity}`
+        `http://localhost:5000/api/data/attractions?location=${searchCity}`
       );
       const data = await response.json();
       setAttractions(data);

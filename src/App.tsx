@@ -16,6 +16,11 @@ import { FlightSearchProvider } from "./contexts/FlightSearchContext"
 import Summary from "./pages/Summary/Summary"
 import Profile from "./pages/Profile/Profile"
 
+const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+	const token = localStorage.getItem('token');
+	return token ? children : <Navigate to="/login" />;
+  };
+
 function App() {
 	return (
 		<>
@@ -31,7 +36,9 @@ function App() {
 					<Route path='/attractions' element={<Attractions/>}/>
 					<Route path='/plan' element={<Plan/>}/>
 					<Route path='/summary' element={<Summary/>} />
-					<Route path='profile' element={<Profile/>} />
+					<Route path='profile' element={<PrivateRoute>
+													<Profile />
+													</PrivateRoute>} />
 				</Routes>
 			</Router>
 			</FlightSearchProvider>
