@@ -279,6 +279,7 @@ import dotenv from 'dotenv';
 
 import authRoutes from './routes/authRoutes';
 import dataRoutes from './routes/dataRoutes';
+import travelRoutes from "./routes/travelRoutes"
 // import protectedRoutes from "./routes/protectedRoutes"
 
 dotenv.config();
@@ -288,11 +289,13 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Ustaw limit na 10MB
+app.use(express.urlencoded({ limit: '10mb', extended: true })); // Dla danych URL-encoded
 
 // Trasy
 app.use('/api/auth', authRoutes);
 app.use('/api/data', dataRoutes);
+app.use('/api/travels', travelRoutes)
 // app.use('/api/protected', protectedRoutes)
 
 // Obsługa błędów

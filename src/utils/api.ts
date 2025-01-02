@@ -53,6 +53,17 @@ export const loginUser = async (email: string, password: string) => {
   return response.data; // Zwraca token JWT
 };
 
+
+export const createTravel = async (travelData: any, token: string) => {
+  const response = await axios.post('http://localhost:5000/api/travels/create', travelData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+
 // DATA
 export const fetchHotels = () => API.get('/data/hotels');
 

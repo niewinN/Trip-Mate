@@ -9,26 +9,26 @@ interface TripCardProps {
 const TripCard: React.FC<TripCardProps> = ({ tripName, arrivalCity }) => {
   const [cityImage, setCityImage] = useState<string>('https://via.placeholder.com/800x600?text=Loading+Image');
 
-  useEffect(() => {
-    const fetchCityImage = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/api/data/city-image?q=${encodeURIComponent(arrivalCity)}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+  // useEffect(() => {
+  //   const fetchCityImage = async () => {
+  //     try {
+  //       const response = await fetch(`http://localhost:5000/api/data/city-image?q=${encodeURIComponent(arrivalCity)}`);
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
 
-        const data = await response.json();
-        console.log('🎯 City Image URL:', data.image);
+  //       const data = await response.json();
+  //       console.log('🎯 City Image URL:', data.image);
 
-        setCityImage(data.image || 'https://via.placeholder.com/800x600?text=No+Image+Available');
-      } catch (error) {
-        console.error('Error fetching city image:', error);
-        setCityImage('https://via.placeholder.com/800x600?text=No+Image+Available');
-      }
-    };
+  //       setCityImage(data.image || 'https://via.placeholder.com/800x600?text=No+Image+Available');
+  //     } catch (error) {
+  //       console.error('Error fetching city image:', error);
+  //       setCityImage('https://via.placeholder.com/800x600?text=No+Image+Available');
+  //     }
+  //   };
 
-    fetchCityImage();
-  }, [arrivalCity]);
+  //   fetchCityImage();
+  // }, [arrivalCity]);
 
   return (
     <div

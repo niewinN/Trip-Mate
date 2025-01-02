@@ -14,6 +14,7 @@ import { useFlightSearchContext } from "../../contexts/FlightSearchContext";
 import { useNavigate } from "react-router-dom";
 import errorToast from "../../assets/plan/errorToast.png"
 import ErrorToast from "../../components/ErrorToast/ErrorToast";
+import { createTravel } from "../../utils/api";
 
 interface TripPersonData {
   name: string;
@@ -47,6 +48,7 @@ const Plan = () => {
   const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
   const hasFetchedInitial = useRef(false);
   const navigate = useNavigate();
+  const attractionsRef = useRef<any[]>([]);
 
   // Aktualizacja osób w podróży
   const updateTripPerson = (index: number, field: "name" | "image", value: any) => {
@@ -85,7 +87,13 @@ const Plan = () => {
     }
   }, [currentStep, fetchFlights]);
 
+  useEffect(() => {
+  console.log("📝 Selected Attractions State Updated:", selectedAttractions);
+}, [selectedAttractions]);
+
+
   const handleFlightSelect = (flight: any) => {
+    console.log("✈️ Selected Flight:", flight); // Dodaj logowanie tutaj
     setSelectedFlight(flight);
     setArrivalCity(flight.segments?.[flight.segments.length - 1]?.arrival?.city || arrivalCity);
     setDepartureDate(flight.segments?.[0]?.departure?.time.split(" ")[0] || departureDate);
@@ -100,6 +108,7 @@ const Plan = () => {
   };
 
   const handleRestaurantSelect = (restaurant: any) => {
+    console.log("Selected Restaurants:", restaurant)
     setSelectedRestaurants((prev) => {
       const isAlreadySelected = prev.some((r) => r.title === restaurant.title);
       if (isAlreadySelected) {
@@ -109,48 +118,88 @@ const Plan = () => {
     });
   };
 
+  
+
   const handleAttractionSelect = (attractions: any[]) => {
-    console.log("🎢 Selected Attractions:", attractions); // Debug
-    setSelectedAttractions([...attractions]); // Aktualizacja stanu
+    console.log("🎢 Selected Attractions:", attractions);
+    setSelectedAttractions(attractions);
   };
  
   const handleRestaurantNext = () => {
     setCurrentStep(5); // Przejście do AttractionsBox
   };
   
-  const handleFinish = () => {
-    setSelectedAttractions((prevAttractions) => {
-      console.log("🎯 Final Trip Summary (Before Navigate in Plan.tsx):", {
-        flight: selectedFlight,
-        hotel: selectedHotel,
-        restaurants: selectedRestaurants,
-        attractions: prevAttractions,
-        departureCity,
-        arrivalCity,
-        departureDate,
-        returnDate,
-      });
+
+
+useEffect(() => {
+  attractionsRef.current = selectedAttractions;
+  console.log("📝 Attractions Ref Updated:", attractionsRef.current);
+}, [selectedAttractions]);
   
-      navigate("/summary", {
-        state: {
-          flight: selectedFlight,
-          hotel: selectedHotel,
-          restaurants: selectedRestaurants,
-          attractions: prevAttractions,
-          tripName,
-          tripPersons,
-          departureCity,
-          arrivalCity,
-          departureDate,
-          returnDate,
-        },
-      });
-  
-      return prevAttractions; // Zwracamy niezmieniony stan
-    });
-  };
-  
-  
+const handleFinish = async () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    navigate('/login');
+    return;
+  }
+
+  console.log("🎢 Final Selected Attractions (Before API Call):", selectedAttractions);
+
+  const travelData = {
+    departureCity,
+    arrivalCity,
+    departureDate,
+    returnDate,
+    passengersCount: passengers || 1,
+    tripName,
+    tripPersons,
+    flight: {
+      airline: selectedFlight?.airline || null,
+      airline_logo: selectedFlight?.airline_logo || null,
+      price: selectedFlight?.price || null,
+      departure_airport: selectedFlight?.segments?.[0]?.departure?.airport || null,
+      arrival_airport: selectedFlight?.segments?.[selectedFlight?.segments.length - 1]?.arrival?.airport || null,
+      departure_time: selectedFlight?.segments?.[0]?.departure?.time || null,
+      arrival_time: selectedFlight?.segments?.[selectedFlight?.segments.length - 1]?.arrival?.time || null,
+      total_duration: selectedFlight?.totalDuration || null,
+    },
+    hotel: {
+      name: selectedHotel?.name || null,
+      description: selectedHotel?.description || null,
+      check_in_time: selectedHotel?.check_in_time || null,
+      check_out_time: selectedHotel?.check_out_time || null,
+      price: selectedHotel?.rate_per_night?.extracted_lowest || null,
+      location: arrivalCity || null,
+      check_in_date: departureDate || null,
+      check_out_date: returnDate || null,
+    },
+    restaurants: selectedRestaurants.map((restaurant) => ({
+      title: restaurant.title || 'No title',
+      address: restaurant.address || 'No address',
+      description: restaurant.description || 'No description',
+      price: restaurant.price || 'No price',
+      thumbnail: restaurant.thumbnail || null,
+    })),
+    attractions: selectedAttractions
+    ? selectedAttractions.map((attraction) => ({
+        title: attraction.title || 'No title',
+        description: attraction.description || 'No description',
+        thumbnail: attraction.thumbnail || null,
+      }))
+    : [],
+};
+
+  console.log('🚀 Final Travel Data (Before API Call):', travelData);
+
+  try {
+    const response = await createTravel(travelData, token);
+    console.log('✅ Travel created successfully:', response);
+    navigate(`/summary/${response.travelId}`);
+  } catch (error) {
+    console.error('❌ Error creating travel:', error);
+    setShowErrorToast(true);
+  }
+};
   
 
   return (

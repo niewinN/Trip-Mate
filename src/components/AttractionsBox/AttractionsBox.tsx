@@ -48,6 +48,7 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
   };
 
   const handleAddAttraction = (attraction: any) => {
+    console.log("🎢 Selected Attraction:", attraction); // Debug
     setSelectedAttractions((prev) => {
       const isAlreadySelected = prev.some((a) => a.title === attraction.title);
       if (isAlreadySelected) {
@@ -57,10 +58,33 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
     });
   };
 
+  // const handleFinish = () => {
+  //   console.log("🏁 Final Selected Attractions (AttractionsBox.tsx):", selectedAttractions);
+  //   onAttractionSelect([...selectedAttractions]);
+  //   setTimeout(() => {
+  //     onFinish();
+  //   }, 0); //
+  // };
   const handleFinish = () => {
     console.log("🏁 Final Selected Attractions (AttractionsBox.tsx):", selectedAttractions);
-    onAttractionSelect([...selectedAttractions]);
-    onFinish();
+  
+    const sanitizedAttractions = selectedAttractions.map((attraction) => ({
+      title: attraction.title || "No title",
+      description: attraction.description || "No description",
+      thumbnail: attraction.thumbnail || null,
+      rating: attraction.rating || 0,
+      reviews_original: attraction.reviews_original || "0",
+      reviews: attraction.reviews || 0,
+      address: attraction.address || "Unknown",
+    }));
+  
+    console.log("✅ Sanitized Attractions:", sanitizedAttractions);
+  
+    onAttractionSelect(sanitizedAttractions);
+  
+    setTimeout(() => {
+      onFinish();
+    }, 0);
   };
   
   

@@ -47,8 +47,14 @@ const FlightSearchPanel: React.FC<FlightSearchPanelProps> = ({
     });
 
     onSearch();
+
     if (redirectToPlan) {
-      navigate('/plan'); 
+      const token = localStorage.getItem('token');
+      if (token) {
+        navigate('/plan'); // Zalogowany użytkownik → /plan
+      } else {
+        navigate('/login'); // Niezalogowany użytkownik → /login
+      }
     }
   };
   

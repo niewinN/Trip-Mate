@@ -34,11 +34,9 @@ function App() {
 					<Route path='/flights' element={<Flights/>}/>
 					<Route path='/restaurants' element={<Restaurants/>}/>
 					<Route path='/attractions' element={<Attractions/>}/>
-					<Route path='/plan' element={<Plan/>}/>
-					<Route path='/summary' element={<Summary/>} />
-					<Route path='profile' element={<PrivateRoute>
-													<Profile />
-													</PrivateRoute>} />
+					<Route path='/plan' element={<PrivateRoute><Plan/></PrivateRoute>}/>
+					<Route path='/summary/:id' element={<Summary/>} />
+					<Route path='profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
 				</Routes>
 			</Router>
 			</FlightSearchProvider>
