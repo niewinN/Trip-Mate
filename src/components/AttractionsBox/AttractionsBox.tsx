@@ -47,16 +47,36 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
     }
   };
 
+  // const handleAddAttraction = (attraction: any) => {
+  //   console.log("🎢 Selected Attraction:", attraction); // Debug
+  //   setSelectedAttractions((prev) => {
+  //     const isAlreadySelected = prev.some((a) => a.title === attraction.title);
+  //     if (isAlreadySelected) {
+  //       return prev.filter((a) => a.title !== attraction.title);
+  //     }
+  //     return [...prev, attraction];
+  //   });
+  // };
   const handleAddAttraction = (attraction: any) => {
     console.log("🎢 Selected Attraction:", attraction); // Debug
+  
     setSelectedAttractions((prev) => {
       const isAlreadySelected = prev.some((a) => a.title === attraction.title);
+      let updatedAttractions;
+  
       if (isAlreadySelected) {
-        return prev.filter((a) => a.title !== attraction.title);
+        updatedAttractions = prev.filter((a) => a.title !== attraction.title);
+      } else {
+        updatedAttractions = [...prev, attraction];
       }
-      return [...prev, attraction];
+  
+      // Natychmiast aktualizujemy rodzica przez onAttractionSelect
+      onAttractionSelect(updatedAttractions);
+  
+      return updatedAttractions;
     });
   };
+  
 
   // const handleFinish = () => {
   //   console.log("🏁 Final Selected Attractions (AttractionsBox.tsx):", selectedAttractions);
@@ -81,10 +101,7 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
     console.log("✅ Sanitized Attractions:", sanitizedAttractions);
   
     onAttractionSelect(sanitizedAttractions);
-  
-    setTimeout(() => {
-      onFinish();
-    }, 0);
+    onFinish()
   };
   
   

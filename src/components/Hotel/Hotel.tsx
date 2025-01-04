@@ -74,7 +74,9 @@ interface HotelProps {
     check_out_time?: string | null;
     amenities?: string[];
     nearby_places?: string[];
-    images?: { thumbnail: string }[];
+    images?: { thumbnail: string }[]; // Dla danych z Serp API
+    thumbnail?: string; // Dla danych z bazy danych
+    price?: number; // Dla danych z bazy danych
   };
   onSelect: (hotel: any) => void;
 }
@@ -84,13 +86,17 @@ const Hotel: React.FC<HotelProps> = ({ hotel, onSelect }) => {
     return <div className={styles.hotelCard}>No hotel data available.</div>;
   }
 
+    // Normalizacja danych z różnych źródeł
+    const thumbnail = hotel.images?.[0]?.thumbnail || hotel.thumbnail || 'https://via.placeholder.com/150';
+    const price = hotel.rate_per_night?.lowest || hotel.price || 'N/A';
+
   return (
     <div className={styles.hotelCard}>
       {/* Obrazek hotelu */}
       <div className={styles.hotelImage}>
         {hotel.images?.[0]?.thumbnail ? (
           <img
-            src={hotel.images[0].thumbnail}
+            src={thumbnail}
             alt={hotel.name || 'Hotel Image'}
             className={styles.thumbnail}
           />
@@ -106,7 +112,7 @@ const Hotel: React.FC<HotelProps> = ({ hotel, onSelect }) => {
           {hotel.hotel_class || 'N/A'} • Ocena: {hotel.overall_rating || 'Brak danych'} ⭐️ • Recenzje: {hotel.reviews || 0}
         </p>
         <p className={styles.hotelPrice}>
-          Cena za noc: {hotel.rate_per_night?.lowest || 'Brak danych'}
+          Cena za noc: {price} zł
         </p>
 
         {/* Udogodnienia */}

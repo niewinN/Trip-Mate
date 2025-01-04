@@ -121,20 +121,17 @@ const Plan = () => {
   
 
   const handleAttractionSelect = (attractions: any[]) => {
-    console.log("🎢 Selected Attractions:", attractions);
-    setSelectedAttractions(attractions);
+    console.log("🎡 Attractions received from AttractionsBox:", attractions);
+    setSelectedAttractions([...attractions]);
   };
+  
+  
+  
  
   const handleRestaurantNext = () => {
     setCurrentStep(5); // Przejście do AttractionsBox
   };
   
-
-
-useEffect(() => {
-  attractionsRef.current = selectedAttractions;
-  console.log("📝 Attractions Ref Updated:", attractionsRef.current);
-}, [selectedAttractions]);
   
 const handleFinish = async () => {
   const token = localStorage.getItem('token');
@@ -143,7 +140,9 @@ const handleFinish = async () => {
     return;
   }
 
-  console.log("🎢 Final Selected Attractions (Before API Call):", selectedAttractions);
+  // Wymuś pełną synchronizację stanu
+  const attractionsCopy = [...selectedAttractions];
+  console.log("🎢 Final Selected Attractions (Before API Call):", attractionsCopy);
 
   const travelData = {
     departureCity,
@@ -153,7 +152,8 @@ const handleFinish = async () => {
     passengersCount: passengers || 1,
     tripName,
     tripPersons,
-    flight: {
+    flight: selectedFlight
+  ? [{
       airline: selectedFlight?.airline || null,
       airline_logo: selectedFlight?.airline_logo || null,
       price: selectedFlight?.price || null,
@@ -162,44 +162,63 @@ const handleFinish = async () => {
       departure_time: selectedFlight?.segments?.[0]?.departure?.time || null,
       arrival_time: selectedFlight?.segments?.[selectedFlight?.segments.length - 1]?.arrival?.time || null,
       total_duration: selectedFlight?.totalDuration || null,
-    },
-    hotel: {
-      name: selectedHotel?.name || null,
-      description: selectedHotel?.description || null,
-      check_in_time: selectedHotel?.check_in_time || null,
-      check_out_time: selectedHotel?.check_out_time || null,
-      price: selectedHotel?.rate_per_night?.extracted_lowest || null,
-      location: arrivalCity || null,
-      check_in_date: departureDate || null,
-      check_out_date: returnDate || null,
-    },
-    restaurants: selectedRestaurants.map((restaurant) => ({
-      title: restaurant.title || 'No title',
-      address: restaurant.address || 'No address',
-      description: restaurant.description || 'No description',
-      price: restaurant.price || 'No price',
-      thumbnail: restaurant.thumbnail || null,
+      segments: selectedFlight?.segments || [],
+    }]
+  : [],
+
+      hotel: selectedHotel
+      ? [{
+          name: selectedHotel?.name || null,
+          location: arrivalCity || null,
+          check_in_date: departureDate || null,
+          check_out_date: returnDate || null,
+          price: selectedHotel?.rate_per_night?.extracted_lowest || null,
+          description: selectedHotel?.description || null,
+          hotel_class: selectedHotel?.hotel_class || null,
+          overall_rating: selectedHotel?.overall_rating || null,
+          reviews: selectedHotel?.reviews || null,
+          amenities: selectedHotel?.amenities || [],
+          nearby_places: selectedHotel?.nearby_places || [],
+          thumbnail: selectedHotel?.images?.[0]?.thumbnail || null,
+        }]
+      : [],
+      restaurants: selectedRestaurants.map((restaurant) => ({
+        title: restaurant.title,
+        address: restaurant.address,
+        price_range: restaurant.price,
+        description: restaurant.description,
+        thumbnail: restaurant.thumbnail,
+        rating: restaurant.rating,
+        reviews_original: restaurant.reviews_original,
+        reviews: restaurant.reviews,
+        type: restaurant.type,
+      })),
+    attractions: selectedAttractions.map((attraction) => ({
+      title: attraction.title || 'No title',
+      description: attraction.description || 'No description',
+      thumbnail: attraction.thumbnail || null,
     })),
-    attractions: selectedAttractions
-    ? selectedAttractions.map((attraction) => ({
-        title: attraction.title || 'No title',
-        description: attraction.description || 'No description',
-        thumbnail: attraction.thumbnail || null,
-      }))
-    : [],
-};
+  };
 
   console.log('🚀 Final Travel Data (Before API Call):', travelData);
 
   try {
     const response = await createTravel(travelData, token);
     console.log('✅ Travel created successfully:', response);
+    console.log('🆔 Travel ID from Response:', response.travelId);
+
+  if (response && response.travelId) {
     navigate(`/summary/${response.travelId}`);
+  } else {
+    console.error('❌ Travel ID is missing in the response!');
+    setShowErrorToast(true);
+  }
   } catch (error) {
     console.error('❌ Error creating travel:', error);
     setShowErrorToast(true);
   }
 };
+
   
 
   return (

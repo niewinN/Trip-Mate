@@ -1,17 +1,17 @@
 {
-    "compilerOptions": {
-      "target": "ES6",
-      "module": "commonjs",
-      "rootDir": "./",
-      "outDir": "./dist",
-      "esModuleInterop": true,
-      "strict": true,
-      "moduleResolution": "Node",
-      "skipLibCheck": true,
-      "resolveJsonModule": true,
-      "types": ["node", "express", "cors", "dotenv"]
-    },
-    "include": ["server.ts", "routes/**/*", "controllers/**/*", "middleware/**/*", "utils/**/*"],
-    "exclude": ["node_modules"]
-  }
-  
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "rootDir": "./",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "strict": true,
+    "moduleResolution": "Node",
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "types": ["node", "express", "cors", "dotenv"]
+  },
+  "include": ["server.ts", "routes/**/*", "controllers/**/*", "middleware/**/*", "utils/**/*", "types/**/*"],
+  "exclude": ["node_modules"]
+}
