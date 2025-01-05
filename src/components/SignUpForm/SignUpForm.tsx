@@ -1,38 +1,6 @@
-// import React from 'react';
-// import styles from './SignUpForm.module.css';
-// import { registerUser } from '../../utils/api';
-
-// interface SignUpFormProps {
-//   onToggle: () => void;
-// }
-
-// const SignUpForm: React.FC<SignUpFormProps> = ({ onToggle }) => {
-//   return (
-//     <div className={styles.container}>
-//       <h1 className={styles.title}>Sign up!</h1>
-//       <form className={styles.form}>
-//         <label htmlFor="name">Name</label>
-//         <input type="text"/>
-//         <label htmlFor="email">E-mail</label>
-//         <input type="email"/>
-//         <label htmlFor="password">Password</label>
-//         <input type="password"/>
-//         <label htmlFor="confirmPassword">Confirm password</label>
-//         <input type="password"/>
-//         <button type="submit">Sign up</button>
-//       </form>
-//       <p className={styles.register}>
-//         Already have an account?{' '}
-//         <a href="#" onClick={onToggle} className={styles.link}>
-//           Log in
-//         </a>
-//       </p>
-//     </div>
-//   );
-// };
-
-// export default SignUpForm;
-import React, { useState } from 'react';
+import React from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import styles from './SignUpForm.module.css';
 import { registerUser } from '../../utils/api';
 
@@ -40,52 +8,103 @@ interface SignUpFormProps {
   onToggle: () => void;
 }
 
-const SignUpForm: React.FC<SignUpFormProps> = ({ onToggle }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [phone, setPhone] = useState('');
+// ✅ Schema walidacyjna z Yup
+const validationSchema = Yup.object({
+  name: Yup.string().required('Name is required'),
+  email: Yup.string().email('Invalid email format').required('Email is required'),
+  password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Confirm Password is required'),
+  phone: Yup.string().matches(/^\d{9}$/, 'Phone number must be 9 digits').optional(),
+});
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !email || !password) {
-      return alert('Name, email, and password are required');
-    }
-  
-    if (password !== confirmPassword) {
-      return alert('Passwords do not match');
-    }
-  
-    try {
-      await registerUser(name, email, password, phone);
-      alert('Registration successful!');
-      onToggle();
-    } catch (error: any) {
-      console.error('❌ Registration error:', error);
-      alert(error.response?.data?.error || 'Registration failed');
-    }
-  };
-  
-
-  return (
-    <div className={styles.container}>
+const SignUpForm: React.FC<SignUpFormProps> = ({ onToggle }) => (
+  <div className={styles.container}>
     <h1 className={styles.title}>Sign up!</h1>
-    <form className={styles.form} onSubmit={handleRegister}>
-      <label>Name</label>
-      <input value={name} onChange={(e) => setName(e.target.value)} />
-      <label>Email</label>
-      <input value={email} onChange={(e) => setEmail(e.target.value)} />
-      <label>Password</label>
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      <label>Confirm Password</label>
-      <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-      <label>Phone (optional)</label>
-      <input value={phone} onChange={(e) => setPhone(e.target.value)} />
-      <button type="submit">Sign Up</button>
-    </form>
-    </div>
-  );
-};
+    <Formik
+      initialValues={{
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+      }}
+      validationSchema={validationSchema}
+      onSubmit={async (values) => {
+        const { name, email, password, phone } = values;
+        try {
+          await registerUser(name, email, password, phone);
+          onToggle();
+        } catch (error: any) {
+          console.error('❌ Registration error:', error);
+          alert(error.response?.data?.error || 'Registration failed');
+        }
+      }}
+      validateOnBlur={false} // Wyłącz walidację przy opuszczeniu pola
+      validateOnChange={false} // Wyłącz walidację przy zmianie pola
+    >
+      {({ isSubmitting, errors }) => (
+        <Form className={styles.form}>
+          <label>Name</label>
+          <Field
+            name="name"
+            className={`${styles.input} ${
+              errors.name ? styles.errorInput : ''
+            }`}
+          />
+          <ErrorMessage name="name" component="div" className={styles.errorMessage} />
+
+          <label>Email</label>
+          <Field
+            name="email"
+            type="email"
+            className={`${styles.input} ${
+              errors.email ? styles.errorInput : ''
+            }`}
+          />
+          <ErrorMessage name="email" component="div" className={styles.errorMessage} />
+
+          <label>Password</label>
+          <Field
+            name="password"
+            type="password"
+            className={`${styles.input} ${
+              errors.password ? styles.errorInput : ''
+            }`}
+          />
+          <ErrorMessage name="password" component="div" className={styles.errorMessage} />
+
+          <label>Confirm Password</label>
+          <Field
+            name="confirmPassword"
+            type="password"
+            className={`${styles.input} ${
+              errors.confirmPassword ? styles.errorInput : ''
+            }`}
+          />
+          <ErrorMessage
+            name="confirmPassword"
+            component="div"
+            className={styles.errorMessage}
+          />
+
+          <label>Phone (optional)</label>
+          <Field
+            name="phone"
+            className={`${styles.input} ${
+              errors.phone ? styles.errorInput : ''
+            }`}
+          />
+          <ErrorMessage name="phone" component="div" className={styles.errorMessage} />
+
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Signing Up...' : 'Sign Up'}
+          </button>
+        </Form>
+      )}
+    </Formik>
+  </div>
+);
 
 export default SignUpForm;

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import styles from './ErrorToast.module.css';
+import styles from './Toast.module.css';
 
 interface ErrorToastProps {
   message: string;
@@ -7,7 +7,7 @@ interface ErrorToastProps {
   onClose: () => void;
 }
 
-const ErrorToast: React.FC<ErrorToastProps> = ({ message, imageSrc, onClose }) => {
+const Toast: React.FC<ErrorToastProps> = ({ message, imageSrc, onClose }) => {
   const toastRef = useRef<HTMLDivElement>(null);
 
   // Automatyczne zamknięcie po 10 sekundach
@@ -43,4 +43,4 @@ const ErrorToast: React.FC<ErrorToastProps> = ({ message, imageSrc, onClose }) =
   );
 };
 
-export default ErrorToast;
+export default Toast;

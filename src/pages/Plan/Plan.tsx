@@ -13,7 +13,7 @@ import AttractionsBox from "../../components/AttractionsBox/AttractionsBox";
 import { useFlightSearchContext } from "../../contexts/FlightSearchContext";
 import { useNavigate } from "react-router-dom";
 import errorToast from "../../assets/plan/errorToast.png"
-import ErrorToast from "../../components/ErrorToast/ErrorToast";
+import ErrorToast from "../../components/Toast/Toast";
 import { createTravel } from "../../utils/api";
 
 interface TripPersonData {
@@ -48,7 +48,6 @@ const Plan = () => {
   const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
   const hasFetchedInitial = useRef(false);
   const navigate = useNavigate();
-  const attractionsRef = useRef<any[]>([]);
 
   // Aktualizacja osób w podróży
   const updateTripPerson = (index: number, field: "name" | "image", value: any) => {
@@ -56,6 +55,39 @@ const Plan = () => {
     updatedPersons[index] = { ...updatedPersons[index], [field]: value };
     setTripPersons(updatedPersons);
   };
+
+  useEffect(() => {
+    setTripPersons((prev) => {
+      const updatedPersons = [...prev];
+
+      if (passengers > updatedPersons.length) {
+        // Dodanie brakujących kart
+        for (let i = updatedPersons.length; i < passengers; i++) {
+          updatedPersons.push({ name: "", image: null });
+        }
+      } else if (passengers < updatedPersons.length) {
+        // Usunięcie nadmiarowych kart
+        updatedPersons.splice(passengers);
+      }
+
+      console.log('🔄 Updated TripPersons:', updatedPersons); // Sprawdź aktualizację tablicy
+
+      return updatedPersons;
+    });
+  }, [passengers]);
+
+  useEffect(() => {
+    setTripPersons((prev) => {
+      const updatedPersons = Array.from({ length: passengers }, (_, i) => ({
+        name: prev[i]?.name || "",
+        image: prev[i]?.image || null,
+      }));
+      console.log('🔄 Forced Update TripPersons after passengers change:', updatedPersons);
+      return updatedPersons;
+    });
+  }, [passengers]);
+  
+  
 
   // Sprawdzanie kompletności formularza
   const isFormComplete = () => {
@@ -98,7 +130,7 @@ const Plan = () => {
     setArrivalCity(flight.segments?.[flight.segments.length - 1]?.arrival?.city || arrivalCity);
     setDepartureDate(flight.segments?.[0]?.departure?.time.split(" ")[0] || departureDate);
     setReturnDate(flight.return_date || returnDate);
-    setPassengers(flight.passengers || 1);
+    // setPassengers(flight.passengers || 1);
     setCurrentStep(3);
   };
 
@@ -134,6 +166,7 @@ const Plan = () => {
   
   
 const handleFinish = async () => {
+  console.log('🛠️ TripPersons State (Before API Call):', tripPersons);
   const token = localStorage.getItem('token');
   if (!token) {
     navigate('/login');

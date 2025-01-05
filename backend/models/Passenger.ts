@@ -1,13 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../config/db';
-import Travel from './Travel'; // ✅ Upewnij się, że ścieżka jest poprawna
+import Travel from './Travel';
 
-class Passenger extends Model {
-  public id!: number;
-  public travel_id!: number;
-  public name!: string;
-  public photo_url?: string;
-}
+class Passenger extends Model {}
 
 Passenger.init(
   {
@@ -18,9 +13,8 @@ Passenger.init(
     },
     travel_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
       references: {
-        model: 'travels', // ✅ Zgadza się z nazwą tabeli w bazie danych
+        model: 'travels',
         key: 'id',
       },
     },
@@ -29,7 +23,7 @@ Passenger.init(
       allowNull: false,
     },
     photo_url: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: true,
     },
   },
@@ -40,7 +34,7 @@ Passenger.init(
   }
 );
 
-// ✅ Upewnij się, że relacja jest poprawnie zdefiniowana
+// Asocjacja
 Passenger.belongsTo(Travel, { foreignKey: 'travel_id', as: 'travel' });
 Travel.hasMany(Passenger, { foreignKey: 'travel_id', as: 'passengers' });
 

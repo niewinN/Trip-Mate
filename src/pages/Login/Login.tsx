@@ -1,4 +1,3 @@
-import React from "react"
 import Navbar from "../../components/Navbar/Navbar"
 import styles from "./Login.module.css"
 import LoginBox from "../../components/LoginBox/LoginBox"
