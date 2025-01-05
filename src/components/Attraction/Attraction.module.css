@@ -12,11 +12,12 @@
   }
 
   .attractionCard.selected {
-    border: 2px solid blue;
+    border-color: #007bff;
+    box-shadow: 0 0 10px #007bff;
   }
   
   .attractionCard:hover {
-    transform: scale(1.02);
+    /* transform: scale(1.02); */
   }
   
   /* Dodaj przycisk w prawym górnym rogu */

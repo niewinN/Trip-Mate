@@ -16,7 +16,7 @@ const validationSchema = Yup.object({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'Passwords must match')
     .required('Confirm Password is required'),
-  phone: Yup.string().matches(/^\d{9}$/, 'Phone number must be 9 digits').optional(),
+  phone: Yup.string().matches(/^\d{9}$/, 'Phone number must be 9 digits').required('Phone is required'),
 });
 
 const SignUpForm: React.FC<SignUpFormProps> = ({ onToggle }) => (
@@ -89,7 +89,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onToggle }) => (
             className={styles.errorMessage}
           />
 
-          <label>Phone (optional)</label>
+          <label>Phone</label>
           <Field
             name="phone"
             className={`${styles.input} ${

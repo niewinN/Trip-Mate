@@ -60,3 +60,15 @@
     background: #0056b3;
   }
   
+  .inputError {
+    border: 1px solid red;
+  }
+  
+  .errorText {
+    color: red;
+    font-size: 1.5rem;
+    /* margin-top: 5px; */
+    text-align: left;
+    margin-bottom: 15px;
+  }
+  

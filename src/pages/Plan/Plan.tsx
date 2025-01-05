@@ -11,7 +11,7 @@ import HotelsBox from "../../components/HotelsBox/HotelsBox";
 import RestaurantsBox from "../../components/RestaurantsBox/RestaurantsBox";
 import AttractionsBox from "../../components/AttractionsBox/AttractionsBox";
 import { useFlightSearchContext } from "../../contexts/FlightSearchContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import errorToast from "../../assets/plan/errorToast.png"
 import ErrorToast from "../../components/Toast/Toast";
 import { createTravel } from "../../utils/api";
@@ -47,7 +47,9 @@ const Plan = () => {
   const [selectedAttractions, setSelectedAttractions] = useState<any[]>([]);
   const [showErrorToast, setShowErrorToast] = useState<boolean>(false);
   const hasFetchedInitial = useRef(false);
+  const isFirstRender = useRef(true)
   const navigate = useNavigate();
+  const location = useLocation()
 
   // Aktualizacja osób w podróży
   const updateTripPerson = (index: number, field: "name" | "image", value: any) => {
@@ -55,6 +57,34 @@ const Plan = () => {
     updatedPersons[index] = { ...updatedPersons[index], [field]: value };
     setTripPersons(updatedPersons);
   };
+
+   // 🕹️ Obsługa nawigacji przeglądarki
+   useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state?.step !== undefined) {
+        setCurrentStep(event.state.step);
+      }
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    // Ustaw stan początkowy historii tylko raz
+    if (isFirstRender.current) {
+      window.history.replaceState({ step: currentStep }, "", location.pathname);
+      isFirstRender.current = false;
+    }
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    // Aktualizuj historię tylko przy zmianie currentStep (nie na każdym renderze)
+    if (!isFirstRender.current) {
+      window.history.pushState({ step: currentStep }, "", location.pathname);
+    }
+  }, [currentStep, location.pathname]);
 
   useEffect(() => {
     setTripPersons((prev) => {
@@ -102,15 +132,34 @@ const Plan = () => {
     );
   };
 
+  // const handleNextStep = () => {
+  //   if (isFormComplete()) {
+  //     setCurrentStep(2);
+  //     fetchFlights();
+  //     hasFetchedInitial.current = true;
+  //   } else {
+  //     setShowErrorToast(true)
+  //   }
+  // };
+  // 🟢 Funkcja przejścia do następnego kroku
   const handleNextStep = () => {
-    if (isFormComplete()) {
-      setCurrentStep(2);
+    if (!isFormComplete()) {
+      setShowErrorToast(true);
+      return;
+    }
+
+    setCurrentStep((prevStep) => {
+      const nextStep = prevStep + 1;
+      window.history.pushState({ step: nextStep }, "", location.pathname);
+      return nextStep;
+    });
+
+    if (currentStep === 2 && !hasFetchedInitial.current) {
       fetchFlights();
       hasFetchedInitial.current = true;
-    } else {
-      setShowErrorToast(true)
     }
   };
+
 
   useEffect(() => {
     if (currentStep === 2 && !hasFetchedInitial.current) {
@@ -303,6 +352,7 @@ const handleFinish = async () => {
             initialDepartureDate={departureDate}
             initialReturnDate={returnDate}
             initialPassengers={passengers}
+            isRedirectEnabled={false}
           />
         )}
 
@@ -314,6 +364,7 @@ const handleFinish = async () => {
             returnDate={returnDate}
             passengers={passengers}
             onHotelSelect={handleHotelSelect}
+            isRedirectEnabled={false}
           />
         )}
 

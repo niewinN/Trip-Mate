@@ -17,7 +17,7 @@
 }
 
 .restaurantCard:hover {
-  transform: scale(1.02);
+  /* transform: scale(1.02); */
 }
 
 /* Dodaj przycisk w prawym górnym rogu */

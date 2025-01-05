@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { createUser, getUserByEmail } from '../models/User';
+import User, { createUser, getUserByEmail } from '../models/User';
 
 // ✅ Rejestracja użytkownika
 export const register = async (req: Request, res: Response) => {
@@ -54,5 +54,68 @@ export const login = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('❌ Login error:', error);
     res.status(400).json({ error: 'Login failed' });
+  }
+};
+
+export const getUserProfile = async (req: Request, res: Response) => {
+  try {
+    // Pobieranie tokena z nagłówków
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+
+    // Dekodowanie tokena
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: number };
+    const user = await User.findByPk(decoded.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      email: user.email,
+      name: user.name,
+      phone: user.phone || '',
+    });
+  } catch (error) {
+    console.error('❌ Error fetching user profile:', error);
+    res.status(500).json({ error: 'Failed to fetch user profile' });
+  }
+};
+
+
+export const updateUserProfile = async (req: Request, res: Response) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: number };
+    const user = await User.findByPk(decoded.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const { name, phone } = req.body;
+
+    // ✅ Aktualizujemy tylko przekazane pola
+    if (name !== undefined) user.name = name;
+    if (phone !== undefined) user.phone = phone;
+
+    await user.save();
+
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        name: user.name,
+        phone: user.phone,
+      },
+    });
+  } catch (error) {
+    console.error('❌ Error updating user profile:', error);
+    res.status(500).json({ error: 'Failed to update profile' });
   }
 };

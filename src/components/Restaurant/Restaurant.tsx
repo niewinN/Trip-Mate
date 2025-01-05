@@ -15,20 +15,24 @@ interface RestaurantProps {
   };
   onSelect: (restaurant: any) => void;
   isSelected: boolean;
+  showAddButton?: boolean;
+  disabledSelectedStyle?: boolean;
 }
 
-const Restaurant: React.FC<RestaurantProps> = ({ restaurant, onSelect, isSelected }) => {
+const Restaurant: React.FC<RestaurantProps> = ({ restaurant, onSelect, isSelected, showAddButton = true, disabledSelectedStyle = false }) => {
   return (
     <div
-      className={`${styles.restaurantCard} ${isSelected ? styles.selected : ''}`}
+      className={`${styles.restaurantCard} ${isSelected && !disabledSelectedStyle ? styles.selected : ''}`}
       onClick={() => onSelect(restaurant)}
     >
-      <button
-        className={styles.addToPlan}
-        aria-label={`Add ${restaurant.title} to the plan`}
-      >
-        +
-      </button>
+      {showAddButton && (
+        <button
+          className={styles.addToPlan}
+          aria-label={`Add ${restaurant.title} to the plan`}
+        >
+          +
+        </button>
+      )}
       <div className={styles.thumbnailContainer}>
         <img src={restaurant.thumbnail} alt={restaurant.title} className={styles.thumbnail} />
       </div>

@@ -26,6 +26,7 @@ const Flights = () => {
           initialReturnDate={defaultReturnDate}
           initialPassengers={defaultPassengers}
           onFlightSelect={handleFlightSelect}
+          isRedirectEnabled={true}
         />
       </Wrapper>
     </div>

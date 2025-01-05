@@ -132,7 +132,7 @@ const Summary: React.FC = () => {
               {flights && flights.length > 0 ? (
                 flights.map((flight: any, index: number) => (
                   <div key={index} className={styles.card}>
-                    <Flight flight={flight} onSelect={() => {}} />
+                    <Flight flight={flight} buttonLabel = 'Show' onSelect={() => {}} />
                   </div>
                 ))
               ) : (
@@ -162,6 +162,7 @@ const Summary: React.FC = () => {
                         thumbnail: hotel.thumbnail || null,
                       }}
                       onSelect={() => {}}
+                      buttonLabel="Show"
                     />
                   </div>
                 ))
@@ -176,7 +177,7 @@ const Summary: React.FC = () => {
               {restaurants && restaurants.length > 0 ? (
                 restaurants.map((restaurant: any, index: number) => (
                   <div key={index} className={styles.card}>
-                    <Restaurant restaurant={restaurant} onSelect={() => {}} isSelected={true} />
+                    <Restaurant restaurant={restaurant} disabledSelectedStyle={true}  showAddButton = {false} onSelect={() => {}} isSelected={true} />
                   </div>
                 ))
               ) : (
@@ -194,6 +195,8 @@ const Summary: React.FC = () => {
                       {...attraction}
                       onSelect={() => {}}
                       isSelected={true}
+                      showAddButton={false}
+                      disabledSelectedStyle={true}
                     />
                   </div>
                 ))

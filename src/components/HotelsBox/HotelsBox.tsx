@@ -15,6 +15,7 @@ interface HotelsBoxProps {
   returnDate: string;
   passengers: number;
   onHotelSelect: (hotel: any) => void;
+  isRedirectEnabled?: boolean;
 }
 
 const HotelsBox: React.FC<HotelsBoxProps> = ({
@@ -23,6 +24,7 @@ const HotelsBox: React.FC<HotelsBoxProps> = ({
   returnDate,
   passengers,
   onHotelSelect,
+  isRedirectEnabled = false,
 }) => {
   const hotelFilters = filters.hotels;
 
@@ -131,6 +133,7 @@ const HotelsBox: React.FC<HotelsBoxProps> = ({
           guests={guests}
           rooms={rooms}
           onSelect={handleSelectHotel}
+          isRedirectEnabled={isRedirectEnabled}
         />
       </div>
     </div>

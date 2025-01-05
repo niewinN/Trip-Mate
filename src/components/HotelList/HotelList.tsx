@@ -10,17 +10,18 @@ interface HotelListProps {
   guests: number;
   rooms: number;
   onSelect: (hotel: any) => void;
+  isRedirectEnabled?: boolean;
 }
 
 
-const HotelList: React.FC<HotelListProps> = ({ hotels, onSelect }) => {
+const HotelList: React.FC<HotelListProps> = ({ hotels, onSelect, isRedirectEnabled = false }) => {
   return (
     <div className={styles.hotelList}>
       {hotels.length === 0 ? (
         <p>Brak wyników wyszukiwania.</p>
       ) : (
         hotels.map((hotel, index) => (
-          <Hotel key={index} hotel={hotel} onSelect={onSelect} />
+          <Hotel key={index} hotel={hotel} onSelect={onSelect} isRedirectEnabled={isRedirectEnabled} />
         ))
       )}
     </div>
