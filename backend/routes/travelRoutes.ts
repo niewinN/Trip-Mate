@@ -6,6 +6,7 @@ import {
   deleteTravel,
   createTravel,
   getUserTrips,
+  getUserStats,
 } from '../controllers/travelController';
 import { protect } from '../middleware/authMiddleware';
 
@@ -20,6 +21,8 @@ const router = Router();
 router.use(protect);
 
 router.get('/user-trips', asyncHandler(getUserTrips))
+
+router.get('/user-stats', asyncHandler(getUserStats));
 
 // Tworzenie nowej podróży
 router.post('/', asyncHandler(createTravel));

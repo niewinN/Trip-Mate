@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import multer, { FileFilterCallback } from 'multer';
 import path from 'path';
+import { uploadPassengerPhoto } from '../controllers/passengerController';
 
 const router = Router();
 
@@ -40,5 +41,7 @@ router.post(
     res.status(200).json({ message: 'File uploaded successfully', fileUrl });
   }
 );
+
+router.post('/passenger', upload.single('file'), uploadPassengerPhoto);
 
 export default router;

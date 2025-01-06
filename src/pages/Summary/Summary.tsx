@@ -27,27 +27,24 @@ const Summary: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false); // Flaga stanu
 
 
-useEffect(() => {
-  const fetchMultimedia = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/multimedia/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      // Unikamy dodawania duplikatów
-      setMultimediaList(response.data);
-    } catch (error) {
-      console.error('❌ Error fetching multimedia:', error);
-    }
-  };
-
-  fetchMultimedia();
-}, [id]);
-
-
+  useEffect(() => {
+    const fetchMultimedia = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:5000/api/multimedia/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setMultimediaList(response.data);
+      } catch (error) {
+        console.error('❌ Error fetching multimedia:', error);
+      }
+    };
+  
+    fetchMultimedia();
+  }, [id]);
+  
 const handleMediaUpload = async (file: File) => {
   if (isUploading) {
     console.warn('🚫 Upload already in progress');
@@ -55,18 +52,18 @@ const handleMediaUpload = async (file: File) => {
   }
 
   try {
-    setIsUploading(true); // Blokada kolejnych przesłań
+    setIsUploading(true);
 
     const token = localStorage.getItem('token');
     if (!token) {
-      console.error('No authentication token found');
+      console.error('❌ No authentication token found');
       return;
     }
 
     const formData = new FormData();
     formData.append('file', file);
 
-    // Przesyłanie pliku na serwer
+    console.log('🔄 Uploading file...');
     const uploadResponse = await axios.post(
       'http://localhost:5000/api/upload',
       formData,
@@ -81,17 +78,17 @@ const handleMediaUpload = async (file: File) => {
     console.log('✅ File uploaded successfully:', uploadResponse.data);
 
     if (!uploadResponse.data.fileUrl) {
-      console.error('No file URL returned from upload');
+      console.error('❌ No file URL returned from upload');
       return;
     }
 
-    // Zapis multimediów w bazie danych
     const travelId = parseInt(id!, 10);
     if (isNaN(travelId)) {
       console.error('❌ Invalid travel ID:', id);
       return;
     }
 
+    console.log('🔄 Saving multimedia...');
     const multimediaResponse = await axios.post(
       `http://localhost:5000/api/multimedia/${travelId}`,
       {
@@ -105,21 +102,27 @@ const handleMediaUpload = async (file: File) => {
 
     console.log('✅ Multimedia added successfully:', multimediaResponse.data);
 
-    // ✅ Aktualizacja stanu lokalnie
+    // ✅ Dodaj nowe multimedia do multimediaList
     setMultimediaList((prevList) => [
       ...prevList,
       {
-        id: multimediaResponse.data.id,
+        id: multimediaResponse.data.multimedia.id,
         url: uploadResponse.data.fileUrl,
         type: file.type.startsWith('video') ? 'video' : 'image',
       }
     ]);
+
+    // ✅ Usuń jedną kartę dynamiczną (tylko jedną)
+    setMultimediaCards((prev) => (prev > 0 ? prev - 1 : 0));
   } catch (error: any) {
     console.error('❌ Error uploading media:', error.response?.data || error.message);
   } finally {
-    setIsUploading(false); // Odblokowanie przesyłania
+    setIsUploading(false);
   }
 };
+
+
+
 
 
   useEffect(() => {
@@ -153,39 +156,30 @@ const handleMediaUpload = async (file: File) => {
     setMultimediaCards((prev) => prev + 4);
   };
 
-  // const handleMediaDelete = async (deletedMediaId: number) => {
-  //   try {
-  //     setMultimediaList((prevList) => prevList.filter((media) => media.id !== deletedMediaId));
-  
-  //     // Po lokalnym usunięciu odśwież listę z serwera
-  //     await fetchMultimedia();
-  //   } catch (error) {
-  //     console.error('❌ Error refreshing multimedia list:', error);
-  //   }
-  // };
   const handleMediaDelete = async (deletedMediaId: number) => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        console.error('No authentication token found');
+        console.error('❌ No authentication token found');
         return;
       }
   
       console.log(`🔄 Deleting multimedia with ID: ${deletedMediaId}`);
   
-      // ✅ Usuń multimedia na serwerze
       await axios.delete(`http://localhost:5000/api/multimedia/${id}/${deletedMediaId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
       console.log('✅ Multimedia deleted successfully');
   
-      // ✅ Aktualizuj lokalny stan po udanym usunięciu
-      setMultimediaList((prevList) => prevList.filter((media) => media.id !== deletedMediaId));
+      setMultimediaList((prevList) => 
+        prevList.filter((media) => media.id !== deletedMediaId)
+      );
     } catch (error: any) {
       console.error('❌ Error deleting multimedia:', error.response?.data || error.message);
     }
   };
+  
   
   
   
@@ -232,27 +226,29 @@ const handleMediaUpload = async (file: File) => {
               </p>
             </div>
 
-            {/* Sekcja Uczestników */}
-            <section className={styles.section}>
-              {passengers && passengers.length > 0 ? (
-                <div className={styles.cardContainer}>
-                  {passengers.map((person: TripPersonProps, index: number) => (
-                    <div key={index} className={styles.participantCard}>
-                      <p className={styles.participantName}>{person.name || "Unnamed"}</p>
-                      <img
-                        src={person.image || "https://via.placeholder.com/150"}
-                        alt={person.name || "Participant"}
-                        className={styles.participantImage}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p>No participants added.</p>
-              )}
-            </section>
+          <section className={styles.section}>
+            {passengers && passengers.length > 0 ? (
+              <div className={styles.cardContainer}>
+                {passengers.map((person: TripPersonProps, index: number) => (
+                  <div key={index} className={styles.participantCard}>
+                    <p className={styles.participantName}>{person.name || "Unnamed"}</p>
+                    <img
+                      src={
+                        person.image
+                          ? person.image
+                          : "https://via.placeholder.com/150"
+                      }
+                      alt={person.name || "Participant"}
+                      className={styles.participantImage}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No participants added.</p>
+            )}
+          </section>
           </div>
-
           {/* Sekcja Kart */}
           <div className={styles.cards}>
             {/* Sekcja Lotu */}
@@ -344,11 +340,27 @@ const handleMediaUpload = async (file: File) => {
         <section className={styles.multimediaSection}>
           <h2>📹 Multimedia</h2>
           <div className={styles.multimediaContainer}>
+            {/* Renderowanie istniejących multimediów */}
             {multimediaList.map((media) => (
-              <MultimediaCard key={`media-${media.id}`}  mediaUrl={media.url} mediaType={media.type} travelId={id} multimediaId={media.id} onDelete={() => handleMediaDelete(media.id)}/>
+              <MultimediaCard 
+                key={`existing-${media.id}`} 
+                mediaUrl={media.url} 
+                onUpload={handleMediaUpload} 
+                isUploading={isUploading} 
+                mediaType={media.type} 
+                travelId={id} 
+                multimediaId={media.id} 
+                onDelete={() => handleMediaDelete(media.id)}
+              />
             ))}
+
+            {/* Renderowanie pustych kart na nowe multimedia */}
             {Array.from({ length: multimediaCards }).map((_, index) => (
-              <MultimediaCard key={`new-${index}`} onUpload={handleMediaUpload} travelId={id} />
+              <MultimediaCard 
+                key={`new-${index}`} 
+                travelId={id} 
+                onUpload={handleMediaUpload}
+              />
             ))}
           </div>
           <div className={styles.btnContainer}>
@@ -357,21 +369,6 @@ const handleMediaUpload = async (file: File) => {
             </button>
           </div>
         </section>
-
-        {/* Sekcja Multimedia */}
-        {/* <section className={styles.multimediaSection}>
-          <h2>📹 Multimedia</h2>
-          <div className={styles.multimediaContainer}>
-            {Array.from({ length: multimediaCards }).map((_, index) => (
-              <MultimediaCard key={index} onUpload={handleMediaUpload} />
-            ))}
-          </div>
-          <div className={styles.btnContainer}>
-            <button className={styles.addMoreButton} onClick={addMoreCards}>
-              ➕ Dodaj więcej
-            </button>
-          </div>
-        </section> */}
       </Wrapper>
     </div>
   );

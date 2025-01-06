@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import sequelize from '../config/db';
+import { Op } from 'sequelize';
 import Travel from '../models/Travel';
 import Passenger from '../models/Passenger';
 import Flight from '../models/Flight';
 import Hotel from '../models/Hotel';
 import Restaurant from '../models/Restaurant';
 import Attraction from '../models/Attraction';
+import Multimedia from '../models/Multimedia';
 
 // 🛠️ **Typowanie interfejsów dla danych wejściowych**
 interface TripPerson {
@@ -118,8 +120,6 @@ export const getAllTravels = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-
-// 🛠️ **Pobierz podróż po ID**
 export const getTravelById = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
     const { id } = req.params;
@@ -137,16 +137,28 @@ export const getTravelById = async (req: Request, res: Response, next: NextFunct
       return res.status(404).json({ error: `Travel with ID ${id} not found` });
     }
 
-    return res.status(200).json({ message: `Travel with ID ${id} fetched successfully`, travel });
+    // 🛠️ Mapowanie pasażerów
+    // 🛠️ Mapowanie pasażerów
+      const passengers = travel.passengers?.map((passenger: Passenger) => ({
+        id: passenger.id,
+        name: passenger.name,
+        image: passenger.photo_url, // <-- Upewnij się, że przekazujesz 'photo_url' jako 'image'
+      })) || [];
+
+
+    return res.status(200).json({
+      message: `Travel with ID ${id} fetched successfully`,
+      travel: {
+        ...travel.toJSON(),
+        passengers,
+      },
+    });
   } catch (error) {
-    if (error instanceof Error) {
-      console.error('❌ Error fetching travel by ID:', error.message);
-    } else {
-      console.error('❌ Unknown error fetching travel by ID:', error);
-    }    
+    console.error('❌ Error fetching travel by ID:', error);
     next(error);
   }
 };
+
 
 
 // 🛠️ **Aktualizuj podróż**
@@ -374,6 +386,105 @@ if (restaurants.length > 0) {
     await transaction.rollback();
     console.error('❌ Transaction failed:', error instanceof Error ? error.message : error);
     // console.error('❌ Error creating travel:', error);
+    next(error);
+  }
+};
+
+// 🛠️ **Pobierz statystyki użytkownika**
+// export const getUserStats = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response | void> => {
+//   try {
+//     if (!req.user || !req.user.id) {
+//       return res.status(401).json({ error: 'Unauthorized - User ID is missing' });
+//     }
+
+//     const userId = req.user.id;
+
+//     // Liczba podróży
+//     const numberOfTrips = await Travel.count({
+//       where: { user_id: userId },
+//     });
+
+//     // Liczba dni podróży
+//     const travels = await Travel.findAll({
+//       where: { user_id: userId },
+//       attributes: ['departureDate', 'returnDate'],
+//     });
+
+//     const daysInTrip = travels.reduce((total, trip) => {
+//       const departureDate = new Date(trip.departureDate);
+//       const returnDate = new Date(trip.returnDate);
+//       const tripDays = Math.ceil(
+//         (returnDate.getTime() - departureDate.getTime()) / (1000 * 60 * 60 * 24)
+//       );
+//       return total + tripDays;
+//     }, 0);
+
+//     // Liczba multimediów
+//     const numberOfPhotos = await Multimedia.count({
+//       where: { travel_id: travels.map(trip => trip.id) },
+//     });
+
+//     return res.status(200).json({
+//       numberOfTrips,
+//       daysInTrip,
+//       numberOfPhotos,
+//     });
+//   } catch (error) {
+//     console.error('❌ Error fetching user stats:', error);
+//     next(error);
+//   }
+// };
+// 🛠️ **Pobierz statystyki użytkownika**
+export const getUserStats = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response | void> => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Unauthorized - User ID is missing' });
+    }
+
+    const userId = req.user.id;
+
+    // 🔢 **1. Liczba podróży użytkownika**
+    const numberOfTrips = await Travel.count({
+      where: { user_id: userId },
+    });
+
+    // 📅 **2. Suma dni podróży użytkownika**
+    const travels = await Travel.findAll({
+      where: { user_id: userId },
+      attributes: ['id', 'departureDate', 'returnDate'],
+    });
+
+    const daysInTrip = travels.reduce((total, trip) => {
+      const departureDate = new Date(trip.departureDate);
+      const returnDate = new Date(trip.returnDate);
+      const tripDays = Math.ceil(
+        (returnDate.getTime() - departureDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+      return total + tripDays;
+    }, 0);
+
+    // 🖼️ **3. Liczba multimediów użytkownika**
+    const travelIds = travels.map(trip => trip.id);
+
+    let numberOfPhotos = 0;
+
+    if (travelIds.length > 0) {
+      numberOfPhotos = await Multimedia.count({
+        where: {
+          travel_id: {
+            [Op.in]: travelIds, // Sprawdź czy travel_id znajduje się na liście
+          },
+        },
+      });
+    }
+
+    return res.status(200).json({
+      numberOfTrips,
+      daysInTrip,
+      numberOfPhotos,
+    });
+  } catch (error) {
+    console.error('❌ Error fetching user stats:', error);
     next(error);
   }
 };

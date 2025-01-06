@@ -8,9 +8,10 @@ interface TripPersonProps {
   initialName?: string;
   onNameChange: (name: string) => void;
   onImageChange: (image: string) => void;
+  travelId?: string;
 }
 
-const TripPerson: React.FC<TripPersonProps> = ({ initialName = 'Name...', onNameChange, onImageChange }) => {
+const TripPerson: React.FC<TripPersonProps> = ({ initialName = 'Name...', onNameChange, onImageChange, travelId }) => {
   const [name, setName] = useState(initialName);
   const [image, setImage] = useState<string | null>(null);
   const [showToast, setShowToast] = useState(false);
@@ -56,26 +57,30 @@ const TripPerson: React.FC<TripPersonProps> = ({ initialName = 'Name...', onName
     }
   };
 
-  // Obsługa przesyłania zdjęcia
   const handleUploadPhoto = () => {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
+
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement)?.files?.[0];
       if (file) {
         const reader = new FileReader();
+
         reader.onload = () => {
           const imageData = reader.result as string;
           setImage(imageData); // Aktualizacja lokalnego stanu
           onImageChange(imageData); // Przekazanie zdjęcia do głównego komponentu
           setShowToast(false);
         };
+
         reader.readAsDataURL(file);
       }
     };
+
     input.click();
   };
+
 
   return (
     <div className={styles.card}>
