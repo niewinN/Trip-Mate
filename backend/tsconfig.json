@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "./types"],
-    "types": ["node", "express", "cors", "dotenv"]
+    "types": ["node", "express", "multer", "cors", "dotenv"]
   },
   "include": ["server.ts", "routes/**/*", "controllers/**/*", "middleware/**/*", "utils/**/*", "types/**/*"],
   "exclude": ["node_modules"]

@@ -1,19 +1,27 @@
 import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 import styles from './MultimediaCard.module.css';
+import axios from 'axios';
 
 interface MultimediaCardProps {
+  mediaUrl?: string;
+  mediaType?: 'image' | 'video';
   onUpload?: (file: File | Blob) => void;
+  onDelete?: () => void;
+  travelId?: string;
+  multimediaId?: string;
 }
 
-const MultimediaCard: React.FC<MultimediaCardProps> = ({ onUpload }) => {
-  const [mediaPreview, setMediaPreview] = useState<string | null>(null);
-  const [mediaType, setMediaType] = useState<'image' | 'video' | null>(null);
+const MultimediaCard: React.FC<MultimediaCardProps> = ({ mediaUrl, mediaType: initialMediaType, onUpload, onDelete, travelId, multimediaId}) => {
+  // const { travelId } = useParams<{ travelId: string }>();
+  const [mediaPreview, setMediaPreview] = useState<string | null>(mediaUrl || null);
+  const [mediaType, setMediaType] = useState<'image' | 'video' | null>(initialMediaType || null);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [isCameraActive, setIsCameraActive] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [isLargePreview, setIsLargePreview] = useState<boolean>(false);
+  
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const webcamRef = useRef<Webcam>(null);
@@ -21,16 +29,45 @@ const MultimediaCard: React.FC<MultimediaCardProps> = ({ onUpload }) => {
   const recordedChunks = useRef<Blob[]>([]);
 
   /** 📁 Dodawanie pliku z komputera */
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const previewURL = URL.createObjectURL(file);
-      setMediaPreview(previewURL);
-      setMediaType(file.type.startsWith('video') ? 'video' : 'image');
-      if (onUpload) onUpload(file);
+  // const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = event.target.files?.[0];
+  //   if (file) {
+  //     const previewURL = URL.createObjectURL(file);
+  //     setMediaPreview(previewURL);
+  //     setMediaType(file.type.startsWith('video') ? 'video' : 'image');
+
+  //     // Wysyłanie na serwer
+  //     const formData = new FormData();
+  //     formData.append('file', file);
+
+  //     try {
+  //       const response = await axios.post('http://localhost:5000/api/upload', formData, {
+  //         headers: { 'Content-Type': 'multipart/form-data' },
+  //       });
+  //       console.log('✅ File uploaded successfully:', response.data);
+  //       const file = event.target.files?.[0];
+  //       if (file && onUpload) {
+  //         await onUpload(file);
+  //       }
+  //     } catch (error) {
+  //       console.error('❌ Error uploading file:', error);
+  //     }
+  //   }
+  //   resetCameraState();
+  // };
+  /** 📁 Dodawanie pliku z komputera */
+const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const file = event.target.files?.[0];
+  if (file && onUpload) {
+    try {
+      // Przekaż plik do nadrzędnej funkcji `onUpload`
+      await onUpload(file);
+    } catch (error) {
+      console.error('❌ Error handling file upload in parent:', error);
     }
-    resetCameraState();
-  };
+  }
+  resetCameraState();
+};
 
   /** 🎥 Aktywacja kamery */
   const startCamera = () => {
@@ -39,16 +76,76 @@ const MultimediaCard: React.FC<MultimediaCardProps> = ({ onUpload }) => {
   };
 
   /** 📸 Zrobienie zdjęcia */
-  const capturePhoto = () => {
-    if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot();
-      if (imageSrc) {
-        setMediaPreview(imageSrc);
-        setMediaType('image');
-        stopCamera();
+  // const capturePhoto = () => {
+  //   if (webcamRef.current) {
+  //     const imageSrc = webcamRef.current.getScreenshot();
+  //     if (imageSrc) {
+  //       setMediaPreview(imageSrc);
+  //       setMediaType('image');
+  //       stopCamera();
+  //     }
+  //   }
+  // };
+  /** 📸 Zrobienie zdjęcia */
+// const capturePhoto = async () => {
+//   if (webcamRef.current) {
+//     const imageSrc = webcamRef.current.getScreenshot();
+//     if (imageSrc) {
+//       setMediaPreview(imageSrc);
+//       setMediaType('image');
+
+//       try {
+//         // Przekształć dane base64 na Blob
+//         const response = await fetch(imageSrc);
+//         const blob = await response.blob();
+//         const file = new File([blob], 'photo.png', { type: 'image/png' });
+
+//         const formData = new FormData();
+//         formData.append('file', file);
+
+//         // Wysyłanie zdjęcia na serwer
+//         const uploadResponse = await axios.post('http://localhost:5000/api/upload', formData, {
+//           headers: { 'Content-Type': 'multipart/form-data' },
+//         });
+
+//         console.log('✅ Photo uploaded successfully:', uploadResponse.data);
+//         if (onUpload) onUpload(file);
+//       } catch (error) {
+//         console.error('❌ Error uploading photo:', error);
+//       }
+
+//       stopCamera();
+//     }
+//   }
+// };
+const capturePhoto = async () => {
+  if (webcamRef.current) {
+    const imageSrc = webcamRef.current.getScreenshot();
+    if (imageSrc) {
+      setMediaPreview(imageSrc);
+      setMediaType('image');
+
+      try {
+        // Przekształć dane base64 na Blob
+        const response = await fetch(imageSrc);
+        const blob = await response.blob();
+        const file = new File([blob], `photo-${Date.now()}.png`, { type: 'image/png' });
+
+        console.log('✅ Photo captured successfully');
+
+        // Przekazanie pliku bezpośrednio do funkcji onUpload
+        if (onUpload) {
+          await onUpload(file);
+        }
+      } catch (error) {
+        console.error('❌ Error capturing photo:', error);
       }
+
+      stopCamera();
     }
-  };
+  }
+};
+
 
   /** 🎥 Rozpoczęcie nagrywania */
   const startRecording = () => {
@@ -71,20 +168,63 @@ const MultimediaCard: React.FC<MultimediaCardProps> = ({ onUpload }) => {
   };
 
   /** 🛑 Zatrzymanie nagrywania */
-  const stopRecording = () => {
+  // const stopRecording = async () => {
+  //   if (mediaRecorderRef.current) {
+  //     mediaRecorderRef.current.stop();
+  //     mediaRecorderRef.current.onstop = async () => {
+  //       const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
+  //       const videoURL = URL.createObjectURL(blob);
+  //       setMediaPreview(videoURL);
+  //       setMediaType('video');
+
+  //       // Wysyłanie na serwer
+  //       const formData = new FormData();
+  //       formData.append('file', blob, 'video.webm');
+
+  //       try {
+  //         const response = await axios.post('http://localhost:5000/api/upload', formData, {
+  //           headers: { 'Content-Type': 'multipart/form-data' },
+  //         });
+  //         console.log('✅ Video uploaded successfully:', response.data);
+  //         if (onUpload) onUpload(blob);
+  //       } catch (error) {
+  //         console.error('❌ Error uploading video:', error);
+  //       }
+
+  //       stopCamera();
+  //       setIsRecording(false);
+  //     };
+  //   }
+  // };
+  const stopRecording = async () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.onstop = () => {
+  
+      mediaRecorderRef.current.onstop = async () => {
         const blob = new Blob(recordedChunks.current, { type: 'video/webm' });
         const videoURL = URL.createObjectURL(blob);
         setMediaPreview(videoURL);
         setMediaType('video');
-        if (onUpload) onUpload(blob);
-        stopCamera();
-        setIsRecording(false);
+  
+        try {
+          console.log('✅ Video recording stopped successfully');
+  
+          // Przekazanie pliku do funkcji `onUpload`
+          const file = new File([blob], `video-${Date.now()}.webm`, { type: 'video/webm' });
+  
+          if (onUpload) {
+            await onUpload(file); // Przekazanie pliku do głównego handlera przesyłania
+          }
+        } catch (error) {
+          console.error('❌ Error processing video:', error);
+        } finally {
+          stopCamera();
+          setIsRecording(false);
+        }
       };
     }
   };
+  
 
   /** 🛑 Zatrzymanie kamery */
   const stopCamera = () => {
@@ -92,15 +232,29 @@ const MultimediaCard: React.FC<MultimediaCardProps> = ({ onUpload }) => {
     resetCameraState();
   };
 
-  /** 🗑️ Usunięcie materiału */
- /** 🗑️ Usunięcie materiału */
-  const deleteMedia = (event: React.MouseEvent) => {
-    event.stopPropagation(); // Zatrzymuje propagację eventu na wyższe elementy
-    setMediaPreview(null);
-    setMediaType(null);
-    resetCameraState();
-  };
+  const deleteMedia = async (event: React.MouseEvent) => {
+    event.stopPropagation();
   
+    if (!multimediaId || !travelId) {
+      console.error('❌ Missing multimediaId or travelId');
+      return;
+    }
+  
+    try {
+      console.log(`🔄 Requesting deletion of multimedia with travelId: ${travelId}, multimediaId: ${multimediaId}`);
+  
+      // ✅ Wywołaj funkcję `onDelete` zamiast samodzielnie wysyłać żądanie DELETE
+      if (onDelete) {
+        onDelete();
+      }
+  
+      setMediaPreview(null);
+      setMediaType(null);
+      resetCameraState();
+    } catch (error: any) {
+      console.error('❌ Error triggering delete callback:', error.response?.data || error.message);
+    }
+  };
 
   /** 🔍 Powiększanie podglądu */
   const toggleFullscreenPreview = () => {
@@ -144,26 +298,28 @@ const MultimediaCard: React.FC<MultimediaCardProps> = ({ onUpload }) => {
         </div>
       )}
 
-      {/* Duże okno kamery */}
       {isCameraActive && (
-        <div className={styles.cameraOverlay}>
-          <Webcam
-            audio={isRecording}
-            ref={webcamRef}
-            screenshotFormat="image/png"
-            className={styles.cameraLargePreview}
-          />
-          <div className={styles.cameraControls}>
-            {!isRecording ? (
-              <>
-                <button onClick={capturePhoto}>📸 Zrób zdjęcie</button>
-                <button onClick={startRecording}>🎥 Nagrywaj</button>
-              </>
-            ) : (
-              <button onClick={stopRecording}>🛑 Zatrzymaj nagrywanie</button>
+              <div className={styles.cameraOverlay}>
+                <Webcam ref={webcamRef} screenshotFormat="image/png" className={styles.cameraLargePreview} />
+                <div className={styles.cameraControls}>
+                  {!isRecording ? (
+                    <>
+                      <button onClick={capturePhoto}>📸 Zrób zdjęcie</button>
+                      <button onClick={startRecording}>🎥 Nagrywaj</button>
+                    </>
+                  ) : (
+                    <button onClick={stopRecording}>🛑 Zatrzymaj nagrywanie</button>
+                  )}
+                  <button onClick={stopCamera}>🛑 Zamknij kamerę</button>
+                </div>
+              </div>
             )}
-            <button onClick={stopCamera}>🛑 Zamknij kamerę</button>
-          </div>
+
+      {/* Toast z opcjami */}
+      {showToast && (
+        <div className={styles.toast}>
+          <button onClick={() => handleToastOption('upload')}>📁 Dodaj plik</button>
+          <button onClick={() => handleToastOption('camera')}>📸 Użyj kamery</button>
         </div>
       )}
 
@@ -180,29 +336,10 @@ const MultimediaCard: React.FC<MultimediaCardProps> = ({ onUpload }) => {
           <button className={styles.deleteButton} onClick={deleteMedia}>🗑️</button>
         </div>
       ) : (
-        <div className={styles.placeholder} onClick={handleAddClick}>
-          <div className={styles.placeholderIcon}>📷</div>
-          <div className={styles.placeholderPlus}>➕</div>
-          <span className={styles.addText}>Dodaj materiał</span>
-        </div>
+        <div className={styles.placeholder} onClick={handleAddClick}>➕ Dodaj materiał</div>
       )}
 
-      {/* Toast z opcjami */}
-      {showToast && (
-        <div className={styles.toast}>
-          <button onClick={() => handleToastOption('upload')}>📁 Dodaj plik</button>
-          <button onClick={() => handleToastOption('camera')}>📸 Użyj kamery</button>
-        </div>
-      )}
-
-      {/* Ukryty input do plików */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*,video/*"
-        style={{ display: 'none' }}
-        onChange={handleFileUpload}
-      />
+      <input ref={fileInputRef} type="file" accept="image/*,video/*" style={{ display: 'none' }} onChange={handleFileUpload} />
     </div>
   );
 };

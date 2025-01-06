@@ -21,6 +21,106 @@ const Summary: React.FC = () => {
 
   const [data, setData] = useState<any>(null);
   const [multimediaCards, setMultimediaCards] = useState<number>(4);
+  // const [multimedia, setMultimedia] = useState<any[]>([]);
+  const [multimediaList, setMultimediaList] = useState<any[]>([]);
+  // const [multimediaFiles, setMultimediaFiles] = useState<File[]>([]);
+  const [isUploading, setIsUploading] = useState(false); // Flaga stanu
+
+
+useEffect(() => {
+  const fetchMultimedia = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`http://localhost:5000/api/multimedia/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Unikamy dodawania duplikatów
+      setMultimediaList(response.data);
+    } catch (error) {
+      console.error('❌ Error fetching multimedia:', error);
+    }
+  };
+
+  fetchMultimedia();
+}, [id]);
+
+
+const handleMediaUpload = async (file: File) => {
+  if (isUploading) {
+    console.warn('🚫 Upload already in progress');
+    return;
+  }
+
+  try {
+    setIsUploading(true); // Blokada kolejnych przesłań
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('No authentication token found');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Przesyłanie pliku na serwer
+    const uploadResponse = await axios.post(
+      'http://localhost:5000/api/upload',
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    console.log('✅ File uploaded successfully:', uploadResponse.data);
+
+    if (!uploadResponse.data.fileUrl) {
+      console.error('No file URL returned from upload');
+      return;
+    }
+
+    // Zapis multimediów w bazie danych
+    const travelId = parseInt(id!, 10);
+    if (isNaN(travelId)) {
+      console.error('❌ Invalid travel ID:', id);
+      return;
+    }
+
+    const multimediaResponse = await axios.post(
+      `http://localhost:5000/api/multimedia/${travelId}`,
+      {
+        url: uploadResponse.data.fileUrl,
+        type: file.type.startsWith('video') ? 'video' : 'image',
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    console.log('✅ Multimedia added successfully:', multimediaResponse.data);
+
+    // ✅ Aktualizacja stanu lokalnie
+    setMultimediaList((prevList) => [
+      ...prevList,
+      {
+        id: multimediaResponse.data.id,
+        url: uploadResponse.data.fileUrl,
+        type: file.type.startsWith('video') ? 'video' : 'image',
+      }
+    ]);
+  } catch (error: any) {
+    console.error('❌ Error uploading media:', error.response?.data || error.message);
+  } finally {
+    setIsUploading(false); // Odblokowanie przesyłania
+  }
+};
+
 
   useEffect(() => {
     const fetchTravelDetails = async () => {
@@ -53,9 +153,43 @@ const Summary: React.FC = () => {
     setMultimediaCards((prev) => prev + 4);
   };
 
-  const handleMediaUpload = (file: File) => {
-    console.log("🖼️ Uploaded File:", file.name);
+  // const handleMediaDelete = async (deletedMediaId: number) => {
+  //   try {
+  //     setMultimediaList((prevList) => prevList.filter((media) => media.id !== deletedMediaId));
+  
+  //     // Po lokalnym usunięciu odśwież listę z serwera
+  //     await fetchMultimedia();
+  //   } catch (error) {
+  //     console.error('❌ Error refreshing multimedia list:', error);
+  //   }
+  // };
+  const handleMediaDelete = async (deletedMediaId: number) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No authentication token found');
+        return;
+      }
+  
+      console.log(`🔄 Deleting multimedia with ID: ${deletedMediaId}`);
+  
+      // ✅ Usuń multimedia na serwerze
+      await axios.delete(`http://localhost:5000/api/multimedia/${id}/${deletedMediaId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      console.log('✅ Multimedia deleted successfully');
+  
+      // ✅ Aktualizuj lokalny stan po udanym usunięciu
+      setMultimediaList((prevList) => prevList.filter((media) => media.id !== deletedMediaId));
+    } catch (error: any) {
+      console.error('❌ Error deleting multimedia:', error.response?.data || error.message);
+    }
   };
+  
+  
+  
+  
 
   if (!data) {
     return <div className={styles.loading}>Loading...</div>;
@@ -206,9 +340,26 @@ const Summary: React.FC = () => {
             </section>
           </div>
         </div>
-
         {/* Sekcja Multimedia */}
         <section className={styles.multimediaSection}>
+          <h2>📹 Multimedia</h2>
+          <div className={styles.multimediaContainer}>
+            {multimediaList.map((media) => (
+              <MultimediaCard key={`media-${media.id}`}  mediaUrl={media.url} mediaType={media.type} travelId={id} multimediaId={media.id} onDelete={() => handleMediaDelete(media.id)}/>
+            ))}
+            {Array.from({ length: multimediaCards }).map((_, index) => (
+              <MultimediaCard key={`new-${index}`} onUpload={handleMediaUpload} travelId={id} />
+            ))}
+          </div>
+          <div className={styles.btnContainer}>
+            <button className={styles.addMoreButton} onClick={addMoreCards}>
+              ➕ Dodaj więcej
+            </button>
+          </div>
+        </section>
+
+        {/* Sekcja Multimedia */}
+        {/* <section className={styles.multimediaSection}>
           <h2>📹 Multimedia</h2>
           <div className={styles.multimediaContainer}>
             {Array.from({ length: multimediaCards }).map((_, index) => (
@@ -220,7 +371,7 @@ const Summary: React.FC = () => {
               ➕ Dodaj więcej
             </button>
           </div>
-        </section>
+        </section> */}
       </Wrapper>
     </div>
   );

@@ -1,34 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './TripCard.module.css';
+import { useNavigate } from 'react-router-dom';
 
 interface TripCardProps {
+  id: number;
   tripName: string;
   arrivalCity: string;
 }
 
-const TripCard: React.FC<TripCardProps> = ({ tripName, arrivalCity }) => {
+const TripCard: React.FC<TripCardProps> = ({ id, tripName, arrivalCity }) => {
   const [cityImage, setCityImage] = useState<string>('https://via.placeholder.com/800x600?text=Loading+Image');
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const fetchCityImage = async () => {
-  //     try {
-  //       const response = await fetch(`http://localhost:5000/api/data/city-image?q=${encodeURIComponent(arrivalCity)}`);
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-
-  //       const data = await response.json();
-  //       console.log('🎯 City Image URL:', data.image);
-
-  //       setCityImage(data.image || 'https://via.placeholder.com/800x600?text=No+Image+Available');
-  //     } catch (error) {
-  //       console.error('Error fetching city image:', error);
-  //       setCityImage('https://via.placeholder.com/800x600?text=No+Image+Available');
-  //     }
-  //   };
-
-  //   fetchCityImage();
-  // }, [arrivalCity]);
+  const handleClick = () => {
+    navigate(`/summary/${id}`);
+  };
 
   return (
     <div
@@ -36,6 +22,7 @@ const TripCard: React.FC<TripCardProps> = ({ tripName, arrivalCity }) => {
       style={{
         backgroundImage: `url(${cityImage})`,
       }}
+      onClick={handleClick}
     >
       <div className={styles.overlay}>
         <h2 className={styles.tripName}>{tripName}</h2>

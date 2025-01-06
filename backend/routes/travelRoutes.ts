@@ -1,19 +1,3 @@
-// import { Router } from 'express';
-// import { protect } from '../middleware/authMiddleware';
-// import { createTravel, deleteTravel, getAllTravels, getTravelById, updateTravel } from '../controllers/travelController';
-
-// const router = Router();
-
-// // router.post('/create', protect, (req, res) => createTravel(req as any, res));
-// // router.get('/:id', protect, (req, res) => getTravelById(req as any, res));
-// // Ścieżki dla podróży
-// router.post('/travels', createTravel);
-// router.get('/travels', getAllTravels);
-// router.get('/travels/:id', getTravelById);
-// router.put('/travels/:id', updateTravel);
-// router.delete('/travels/:id', deleteTravel);
-
-// export default router;
 import { Router, Request, Response, NextFunction } from 'express';
 import {
   getAllTravels,
@@ -21,6 +5,7 @@ import {
   updateTravel,
   deleteTravel,
   createTravel,
+  getUserTrips,
 } from '../controllers/travelController';
 import { protect } from '../middleware/authMiddleware';
 
@@ -33,6 +18,8 @@ const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => P
 const router = Router();
 
 router.use(protect);
+
+router.get('/user-trips', asyncHandler(getUserTrips))
 
 // Tworzenie nowej podróży
 router.post('/', asyncHandler(createTravel));
@@ -47,6 +34,7 @@ router.get('/:id', asyncHandler(getTravelById));
 router.put('/:id', asyncHandler(updateTravel));
 
 // Usuń podróż
-router.delete('/:id', asyncHandler(deleteTravel));
+router.delete('/:travelId/multimediaId', asyncHandler(deleteTravel));
+
 
 export default router;

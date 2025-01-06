@@ -73,6 +73,27 @@ interface AuthenticatedRequest extends Request {
   user?: { id: number };
 }
 
+export const getUserTrips = async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ error: 'Unauthorized - User ID is missing' });
+    }
+
+    const userId = req.user.id;
+
+    const trips = await Travel.findAll({
+      where: { user_id: userId },
+      attributes: ['id', 'tripName', 'arrivalCity'],
+    });
+
+    res.status(200).json(trips);
+  } catch (error) {
+    console.error('❌ Error fetching user trips:', error);
+    res.status(500).json({ error: 'Failed to fetch user trips' });
+  }
+};
+
+
 // 🛠️ **Pobierz wszystkie podróże**
 export const getAllTravels = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
