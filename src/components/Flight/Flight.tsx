@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Flight.module.css";
 import { useNavigate } from "react-router-dom";
+import FlightModal from "../FlightModal/FlightModal";
 
 interface FlightProps {
   flight: {
@@ -21,9 +22,10 @@ interface FlightProps {
   onSelect: (flight: any) => void;
   buttonLabel?: string;
   isRedirectEnabled?: boolean;
+  googleFlightsUrl?: string;
 }
 
-const Flight: React.FC<FlightProps> = ({ flight, onSelect, buttonLabel = 'Select', isRedirectEnabled = false }) => {
+const Flight: React.FC<FlightProps> = ({ flight, onSelect, buttonLabel = 'Select', isRedirectEnabled = false, googleFlightsUrl }) => {
 
   const navigate = useNavigate()
 
@@ -38,6 +40,17 @@ const Flight: React.FC<FlightProps> = ({ flight, onSelect, buttonLabel = 'Select
     } else {
       onSelect(flight);
     }
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    console.log('🔍 Full Flight Data:', flight); // Log pełnych danych
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   // Parsowanie segmentów, jeśli są zapisane jako string
@@ -64,7 +77,8 @@ const Flight: React.FC<FlightProps> = ({ flight, onSelect, buttonLabel = 'Select
   };
 
   return (
-    <div className={styles.flightCard}>
+    <>
+    <div className={styles.flightCard} onClick={handleOpenModal}>
       {/* Logo i nazwa linii lotniczej */}
       <div className={styles.airline}>
         <img src={flight.airline_logo} alt={flight.airline} className={styles.logo} />
@@ -105,6 +119,8 @@ const Flight: React.FC<FlightProps> = ({ flight, onSelect, buttonLabel = 'Select
         </button>
       </div>
     </div>
+    {isModalOpen && <FlightModal flight={flight} onClose={handleCloseModal} googleFlightsUrl={googleFlightsUrl} />}
+    </>
   );
 };
 

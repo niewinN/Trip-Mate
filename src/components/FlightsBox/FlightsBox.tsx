@@ -17,6 +17,7 @@ interface FlightsBoxProps {
   initialReturnDate: string;
   initialPassengers: number;
   isRedirectEnabled?: boolean;
+  googleFlightsUrl?: string;
 }
 
 const FlightsBox: React.FC<FlightsBoxProps> = ({
@@ -40,6 +41,7 @@ const FlightsBox: React.FC<FlightsBoxProps> = ({
     passengers,
     setPassengers,
     flights,
+    googleFlightsUrl,
     loading,
     error,
     fetchFlights,
@@ -125,7 +127,7 @@ const FlightsBox: React.FC<FlightsBoxProps> = ({
         </div>
         {loading && <p>Loading...</p>}
         {error && <p>{error}</p>}
-        <FlightList flights={flights} onSelect={handleSelectFlight} isRedirectEnabled={isRedirectEnabled} />
+        <FlightList flights={flights} onSelect={handleSelectFlight} isRedirectEnabled={isRedirectEnabled} googleFlightsUrl={googleFlightsUrl} />
       </div>
     </div>
   );

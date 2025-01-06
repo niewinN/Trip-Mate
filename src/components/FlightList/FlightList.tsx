@@ -16,16 +16,17 @@ interface FlightListProps {
   }[];
   onSelect: (flight: any) => void; // Prop do obsługi wybranego lotu
   isRedirectEnabled?: boolean;
+  googleFlightsUrl?: string; // Dodano właściwość
 }
 
-const FlightList: React.FC<FlightListProps> = ({ flights, onSelect, isRedirectEnabled = false }) => {
+const FlightList: React.FC<FlightListProps> = ({ flights, onSelect, isRedirectEnabled = false, googleFlightsUrl }) => {
   return (
     <div className={styles.flightList}>
       {flights.length === 0 ? (
         <p>Brak wyników wyszukiwania.</p>
       ) : (
         flights.map((flight, index) => (
-          <Flight key={index} flight={flight} onSelect={onSelect} isRedirectEnabled={isRedirectEnabled} />
+          <Flight key={index} flight={flight} onSelect={onSelect} isRedirectEnabled={isRedirectEnabled} googleFlightsUrl={googleFlightsUrl} />
         ))
       )}
     </div>
