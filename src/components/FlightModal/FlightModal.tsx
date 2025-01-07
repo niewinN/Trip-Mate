@@ -33,8 +33,8 @@ const FlightModal: React.FC<FlightModalProps> = ({ flight, onClose, googleFlight
         {/* Szczegóły Ogólne */}
         <div className={styles.section}>
           <h3><FontAwesomeIcon icon={faInfoCircle} /> General Flight Details</h3>
-          <p><FontAwesomeIcon icon={faDollarSign} /> <strong>Price:</strong> {flight.price} PLN</p>
-          <p><FontAwesomeIcon icon={faClock} /> <strong>Total Travel Time:</strong> {flight.total_duration} min</p>
+          <p> <strong>Price:</strong> {flight.price} PLN</p>
+          <p> <strong>Total Travel Time:</strong> {flight.total_duration} min</p>
           <p><strong>Flight Type:</strong> {flight.type || 'N/A'}</p>
         </div>
 
@@ -89,7 +89,7 @@ const FlightModal: React.FC<FlightModalProps> = ({ flight, onClose, googleFlight
           <div className={styles.section}>
             <h3><FontAwesomeIcon icon={faLink} /> Book on Google Flights</h3>
             <a href={googleFlightsUrl} target="_blank" rel="noopener noreferrer" className={styles.bookingLink}>
-              Visit Google Flights
+              Book flight
             </a>
           </div>
         )}

@@ -47,16 +47,6 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
     }
   };
 
-  // const handleAddAttraction = (attraction: any) => {
-  //   console.log("🎢 Selected Attraction:", attraction); // Debug
-  //   setSelectedAttractions((prev) => {
-  //     const isAlreadySelected = prev.some((a) => a.title === attraction.title);
-  //     if (isAlreadySelected) {
-  //       return prev.filter((a) => a.title !== attraction.title);
-  //     }
-  //     return [...prev, attraction];
-  //   });
-  // };
   const handleAddAttraction = (attraction: any) => {
     console.log("🎢 Selected Attraction:", attraction); // Debug
   
@@ -77,14 +67,6 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
     });
   };
   
-
-  // const handleFinish = () => {
-  //   console.log("🏁 Final Selected Attractions (AttractionsBox.tsx):", selectedAttractions);
-  //   onAttractionSelect([...selectedAttractions]);
-  //   setTimeout(() => {
-  //     onFinish();
-  //   }, 0); //
-  // };
   const handleFinish = () => {
     console.log("🏁 Final Selected Attractions (AttractionsBox.tsx):", selectedAttractions);
   

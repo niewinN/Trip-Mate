@@ -28,19 +28,21 @@
   /* Przycisk zamknięcia */
   .closeButton {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 1.5rem;
+    top: 5px;
+    right: 5px;
+    font-size: 2rem;
     background: none;
     border: none;
     cursor: pointer;
-    color: #333;
+    color: #007bff;
   }
   
   /* Nagłówek */
   .header {
     text-align: center;
     margin-bottom: 20px;
+    /* color: #007bff; */
+    text-transform: uppercase;
   }
   
   .header .logo {
@@ -49,7 +51,7 @@
   }
   
   .header .title {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: bold;
   }
   
@@ -59,14 +61,15 @@
   }
   
   .section h3 {
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     margin-bottom: 10px;
     border-bottom: 2px solid #007bff;
     padding-bottom: 5px;
+    color: #007bff;
   }
   
   .section p {
-    font-size: 1rem;
+    font-size: 1.5rem;
     margin: 5px 0;
   }
   
@@ -75,18 +78,28 @@
     border-radius: 8px;
     padding: 10px;
     margin-bottom: 10px;
+    font-size: 1.5rem;
+  }
+
+  .segment ul {
+    list-style: none;
   }
   
   /* Link rezerwacyjny */
   .bookingLink {
     display: inline-block;
-    margin-top: 10px;
-    color: #007bff;
-    text-decoration: underline;
+    /* margin-top: 10px; */
+    color: #fff;
+    text-decoration: none;
     font-weight: bold;
+    font-size: 1.2rem;
+    width: 100%;
+    background-color: #007bff;
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px;
   }
   
   .bookingLink:hover {
-    text-decoration: none;
+    color: #fff;
   }
-  
