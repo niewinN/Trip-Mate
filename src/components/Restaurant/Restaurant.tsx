@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Restaurant.module.css';
+import RestaurantModal from '../RestaurantModal/RestaurantModal';
 
 interface RestaurantProps {
   restaurant: {
@@ -20,15 +21,30 @@ interface RestaurantProps {
 }
 
 const Restaurant: React.FC<RestaurantProps> = ({ restaurant, onSelect, isSelected, showAddButton = true, disabledSelectedStyle = false }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
+    <>
     <div
+      onClick={handleOpenModal}
       className={`${styles.restaurantCard} ${isSelected && !disabledSelectedStyle ? styles.selected : ''}`}
-      onClick={() => onSelect(restaurant)}
     >
       {showAddButton && (
         <button
           className={styles.addToPlan}
           aria-label={`Add ${restaurant.title} to the plan`}
+          onClick={(event) => {
+            event.stopPropagation(); // Zapobiega otwarciu modala
+            onSelect(restaurant); // Wywołuje tylko onSelect
+          }}
         >
           +
         </button>
@@ -47,6 +63,8 @@ const Restaurant: React.FC<RestaurantProps> = ({ restaurant, onSelect, isSelecte
         <p className={styles.price}>{restaurant.price}</p>
       </div>
     </div>
+    {isModalOpen && <RestaurantModal restaurant={restaurant} onClose={handleCloseModal} />}
+    </>
   );
 };
 

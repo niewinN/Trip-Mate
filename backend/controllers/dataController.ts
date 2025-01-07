@@ -20,7 +20,7 @@ export const getHotels = async (req: Request, res: Response) => {
       },
     });
 
-    console.log('🔍 Full Hotel Response from SerpAPI:', JSON.stringify(response.data, null, 2));
+    // console.log('🔍 Full Hotel Response from SerpAPI:', JSON.stringify(response.data, null, 2));
 
     const hotels = (response.data.properties || []).map((hotel: any) => ({
       name: hotel.name,
@@ -28,6 +28,7 @@ export const getHotels = async (req: Request, res: Response) => {
       logo: hotel.logo || null,
       images: hotel.images || [],
       rate_per_night: hotel.rate_per_night || {},
+      total_rate: hotel.total_rate || {},
       hotel_class: hotel.hotel_class || null,
       overall_rating: hotel.overall_rating || 0,
       reviews: hotel.reviews || 0,
@@ -35,7 +36,14 @@ export const getHotels = async (req: Request, res: Response) => {
       check_out_time: hotel.check_out_time || null,
       amenities: hotel.amenities || [],
       nearby_places: hotel.nearby_places || [],
+      reviews_breakdown: hotel.reviews_breakdown || [],
       deal: hotel.deal || null,
+      deal_description: hotel.deal_description || null,
+      gps_coordinates: hotel.gps_coordinates || {},
+      eco_certified: hotel.eco_certified || false,
+      property_token: hotel.property_token || null,
+      serpapi_property_details_link: hotel.serpapi_property_details_link || null,
+      link: hotel.link || null,
     }));
 
     res.json(hotels);
@@ -124,20 +132,9 @@ export const getFlights = async (req: Request, res: Response) => {
   }
 };
 
-//     if (!bestFlights || bestFlights.length === 0) {
-//       return res.status(404).json({ error: 'Brak wyników dla podanych parametrów.' });
-//     }
-
-//     res.json(bestFlights);
-//   } catch (error: any) {
-//     handleError(res, error, 'Błąd podczas pobierania lotów');
-//   }
-// };
-
-// 🍽️ **Pobieranie Restauracji**
 export const getRestaurants = async (req: Request, res: Response) => {
   try {
-    const { location = 'Warsaw', start = 0 } = req.query;
+    const { location = 'London', start = 0 } = req.query;
 
     const response = await axios.get('https://serpapi.com/search', {
       params: {
@@ -149,6 +146,8 @@ export const getRestaurants = async (req: Request, res: Response) => {
       },
     });
 
+    // console.log('🔍 Full Restaurant Response from SerpAPI:', JSON.stringify(response.data, null, 2));
+
     const restaurants = (response.data.local_results || []).map((restaurant: any) => ({
       title: restaurant.title || 'No title available',
       rating: restaurant.rating || 'No rating',
@@ -159,6 +158,11 @@ export const getRestaurants = async (req: Request, res: Response) => {
       address: restaurant.address || 'No address provided',
       description: restaurant.description || 'No description available.',
       thumbnail: restaurant.thumbnail || 'https://via.placeholder.com/500x500?text=No+Image',
+      phone: restaurant.phone || 'No phone number available',
+      hours: restaurant.hours || 'No opening hours',
+      links: restaurant.links || {},
+      gps_coordinates: restaurant.gps_coordinates || null,
+      place_id_search: restaurant.place_id_search || null,
     }));
 
     res.json(restaurants);
@@ -167,31 +171,71 @@ export const getRestaurants = async (req: Request, res: Response) => {
   }
 };
 
+
 // 🏙️ **Pobieranie Atrakcji**
+// export const getAttractions = async (req: Request, res: Response) => {
+//   try {
+//     const { location = 'New York' } = req.query;
+
+//     const response = await axios.get('https://serpapi.com/search', {
+//       params: {
+//         engine: 'google_local',
+//         q: 'attractions',
+//         location,
+//         api_key: API_KEY,
+//       },
+//     });
+
+//     console.log('🔍 Full Attraction Response from SerpAPI:', JSON.stringify(response.data, null, 2));
+
+//     const attractions = (response.data.local_results || []).map((attraction: any) => ({
+//       title: attraction.title,
+//       description: attraction.description || 'No description available.',
+//       thumbnail: attraction.thumbnail || 'https://via.placeholder.com/500x500?text=No+Image+Available',
+//     }));
+
+//     res.json(attractions);
+//   } catch (error: any) {
+//     handleError(res, error, 'Błąd podczas pobierania atrakcji');
+//   }
+// };
 export const getAttractions = async (req: Request, res: Response) => {
   try {
-    const { location = 'New York' } = req.query;
+    const { location = 'London', start = 0 } = req.query;
 
     const response = await axios.get('https://serpapi.com/search', {
       params: {
         engine: 'google_local',
         q: 'attractions',
         location,
+        start,
         api_key: API_KEY,
       },
     });
 
+    console.log('🔍 Full Attraction Response from SerpAPI:', JSON.stringify(response.data, null, 2));
+
     const attractions = (response.data.local_results || []).map((attraction: any) => ({
-      title: attraction.title,
+      title: attraction.title || 'No title available',
       description: attraction.description || 'No description available.',
-      thumbnail: attraction.thumbnail || 'https://via.placeholder.com/500x500?text=No+Image+Available',
+      thumbnail: attraction.thumbnail || 'https://via.placeholder.com/500x500?text=No+Image',
+      rating: attraction.rating || 0,
+      reviews_original: attraction.reviews_original || 'No reviews',
+      reviews: attraction.reviews || 0,
+      address: attraction.address || 'No address provided',
+      hours: attraction.hours || 'No hours available',
+      place_id: attraction.place_id || 'No place ID',
+      gps_coordinates: attraction.gps_coordinates || {},
+      place_id_search: attraction.place_id_search || null,
     }));
 
     res.json(attractions);
   } catch (error: any) {
-    handleError(res, error, 'Błąd podczas pobierania atrakcji');
+    console.error('Error fetching attractions:', error);
+    res.status(500).send('Error fetching attractions');
   }
 };
+
 
 // 🏙️ **Pobieranie Obrazka Miasta**
 export const getCityImage = async (req: Request, res: Response) => {

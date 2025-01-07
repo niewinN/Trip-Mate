@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Hotel.module.css';
 import { useNavigate } from 'react-router-dom';
+import HotelModal from '../HotelModal/HotelModal';
 
 interface HotelProps {
   hotel: {
@@ -25,6 +26,10 @@ interface HotelProps {
 
 const Hotel: React.FC<HotelProps> = ({ hotel, onSelect, buttonLabel = 'Select', isRedirectEnabled = false, }) => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const handleSelect = () => {
     if (isRedirectEnabled) {
@@ -48,7 +53,8 @@ const Hotel: React.FC<HotelProps> = ({ hotel, onSelect, buttonLabel = 'Select', 
     const price = hotel.rate_per_night?.lowest || hotel.price || 'N/A';
 
   return (
-    <div className={styles.hotelCard}>
+    <>
+    <div className={styles.hotelCard} onClick={handleOpenModal}>
       {/* Obrazek hotelu */}
       <div className={styles.hotelImage}>
         {hotel.images?.[0]?.thumbnail ? (
@@ -87,6 +93,8 @@ const Hotel: React.FC<HotelProps> = ({ hotel, onSelect, buttonLabel = 'Select', 
         </button>
       </div>
     </div>
+    {isModalOpen && <HotelModal hotel={hotel} onClose={handleCloseModal} />}
+    </>
   );
 };
 
