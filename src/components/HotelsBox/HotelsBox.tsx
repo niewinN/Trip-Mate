@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHotel } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import filters from "../../data/filters.json";
+import PlanButton from '../PlanButton/PlanButton';
 
 interface HotelsBoxProps {
   arrivalCity: string;
@@ -16,6 +17,7 @@ interface HotelsBoxProps {
   passengers: number;
   onHotelSelect: (hotel: any) => void;
   isRedirectEnabled?: boolean;
+  showPlanBtn?: boolean;
 }
 
 const HotelsBox: React.FC<HotelsBoxProps> = ({
@@ -25,6 +27,7 @@ const HotelsBox: React.FC<HotelsBoxProps> = ({
   passengers,
   onHotelSelect,
   isRedirectEnabled = false,
+  showPlanBtn = false
 }) => {
   const hotelFilters = filters.hotels;
 
@@ -136,6 +139,7 @@ const HotelsBox: React.FC<HotelsBoxProps> = ({
           isRedirectEnabled={isRedirectEnabled}
         />
       </div>
+      {showPlanBtn && <PlanButton/>}
     </div>
   );
 };

@@ -61,21 +61,23 @@ const HotelModal: React.FC<HotelModalProps> = ({ hotel, onClose }) => {
         </div>
         <div className={styles.flex}>
         {/* Galeria zdjęć */}
-        {hotel.images && hotel.images.length > 0 && (
-          <div className={styles.gallery}>
-            <button className={styles.arrowButton} onClick={prevImage}>
-              <FontAwesomeIcon icon={faArrowLeft} />
-            </button>
-            <img
-              src={hotel.images[currentImageIndex]?.thumbnail}
-              alt={`Hotel image ${currentImageIndex + 1}`}
-              className={styles.galleryImage}
-            />
-            <button className={styles.arrowButton} onClick={nextImage}>
-              <FontAwesomeIcon icon={faArrowRight} />
-            </button>
-          </div>
-        )}
+        {hotel.images && hotel.images.length > 0 ? (
+            <div className={styles.gallery}>
+              <button className={styles.arrowButton} onClick={prevImage}>
+                <FontAwesomeIcon icon={faArrowLeft} />
+              </button>
+              <img
+                src={hotel.images[currentImageIndex]?.thumbnail || 'https://via.placeholder.com/300'}
+                alt={`Hotel image ${currentImageIndex + 1}`}
+                className={styles.galleryImage}
+              />
+              <button className={styles.arrowButton} onClick={nextImage}>
+                <FontAwesomeIcon icon={faArrowRight} />
+              </button>
+            </div>
+          ) : (
+            <p>No images available.</p>
+          )}
         {/* Szczegóły Ogólne */}
         <div>
           <h3>
@@ -99,19 +101,23 @@ const HotelModal: React.FC<HotelModalProps> = ({ hotel, onClose }) => {
         
 
         {/* Opinie */}
-        {hotel.reviews_breakdown && (
+        {hotel.reviews_breakdown ? (
           <div className={styles.section}>
-            <h3><FontAwesomeIcon icon={faStar} /> Reviews Breakdown</h3>
+            <h3>
+              <FontAwesomeIcon icon={faStar} /> Reviews Breakdown
+            </h3>
             {hotel.reviews_breakdown.map((review: any, index: number) => (
               <p key={index}>
                 <strong>{review.name}:</strong> {review.total_mentioned} mentions, {review.positive} positive, {review.negative} negative
               </p>
             ))}
           </div>
+        ) : (
+          <p>No reviews available.</p>
         )}
 
         {/* Udogodnienia */}
-        {hotel.amenities && hotel.amenities.length > 0 && (
+        {hotel.amenities && hotel.amenities.length > 0 ? (
           <div className={styles.section}>
             <h3>
               <FontAwesomeIcon icon={faList} /> Amenities
@@ -122,28 +128,36 @@ const HotelModal: React.FC<HotelModalProps> = ({ hotel, onClose }) => {
               ))}
             </ul>
           </div>
+        ) : (
+          <p>No amenities available.</p>
         )}
 
         {/* Miejsca w pobliżu */}
-        {hotel.nearby_places && hotel.nearby_places.length > 0 && (
-          <div className={styles.section}>
-            <h3>
-              <FontAwesomeIcon icon={faMapMarkerAlt} /> Nearby Places
-            </h3>
-            {hotel.nearby_places.map((place: any, index: number) => (
-              <div key={index} className={styles.nearbyItem}>
-                <strong>{place.name}</strong>
-                <ul>
-                  {place.transportations.map((transport: any, tIndex: number) => (
-                    <li key={tIndex}>
-                      {transport.type}: {transport.duration}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+        {hotel.nearby_places && hotel.nearby_places.length > 0 ? (
+  <div className={styles.section}>
+    <h3>
+      <FontAwesomeIcon icon={faMapMarkerAlt} /> Nearby Places
+    </h3>
+    {hotel.nearby_places.map((place: any, index: number) => (
+      <div key={index} className={styles.nearbyItem}>
+        <p><strong>{place.name || 'Unknown Place'}</strong></p>
+        {place.transportations && place.transportations.length > 0 ? (
+          <ul>
+            {place.transportations.map((transport: any, tIndex: number) => (
+              <li key={tIndex}>
+                {transport.type || 'Unknown Type'}: {transport.duration || 'Unknown Duration'}
+              </li>
             ))}
-          </div>
+          </ul>
+        ) : (
+          <p>No transportations available.</p>
         )}
+      </div>
+    ))}
+  </div>
+) : (
+  <p>No nearby places available.</p>
+)}
 
         {/* Link do rezerwacji */}
         {hotel.link && (

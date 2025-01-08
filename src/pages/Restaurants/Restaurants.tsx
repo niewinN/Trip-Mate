@@ -24,6 +24,8 @@ const Restaurants: React.FC = () => {
           initialReturnDate={defaultReturnDate}
           onRestaurantSelect={handleRestaurantSelect}
           showNextButton={false}
+          showAddButton={false}
+          showPlanBtn={true}
         />
       </Wrapper>
     </div>

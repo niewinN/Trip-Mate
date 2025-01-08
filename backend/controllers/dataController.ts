@@ -213,7 +213,7 @@ export const getAttractions = async (req: Request, res: Response) => {
       },
     });
 
-    console.log('🔍 Full Attraction Response from SerpAPI:', JSON.stringify(response.data, null, 2));
+    // console.log('🔍 Full Attraction Response from SerpAPI:', JSON.stringify(response.data, null, 2));
 
     const attractions = (response.data.local_results || []).map((attraction: any) => ({
       title: attraction.title || 'No title available',

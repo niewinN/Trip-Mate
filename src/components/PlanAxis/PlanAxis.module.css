@@ -20,6 +20,7 @@
     height: 6px; /* Większa wysokość osi dla lepszej widoczności */
     background-color: #ccc;
     border-radius: 3px;
+    margin-top: 70px;
 }
 
 .segment {

@@ -2,6 +2,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import Wrapper from "../../components/Wrapper/Wrapper";
 import styles from "./Flights.module.css";
 import FlightsBox from "../../components/FlightsBox/FlightsBox";
+import PlanButton from "../../components/PlanButton/PlanButton";
 
 const Flights = () => {
   // Domyślne wartości dla parametrów
@@ -27,6 +28,7 @@ const Flights = () => {
           initialPassengers={defaultPassengers}
           onFlightSelect={handleFlightSelect}
           isRedirectEnabled={true}
+          showPlanBtn={true}
         />
       </Wrapper>
     </div>

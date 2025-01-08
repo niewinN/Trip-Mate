@@ -391,50 +391,6 @@ if (restaurants.length > 0) {
 };
 
 // 🛠️ **Pobierz statystyki użytkownika**
-// export const getUserStats = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response | void> => {
-//   try {
-//     if (!req.user || !req.user.id) {
-//       return res.status(401).json({ error: 'Unauthorized - User ID is missing' });
-//     }
-
-//     const userId = req.user.id;
-
-//     // Liczba podróży
-//     const numberOfTrips = await Travel.count({
-//       where: { user_id: userId },
-//     });
-
-//     // Liczba dni podróży
-//     const travels = await Travel.findAll({
-//       where: { user_id: userId },
-//       attributes: ['departureDate', 'returnDate'],
-//     });
-
-//     const daysInTrip = travels.reduce((total, trip) => {
-//       const departureDate = new Date(trip.departureDate);
-//       const returnDate = new Date(trip.returnDate);
-//       const tripDays = Math.ceil(
-//         (returnDate.getTime() - departureDate.getTime()) / (1000 * 60 * 60 * 24)
-//       );
-//       return total + tripDays;
-//     }, 0);
-
-//     // Liczba multimediów
-//     const numberOfPhotos = await Multimedia.count({
-//       where: { travel_id: travels.map(trip => trip.id) },
-//     });
-
-//     return res.status(200).json({
-//       numberOfTrips,
-//       daysInTrip,
-//       numberOfPhotos,
-//     });
-//   } catch (error) {
-//     console.error('❌ Error fetching user stats:', error);
-//     next(error);
-//   }
-// };
-// 🛠️ **Pobierz statystyki użytkownika**
 export const getUserStats = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<Response | void> => {
   try {
     if (!req.user || !req.user.id) {

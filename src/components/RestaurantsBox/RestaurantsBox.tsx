@@ -7,6 +7,7 @@ import HeaderIcon from '../HeaderIcon/HeaderIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCutlery } from '@fortawesome/free-solid-svg-icons';
 import filters from "../../data/filters.json";
+import PlanButton from '../PlanButton/PlanButton';
 
 interface RestaurantsBoxProps {
   initialCity: string;
@@ -15,6 +16,8 @@ interface RestaurantsBoxProps {
   onRestaurantSelect: (restaurant: any) => void;
   onNext: () => void; // Przycisk Next do przejścia do następnego kroku
   showNextButton?: boolean;
+  showAddButton?: boolean;
+  showPlanBtn?: boolean;
 }
 
 const RestaurantsBox: React.FC<RestaurantsBoxProps> = ({
@@ -24,6 +27,8 @@ const RestaurantsBox: React.FC<RestaurantsBoxProps> = ({
   onRestaurantSelect,
   onNext,
   showNextButton = true,
+  showAddButton = true,
+  showPlanBtn = false
 }) => {
   const [city, setCity] = useState<string>(initialCity);
   const [restaurants, setRestaurants] = useState<any[]>([]);
@@ -108,8 +113,10 @@ const RestaurantsBox: React.FC<RestaurantsBoxProps> = ({
           restaurants={restaurants}
           onSelect={handleAddRestaurant}
           selectedRestaurants={selectedRestaurants}
+          showAddButton={showAddButton}
         />
       </div>
+      {showPlanBtn && <PlanButton/>}
     </div>
   );
 };

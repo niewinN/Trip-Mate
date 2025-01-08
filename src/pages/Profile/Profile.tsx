@@ -7,6 +7,7 @@ import TripCard from "../../components/TripCard/TripCard";
 import TripStats from "../../components/TripStats/TripStats";
 import AccountData from "../../components/AccountData/AccountData";
 import styles from "./Profile.module.css";
+import NoTripsBanner from "../../components/NoTripsBanner/NoTripsBanner";
 
 interface Trip {
   id: number;
@@ -62,13 +63,16 @@ const Profile = () => {
     <div className={styles.profile}>
       <Navbar background="#007bff" />
       <Wrapper>
-        <div className={styles.profileBox}>
+      <div className={styles.profileBox}>
+          {/* Sekcja Podróży */}
           <div className={styles.tripContainer}>
             <h1 className={styles.title}>📚 My Trips</h1>
             {loading ? (
               <p>Loading trips...</p>
             ) : error ? (
               <p>{error}</p>
+            ) : trips.length === 0 ? (
+              <NoTripsBanner />
             ) : (
               <div className={styles.tripGrid}>
                 {trips.map((trip) => (

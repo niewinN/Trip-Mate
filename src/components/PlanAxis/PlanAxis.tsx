@@ -8,7 +8,7 @@ interface PlanAxisProps {
 const PlanAxis: React.FC<PlanAxisProps> = ({currentStep}) => {
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>PLAN YOUR TRIP</h2>
+      {currentStep === 1 && <h2 className={styles.title}>PLAN YOUR TRIP</h2>}
       <div className={styles.axis}>
         <div
           className={`${styles.segment} ${

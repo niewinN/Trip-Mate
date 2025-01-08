@@ -60,9 +60,16 @@ const AttractionModal: React.FC<AttractionModalProps> = ({ attraction, onClose }
             <FontAwesomeIcon icon={faClock} /> <strong>Hours:</strong> {attraction.hours}
           </p>
           <p>{attraction.description}</p>
-          <p>
-            <FontAwesomeIcon icon={faLocationArrow} /> <strong>Coordinates:</strong> Latitude: {attraction.gps_coordinates.latitude}, Longitude: {attraction.gps_coordinates.longitude}
-          </p>
+          {attraction.gps_coordinates ? (
+            <p>
+              <FontAwesomeIcon icon={faLocationArrow} /> <strong>Coordinates:</strong> Latitude: {attraction.gps_coordinates.latitude || 'N/A'}, Longitude: {attraction.gps_coordinates.longitude || 'N/A'}
+            </p>
+          ) : (
+            <p>
+              <FontAwesomeIcon icon={faLocationArrow} /> <strong>Coordinates:</strong> Not available
+            </p>
+          )}
+
         </div>
 
         {/* Link do Mapy */}

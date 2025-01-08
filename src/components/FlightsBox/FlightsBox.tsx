@@ -8,6 +8,7 @@ import { faPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFlightSearchContext } from "../../contexts/FlightSearchContext";
 import filters from "../../data/filters.json";
+import PlanButton from "../PlanButton/PlanButton";
 
 interface FlightsBoxProps {
   onFlightSelect: (flight: any) => void;
@@ -18,6 +19,7 @@ interface FlightsBoxProps {
   initialPassengers: number;
   isRedirectEnabled?: boolean;
   googleFlightsUrl?: string;
+  showPlanBtn?: boolean;
 }
 
 const FlightsBox: React.FC<FlightsBoxProps> = ({
@@ -28,6 +30,7 @@ const FlightsBox: React.FC<FlightsBoxProps> = ({
   initialReturnDate,
   initialPassengers,
   isRedirectEnabled = false,
+  showPlanBtn = false
 }) => {
   const {
     departureCity,
@@ -129,6 +132,7 @@ const FlightsBox: React.FC<FlightsBoxProps> = ({
         {error && <p>{error}</p>}
         <FlightList flights={flights} onSelect={handleSelectFlight} isRedirectEnabled={isRedirectEnabled} googleFlightsUrl={googleFlightsUrl} />
       </div>
+      {showPlanBtn && <PlanButton/>}
     </div>
   );
 };

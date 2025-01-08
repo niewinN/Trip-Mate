@@ -18,12 +18,14 @@ interface RestaurantListProps {
   restaurants: RestaurantProps[];
   onSelect: (restaurant: any) => void;
   selectedRestaurants: RestaurantProps[];
+  showAddButton?: boolean;
 }
 
 const RestaurantList: React.FC<RestaurantListProps> = ({
   restaurants,
   onSelect,
   selectedRestaurants,
+  showAddButton = true
 }) => {
   return (
     <div className={styles.restaurantList}>
@@ -33,6 +35,7 @@ const RestaurantList: React.FC<RestaurantListProps> = ({
           restaurant={restaurant}
           onSelect={onSelect}
           isSelected={selectedRestaurants.some((r) => r.title === restaurant.title)}
+          showAddButton={showAddButton}
         />
       ))}
     </div>

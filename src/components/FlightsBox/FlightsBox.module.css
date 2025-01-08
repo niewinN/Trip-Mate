@@ -2,6 +2,10 @@
     display: none;
 }
 
+.second {
+    position: relative;
+}
+
 @media (min-width: 992px) {
     .flex {
         display: flex;

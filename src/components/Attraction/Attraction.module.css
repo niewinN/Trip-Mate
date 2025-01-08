@@ -9,6 +9,7 @@
     margin: 16px 0;
     position: relative; /* Aby umożliwić absolutne pozycjonowanie */
     transition: transform 0.3s;
+    cursor: pointer;
   }
 
   .attractionCard.selected {

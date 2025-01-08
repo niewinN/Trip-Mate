@@ -18,6 +18,8 @@ const Attractions = () => {
           initialCity={defaultCity}
           initialDepartureDate={defaultDepartureDate}
           initialReturnDate={defaultReturnDate}
+          showAddButton={false}
+          showPlanBtn={true}
           />
       </Wrapper>
     </div>

@@ -7,12 +7,15 @@ import HeaderIcon from "../HeaderIcon/HeaderIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMuseum } from "@fortawesome/free-solid-svg-icons";
 import filters from "../../data/filters.json";
+import PlanButton from "../PlanButton/PlanButton";
 
 interface AttractionsBoxProps {
   initialCity: string;
   onAttractionSelect: (attractions: any[]) => void;
   onFinish: () => void;
   showFinishButton?: boolean;
+  showAddButton?: boolean;
+  showPlanBtn?: boolean;
 }
 
 const AttractionsBox: React.FC<AttractionsBoxProps> = ({
@@ -20,6 +23,8 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
   onAttractionSelect,
   onFinish,
   showFinishButton = true,
+  showAddButton = true,
+  showPlanBtn = false
 }) => {
   const [city, setCity] = useState<string>(initialCity);
   const [attractions, setAttractions] = useState<any[]>([]);
@@ -131,8 +136,10 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
           attractions={attractions}
           onSelect={handleAddAttraction}
           selectedAttractions={selectedAttractions}
+          showAddButton={showAddButton}
         />
       </div>
+      {showPlanBtn && <PlanButton/>}
     </div>
   );
 };

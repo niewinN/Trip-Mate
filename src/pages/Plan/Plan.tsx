@@ -387,6 +387,7 @@ const handleFinish = async () => {
             onAttractionSelect={handleAttractionSelect}
             onFinish={handleFinish}
             showFinishButton={true}
+            showAddButton={true}
           />
         )}
 

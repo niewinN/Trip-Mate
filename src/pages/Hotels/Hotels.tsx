@@ -25,6 +25,7 @@ const Hotels = () => {
           passengers={defaultPassengers}
           onHotelSelect={handleHotelSelect}
           isRedirectEnabled={true}
+          showPlanBtn={true}
         />
       </Wrapper>
     </div>
