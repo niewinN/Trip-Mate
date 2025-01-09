@@ -70,6 +70,67 @@ export const getAirportCode = async (city: string): Promise<string> => {
 };
 
 // ✈️ **Pobieranie Lotów**
+// export const getFlights = async (req: Request, res: Response) => {
+//   try {
+//     const { departure_city, arrival_city, departure_date, return_date, passengers } = req.query;
+
+//     if (!departure_city || !arrival_city || !departure_date || !return_date || !passengers) {
+//       return res.status(400).json({ error: 'Brak wymaganych parametrów' });
+//     }
+
+//     const departure_id = await getAirportCode(departure_city as string);
+//     const arrival_id = await getAirportCode(arrival_city as string);
+
+//     const flightsResponse = await axios.get('https://serpapi.com/search.json', {
+//       params: {
+//         engine: 'google_flights',
+//         departure_id,
+//         arrival_id,
+//         outbound_date: departure_date,
+//         return_date,
+//         passengers,
+//         currency: 'PLN',
+//         hl: 'en',
+//         api_key: API_KEY,
+//       },
+//     });
+
+//     // console.log('🔍 Full Flight Response from SerpAPI:', JSON.stringify(flightsResponse.data, null, 2));
+
+//     const bestFlights = flightsResponse.data.best_flights?.map((flight: any) => ({
+//       ...flight,
+//       airline: flight.flights[0]?.airline || 'Unknown',
+//       airline_logo: flight.airline_logo || 'Unknown',
+//       totalDuration: flight.total_duration || 0,
+//       price: flight.price || 'N/A',
+//       segments: flight.flights.map((segment: any) => ({
+//         departure: {
+//           airport: segment.departure_airport?.name || 'Unknown Airport',
+//           time: segment.departure_airport?.time || 'N/A',
+//         },
+//         arrival: {
+//           airport: segment.arrival_airport?.name || 'Unknown Airport',
+//           time: segment.arrival_airport?.time || 'N/A',
+//         },
+//         duration: segment.duration || 0,
+//       })),
+//     }));
+
+//     const googleFlightsUrl = flightsResponse.data.search_metadata?.google_flights_url || null;
+
+//     if (!bestFlights || bestFlights.length === 0) {
+//       return res.status(404).json({ error: 'Brak wyników dla podanych parametrów.' });
+//     }
+
+//     // 🛫 Zwracamy loty i link do Google Flights
+//     res.json({
+//       flights: bestFlights,
+//       googleFlightsUrl, // 🔗 Dodany link do Google Flights
+//     });
+//   } catch (error: any) {
+//     handleError(res, error, 'Błąd podczas pobierania lotów');
+//   }
+// };
 export const getFlights = async (req: Request, res: Response) => {
   try {
     const { departure_city, arrival_city, departure_date, return_date, passengers } = req.query;
@@ -81,13 +142,14 @@ export const getFlights = async (req: Request, res: Response) => {
     const departure_id = await getAirportCode(departure_city as string);
     const arrival_id = await getAirportCode(arrival_city as string);
 
-    const flightsResponse = await axios.get('https://serpapi.com/search.json', {
+    // 🛫 Lot wychodzący (One-way)
+    const outboundResponse = await axios.get('https://serpapi.com/search.json', {
       params: {
         engine: 'google_flights',
         departure_id,
         arrival_id,
         outbound_date: departure_date,
-        return_date,
+        return_date: departure_date, // Dodanie return_date jako departure_date
         passengers,
         currency: 'PLN',
         hl: 'en',
@@ -95,12 +157,9 @@ export const getFlights = async (req: Request, res: Response) => {
       },
     });
 
-    // console.log('🔍 Full Flight Response from SerpAPI:', JSON.stringify(flightsResponse.data, null, 2));
-
-    const bestFlights = flightsResponse.data.best_flights?.map((flight: any) => ({
-      ...flight,
+    const outboundFlights = outboundResponse.data.best_flights?.map((flight: any) => ({
       airline: flight.flights[0]?.airline || 'Unknown',
-      airline_logo: flight.airline_logo || 'Unknown',
+      airline_logo: flight.airline_logo || '',
       totalDuration: flight.total_duration || 0,
       price: flight.price || 'N/A',
       segments: flight.flights.map((segment: any) => ({
@@ -114,21 +173,50 @@ export const getFlights = async (req: Request, res: Response) => {
         },
         duration: segment.duration || 0,
       })),
-    }));
+    })) || [];
 
-    const googleFlightsUrl = flightsResponse.data.search_metadata?.google_flights_url || null;
+    // 🛬 Lot powrotny (One-way)
+    const returnResponse = await axios.get('https://serpapi.com/search.json', {
+      params: {
+        engine: 'google_flights',
+        departure_id: arrival_id, // Zamiana miast
+        arrival_id: departure_id,
+        outbound_date: return_date, // Data powrotu jako outbound
+        return_date: return_date, // Dodanie return_date jako outbound_date
+        passengers,
+        currency: 'PLN',
+        hl: 'en',
+        api_key: API_KEY,
+      },
+    });
 
-    if (!bestFlights || bestFlights.length === 0) {
-      return res.status(404).json({ error: 'Brak wyników dla podanych parametrów.' });
-    }
+    const returnFlights = returnResponse.data.best_flights?.map((flight: any) => ({
+      airline: flight.flights[0]?.airline || 'Unknown',
+      airline_logo: flight.airline_logo || '',
+      totalDuration: flight.total_duration || 0,
+      price: flight.price || 'N/A',
+      segments: flight.flights.map((segment: any) => ({
+        departure: {
+          airport: segment.departure_airport?.name || 'Unknown Airport',
+          time: segment.departure_airport?.time || 'N/A',
+        },
+        arrival: {
+          airport: segment.arrival_airport?.name || 'Unknown Airport',
+          time: segment.arrival_airport?.time || 'N/A',
+        },
+        duration: segment.duration || 0,
+      })),
+    })) || [];
 
-    // 🛫 Zwracamy loty i link do Google Flights
+    // Zwracamy oba zestawy lotów
     res.json({
-      flights: bestFlights,
-      googleFlightsUrl, // 🔗 Dodany link do Google Flights
+      outboundFlights,
+      returnFlights,
+      googleFlightsUrl: outboundResponse.data.search_metadata?.google_flights_url || null,
     });
   } catch (error: any) {
-    handleError(res, error, 'Błąd podczas pobierania lotów');
+    console.error('❌ Error fetching flights:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Błąd podczas pobierania lotów' });
   }
 };
 

@@ -252,7 +252,7 @@ const handleMediaUpload = async (file: File) => {
           {/* Sekcja Kart */}
           <div className={styles.cards}>
             {/* Sekcja Lotu */}
-            <section className={styles.section}>
+            {/* <section className={styles.section}>
               <div className={styles.flightHeader}>
                 <h2>✈️ Flight</h2>
                 <span className={styles.arrowDesktop} onClick={handleArrowClick}>
@@ -268,7 +268,39 @@ const handleMediaUpload = async (file: File) => {
               ) : (
                 <p>No flight selected.</p>
               )}
-            </section>
+            </section> */}
+            <section className={styles.section}>
+  <div className={styles.flightHeader}>
+    <h2>✈️ Flights</h2>
+    <span className={styles.arrowDesktop} onClick={handleArrowClick}>
+      ➔
+    </span>
+  </div>
+  {flights && flights.length > 0 ? (
+    flights.map((flight: any, index: number) => (
+      <div key={index} className={styles.card}>
+        <Flight
+          flight={{
+            airline: flight.airline || 'Unknown Airline',
+            airline_logo: flight.airline_logo || null,
+            price: flight.price || 'N/A',
+            departure_airport: flight.departure_airport || 'Unknown Airport',
+            arrival_airport: flight.arrival_airport || 'Unknown Airport',
+            departure_time: flight.departure_time,
+            arrival_time: flight.arrival_time,
+            total_duration: flight.total_duration,
+            segments: flight.segments ? JSON.parse(flight.segments) : [],
+          }}
+          buttonLabel="Show"
+          onSelect={() => {}}
+        />
+      </div>
+    ))
+  ) : (
+    <p>No flights selected.</p>
+  )}
+</section>
+
 
             {/* Sekcja Hotelu */}
             <section className={styles.section}>

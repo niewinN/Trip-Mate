@@ -51,6 +51,32 @@ const Plan = () => {
   const navigate = useNavigate();
   const location = useLocation()
 
+  const [selectedOutboundFlight, setSelectedOutboundFlight] = useState<any>(null);
+const [selectedReturnFlight, setSelectedReturnFlight] = useState<any>(null);
+
+// Funkcja wyboru lotu wychodzącego
+const handleOutboundFlightSelect = (flight: any) => {
+  console.log("🛫 Selected Outbound Flight:", flight);
+  setSelectedOutboundFlight(flight);
+};
+
+// Funkcja wyboru lotu powrotnego
+const handleReturnFlightSelect = (flight: any) => {
+  console.log("🛬 Selected Return Flight:", flight);
+  setSelectedReturnFlight(flight);
+};
+
+// Sprawdzanie, czy oba loty są wybrane przed przejściem dalej
+const areBothFlightsSelected = () => {
+  const isSelected = !!selectedOutboundFlight && !!selectedReturnFlight;
+  console.log("✅ areBothFlightsSelected:", isSelected);
+  console.log("🛫 Outbound Flight:", selectedOutboundFlight);
+  console.log("🛬 Return Flight:", selectedReturnFlight);
+  return isSelected;
+};
+
+
+
   // Aktualizacja osób w podróży
   const updateTripPerson = (index: number, field: "name" | "image", value: any) => {
     const updatedPersons = [...tripPersons];
@@ -173,15 +199,15 @@ const Plan = () => {
 }, [selectedAttractions]);
 
 
-  const handleFlightSelect = (flight: any) => {
-    console.log("✈️ Selected Flight:", flight); // Dodaj logowanie tutaj
-    setSelectedFlight(flight);
-    setArrivalCity(flight.segments?.[flight.segments.length - 1]?.arrival?.city || arrivalCity);
-    setDepartureDate(flight.segments?.[0]?.departure?.time.split(" ")[0] || departureDate);
-    setReturnDate(flight.return_date || returnDate);
-    // setPassengers(flight.passengers || 1);
-    setCurrentStep(3);
-  };
+  // const handleFlightSelect = (flight: any) => {
+  //   console.log("✈️ Selected Flight:", flight); // Dodaj logowanie tutaj
+  //   setSelectedFlight(flight);
+  //   setArrivalCity(flight.segments?.[flight.segments.length - 1]?.arrival?.city || arrivalCity);
+  //   setDepartureDate(flight.segments?.[0]?.departure?.time.split(" ")[0] || departureDate);
+  //   setReturnDate(flight.return_date || returnDate);
+  //   // setPassengers(flight.passengers || 1);
+  //   setCurrentStep(3);
+  // };
 
   const handleHotelSelect = (hotel: any) => {
     setSelectedHotel(hotel);
@@ -214,6 +240,92 @@ const Plan = () => {
   };
   
   
+// const handleFinish = async () => {
+//   console.log('🛠️ TripPersons State (Before API Call):', tripPersons);
+//   const token = localStorage.getItem('token');
+//   if (!token) {
+//     navigate('/login');
+//     return;
+//   }
+
+//   // Wymuś pełną synchronizację stanu
+//   const attractionsCopy = [...selectedAttractions];
+//   console.log("🎢 Final Selected Attractions (Before API Call):", attractionsCopy);
+
+//   const travelData = {
+//     departureCity,
+//     arrivalCity,
+//     departureDate,
+//     returnDate,
+//     passengersCount: passengers || 1,
+//     tripName,
+//     tripPersons,
+//     flight: selectedFlight
+//   ? [{
+//       airline: selectedFlight?.airline || null,
+//       airline_logo: selectedFlight?.airline_logo || null,
+//       price: selectedFlight?.price || null,
+//       departure_airport: selectedFlight?.segments?.[0]?.departure?.airport || null,
+//       arrival_airport: selectedFlight?.segments?.[selectedFlight?.segments.length - 1]?.arrival?.airport || null,
+//       departure_time: selectedFlight?.segments?.[0]?.departure?.time || null,
+//       arrival_time: selectedFlight?.segments?.[selectedFlight?.segments.length - 1]?.arrival?.time || null,
+//       total_duration: selectedFlight?.totalDuration || null,
+//       segments: selectedFlight?.segments || [],
+//     }]
+//   : [],
+
+//       hotel: selectedHotel
+//       ? [{
+//           name: selectedHotel?.name || null,
+//           location: arrivalCity || null,
+//           check_in_date: departureDate || null,
+//           check_out_date: returnDate || null,
+//           price: selectedHotel?.rate_per_night?.extracted_lowest || null,
+//           description: selectedHotel?.description || null,
+//           hotel_class: selectedHotel?.hotel_class || null,
+//           overall_rating: selectedHotel?.overall_rating || null,
+//           reviews: selectedHotel?.reviews || null,
+//           amenities: selectedHotel?.amenities || [],
+//           nearby_places: selectedHotel?.nearby_places || [],
+//           thumbnail: selectedHotel?.images?.[0]?.thumbnail || null,
+//         }]
+//       : [],
+//       restaurants: selectedRestaurants.map((restaurant) => ({
+//         title: restaurant.title,
+//         address: restaurant.address,
+//         price_range: restaurant.price,
+//         description: restaurant.description,
+//         thumbnail: restaurant.thumbnail,
+//         rating: restaurant.rating,
+//         reviews_original: restaurant.reviews_original,
+//         reviews: restaurant.reviews,
+//         type: restaurant.type,
+//       })),
+//     attractions: selectedAttractions.map((attraction) => ({
+//       title: attraction.title || 'No title',
+//       description: attraction.description || 'No description',
+//       thumbnail: attraction.thumbnail || null,
+//     })),
+//   };
+
+//   console.log('🚀 Final Travel Data (Before API Call):', travelData);
+
+//   try {
+//     const response = await createTravel(travelData, token);
+//     console.log('✅ Travel created successfully:', response);
+//     console.log('🆔 Travel ID from Response:', response.travelId);
+
+//   if (response && response.travelId) {
+//     navigate(`/summary/${response.travelId}`);
+//   } else {
+//     console.error('❌ Travel ID is missing in the response!');
+//     setShowErrorToast(true);
+//   }
+//   } catch (error) {
+//     console.error('❌ Error creating travel:', error);
+//     setShowErrorToast(true);
+//   }
+// };
 const handleFinish = async () => {
   console.log('🛠️ TripPersons State (Before API Call):', tripPersons);
   const token = localStorage.getItem('token');
@@ -221,10 +333,6 @@ const handleFinish = async () => {
     navigate('/login');
     return;
   }
-
-  // Wymuś pełną synchronizację stanu
-  const attractionsCopy = [...selectedAttractions];
-  console.log("🎢 Final Selected Attractions (Before API Call):", attractionsCopy);
 
   const travelData = {
     departureCity,
@@ -234,21 +342,31 @@ const handleFinish = async () => {
     passengersCount: passengers || 1,
     tripName,
     tripPersons,
-    flight: selectedFlight
-  ? [{
-      airline: selectedFlight?.airline || null,
-      airline_logo: selectedFlight?.airline_logo || null,
-      price: selectedFlight?.price || null,
-      departure_airport: selectedFlight?.segments?.[0]?.departure?.airport || null,
-      arrival_airport: selectedFlight?.segments?.[selectedFlight?.segments.length - 1]?.arrival?.airport || null,
-      departure_time: selectedFlight?.segments?.[0]?.departure?.time || null,
-      arrival_time: selectedFlight?.segments?.[selectedFlight?.segments.length - 1]?.arrival?.time || null,
-      total_duration: selectedFlight?.totalDuration || null,
-      segments: selectedFlight?.segments || [],
-    }]
-  : [],
-
-      hotel: selectedHotel
+    flights: [
+      {
+        airline: selectedOutboundFlight?.airline || null,
+        airline_logo: selectedOutboundFlight?.airline_logo || null,
+        price: selectedOutboundFlight?.price || null,
+        departure_airport: selectedOutboundFlight?.segments?.[0]?.departure?.airport || null,
+        arrival_airport: selectedOutboundFlight?.segments?.[selectedOutboundFlight?.segments.length - 1]?.arrival?.airport || null,
+        departure_time: selectedOutboundFlight?.segments?.[0]?.departure?.time || null,
+        arrival_time: selectedOutboundFlight?.segments?.[selectedOutboundFlight?.segments.length - 1]?.arrival?.time || null,
+        total_duration: selectedOutboundFlight?.totalDuration || null,
+        segments: selectedOutboundFlight?.segments || [],
+      },
+      {
+        airline: selectedReturnFlight?.airline || null,
+        airline_logo: selectedReturnFlight?.airline_logo || null,
+        price: selectedReturnFlight?.price || null,
+        departure_airport: selectedReturnFlight?.segments?.[0]?.departure?.airport || null,
+        arrival_airport: selectedReturnFlight?.segments?.[selectedReturnFlight?.segments.length - 1]?.arrival?.airport || null,
+        departure_time: selectedReturnFlight?.segments?.[0]?.departure?.time || null,
+        arrival_time: selectedReturnFlight?.segments?.[selectedReturnFlight?.segments.length - 1]?.arrival?.time || null,
+        total_duration: selectedReturnFlight?.totalDuration || null,
+        segments: selectedReturnFlight?.segments || [],
+      },
+    ],
+    hotel: selectedHotel
       ? [{
           name: selectedHotel?.name || null,
           location: arrivalCity || null,
@@ -264,17 +382,17 @@ const handleFinish = async () => {
           thumbnail: selectedHotel?.images?.[0]?.thumbnail || null,
         }]
       : [],
-      restaurants: selectedRestaurants.map((restaurant) => ({
-        title: restaurant.title,
-        address: restaurant.address,
-        price_range: restaurant.price,
-        description: restaurant.description,
-        thumbnail: restaurant.thumbnail,
-        rating: restaurant.rating,
-        reviews_original: restaurant.reviews_original,
-        reviews: restaurant.reviews,
-        type: restaurant.type,
-      })),
+    restaurants: selectedRestaurants.map((restaurant) => ({
+      title: restaurant.title,
+      address: restaurant.address,
+      price_range: restaurant.price,
+      description: restaurant.description,
+      thumbnail: restaurant.thumbnail,
+      rating: restaurant.rating,
+      reviews_original: restaurant.reviews_original,
+      reviews: restaurant.reviews,
+      type: restaurant.type,
+    })),
     attractions: selectedAttractions.map((attraction) => ({
       title: attraction.title || 'No title',
       description: attraction.description || 'No description',
@@ -282,24 +400,30 @@ const handleFinish = async () => {
     })),
   };
 
-  console.log('🚀 Final Travel Data (Before API Call):', travelData);
-
   try {
     const response = await createTravel(travelData, token);
     console.log('✅ Travel created successfully:', response);
-    console.log('🆔 Travel ID from Response:', response.travelId);
-
-  if (response && response.travelId) {
     navigate(`/summary/${response.travelId}`);
-  } else {
-    console.error('❌ Travel ID is missing in the response!');
-    setShowErrorToast(true);
-  }
   } catch (error) {
     console.error('❌ Error creating travel:', error);
     setShowErrorToast(true);
   }
 };
+
+const handleFlightsNextStep = () => {
+  if (areBothFlightsSelected()) {
+    console.log("✈️ Selected Outbound Flight:", selectedOutboundFlight);
+    console.log("✈️ Selected Return Flight:", selectedReturnFlight);
+    console.log("⏭️ Current Step Before Update:", currentStep);
+
+    setCurrentStep(3); // Przejdź do kroku 3 (hotele)
+
+    console.log("⏭️ Current Step After Update:", currentStep); // Powinno wskazywać 3
+  } else {
+    alert("Wybierz oba loty (wylot i powrót) przed przejściem dalej.");
+  }
+};
+
 
   
 
@@ -344,7 +468,7 @@ const handleFinish = async () => {
         )}
 
         {/* Krok 2: Loty */}
-        {currentStep === 2 && (
+        {/* {currentStep === 2 && (
           <FlightsBox
             onFlightSelect={handleFlightSelect}
             initialDepartureCity={departureCity}
@@ -354,7 +478,34 @@ const handleFinish = async () => {
             initialPassengers={passengers}
             isRedirectEnabled={false}
           />
-        )}
+        )} */}
+        {currentStep === 2 && (
+  <>
+    <FlightsBox
+       onOutboundFlightSelect={handleOutboundFlightSelect}
+       onReturnFlightSelect={handleReturnFlightSelect}
+       initialDepartureCity={departureCity}
+       initialArrivalCity={arrivalCity}
+       initialDepartureDate={departureDate}
+       initialReturnDate={returnDate}
+       initialPassengers={passengers}
+       isRedirectEnabled={false}
+    />
+    <button
+      className={styles.btnFlight}
+      onClick={() => {
+        console.log("🖱️ Next button clicked!");
+        handleFlightsNextStep();
+      }}
+      // onClick={handleFlightsNextStep}
+      disabled={!areBothFlightsSelected()}
+    >
+      Next
+    </button>
+  </>
+)}
+
+
 
         {/* Krok 3: Hotele */}
         {currentStep === 3 && (

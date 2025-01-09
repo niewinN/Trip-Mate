@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FlightSearchPanel from "../FlightSearchPanel/FlightSearchPanel";
 import HeaderIcon from "../HeaderIcon/HeaderIcon";
 import styles from "./FlightsBox.module.css";
@@ -11,6 +11,8 @@ import filters from "../../data/filters.json";
 import PlanButton from "../PlanButton/PlanButton";
 
 interface FlightsBoxProps {
+  onOutboundFlightSelect: (flight: any) => void;
+  onReturnFlightSelect: (flight: any) => void;
   onFlightSelect: (flight: any) => void;
   initialDepartureCity: string;
   initialArrivalCity: string;
@@ -23,6 +25,8 @@ interface FlightsBoxProps {
 }
 
 const FlightsBox: React.FC<FlightsBoxProps> = ({
+  onOutboundFlightSelect,
+  onReturnFlightSelect,
   onFlightSelect,
   initialDepartureCity,
   initialArrivalCity,
@@ -48,7 +52,12 @@ const FlightsBox: React.FC<FlightsBoxProps> = ({
     loading,
     error,
     fetchFlights,
+    outboundFlights,
+    returnFlights
   } = useFlightSearchContext();
+
+  const [selectedOutboundFlight, setSelectedOutboundFlight] = useState<any>(null);
+  const [selectedReturnFlight, setSelectedReturnFlight] = useState<any>(null)
 
   const hasFetched = useRef(false);
 
@@ -87,6 +96,29 @@ const FlightsBox: React.FC<FlightsBoxProps> = ({
       console.warn("onFlightSelect is not defined");
     }
   };
+
+  const handleOutboundFlightSelect = (flight: any) => {
+    console.log("🛫 Selected Outbound Flight:", flight);
+    onOutboundFlightSelect(flight); // Wywołaj funkcję rodzica
+  };
+
+  const handleReturnFlightSelect = (flight: any) => {
+    console.log("🛬 Selected Return Flight:", flight);
+    onReturnFlightSelect(flight); // Wywołaj funkcję rodzica
+  };
+  // const handleNextStep = () => {
+  //   if (selectedOutboundFlight && selectedReturnFlight) {
+  //     console.log("✅ Proceeding with selected flights:");
+  //     console.log("Outbound:", selectedOutboundFlight);
+  //     console.log("Return:", selectedReturnFlight);
+  //     onFlightSelect({
+  //       outbound: selectedOutboundFlight,
+  //       return: selectedReturnFlight,
+  //     });
+  //   } else {
+  //     alert("Wybierz oba loty (wylot i powrót) przed przejściem dalej.");
+  //   }
+  // };
 
   return (
     <div className={styles.flex}>
@@ -130,7 +162,9 @@ const FlightsBox: React.FC<FlightsBoxProps> = ({
         </div>
         {loading && <p>Loading...</p>}
         {error && <p>{error}</p>}
-        <FlightList flights={flights} onSelect={handleSelectFlight} isRedirectEnabled={isRedirectEnabled} googleFlightsUrl={googleFlightsUrl} />
+        <FlightList  selectedOutboundFlight={selectedOutboundFlight}
+  selectedReturnFlight={selectedReturnFlight} onSelectOutbound={handleOutboundFlightSelect}
+  onSelectReturn={handleReturnFlightSelect} outboundFlights={outboundFlights} returnFlights={returnFlights} flights={flights} onSelect={handleSelectFlight} isRedirectEnabled={isRedirectEnabled} googleFlightsUrl={googleFlightsUrl} />
       </div>
       {showPlanBtn && <PlanButton/>}
     </div>

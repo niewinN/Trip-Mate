@@ -64,3 +64,7 @@
         display: none;
     }
 }
+
+.btnFlight {
+  display: block;
+}
