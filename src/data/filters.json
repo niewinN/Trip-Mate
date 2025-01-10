@@ -1,44 +1,71 @@
 {
   "hotels": [
     {
-      "title": "Popular filters",
+      "title": "Price Range",
       "filters": [
-        { "id": "swimming_pool", "label": "Swimming Pool" },
-        { "id": "apartments", "label": "Apartments" },
-        { "id": "free_wifi", "label": "Free WiFi" },
-        { "id": "private_bathroom", "label": "Private Bathroom" },
-        { "id": "hotels", "label": "Hotels" },
-        { "id": "kitchen", "label": "Kitchen/Kitchenette" },
-        { "id": "parking", "label": "Parking" },
-        { "id": "stars", "label": "4 stars" }
+        { "id": "price_0_50", "label": "$0 - $50" },
+        { "id": "price_51_100", "label": "$51 - $100" },
+        { "id": "price_101_200", "label": "$101 - $200" },
+        { "id": "price_201_up", "label": "$201+" }
       ]
     },
     {
-      "title": "Facilities",
+      "title": "Hotel Class",
       "filters": [
+        { "id": "1_star", "label": "1 Star" },
+        { "id": "2_star", "label": "2 Stars" },
+        { "id": "3_star", "label": "3 Stars" },
+        { "id": "4_star", "label": "4 Stars" },
+        { "id": "5_star", "label": "5 Stars" }
+      ]
+    },
+    {
+      "title": "Rating",
+      "filters": [
+        { "id": "rating_1_2", "label": "1.0 - 2.0" },
+        { "id": "rating_2_3", "label": "2.1 - 3.0" },
+        { "id": "rating_3_4", "label": "3.1 - 4.0" },
+        { "id": "rating_4_5", "label": "4.1 - 5.0" }
+      ]
+    },
+    {
+      "title": "Amenities",
+      "filters": [
+        { "id": "free_wifi", "label": "Free Wi-Fi" },
         { "id": "parking", "label": "Parking" },
-        { "id": "free_wifi", "label": "Free WiFi" },
+        { "id": "pool", "label": "Pool" },
+        { "id": "spa", "label": "Spa" },
+        { "id": "gym", "label": "Gym" },
+        { "id": "pet_friendly", "label": "Pet Friendly" },
         { "id": "restaurant", "label": "Restaurant" },
-        { "id": "pets_allowed", "label": "Pets Allowed" },
-        { "id": "room_service", "label": "Room Service" }
+        { "id": "air_conditioning", "label": "Air Conditioning" }
       ]
     }
   ],
   "flights": [
     {
-      "title": "Airlines",
-      "filters": [
-        { "id": "delta", "label": "Delta Airlines" },
-        { "id": "american", "label": "American Airlines" },
-        { "id": "united", "label": "United Airlines" }
-      ]
-    },
-    {
       "title": "Stops",
       "filters": [
         { "id": "non_stop", "label": "Non-stop" },
-        { "id": "one_stop", "label": "1 stop" },
-        { "id": "two_stops", "label": "2+ stops" }
+        { "id": "one_stop", "label": "1 Stop" },
+        { "id": "two_stops", "label": "2+ Stops" }
+      ]
+    },
+    {
+      "title": "Airlines",
+      "filters": [
+        { "id": "lot", "label": "LOT Polish Airlines" },
+        { "id": "lufthansa", "label": "Lufthansa" },
+        { "id": "british_airways", "label": "British Airways" },
+        { "id": "wizz_air", "label": "Wizz Air" }
+      ]
+    },
+    {
+      "title": "Price Range",
+      "filters": [
+        { "id": "price_low", "label": "Cheapest" },
+        { "id": "price_medium", "label": "Affordable" },
+        { "id": "price_high", "label": "Premium" }
       ]
     }
   ],
@@ -54,7 +81,15 @@
       ]
     },
     {
-      "title": "Attraction Features",
+      "title": "Rating",
+      "filters": [
+        { "id": "4_plus", "label": "4+ Stars" },
+        { "id": "3_4", "label": "3-4 Stars" },
+        { "id": "below_3", "label": "Below 3 Stars" }
+      ]
+    },
+    {
+      "title": "Features",
       "filters": [
         { "id": "family_friendly", "label": "Family Friendly" },
         { "id": "wheelchair_accessible", "label": "Wheelchair Accessible" },
@@ -63,24 +98,32 @@
     }
   ],
   "restaurants": [
-    {
-      "title": "Cuisine Types",
-      "filters": [
-        { "id": "italian", "label": "Italian" },
-        { "id": "chinese", "label": "Chinese" },
-        { "id": "indian", "label": "Indian" },
-        { "id": "mexican", "label": "Mexican" },
-        { "id": "vegetarian", "label": "Vegetarian" }
-      ]
-    },
-    {
-      "title": "Restaurant Features",
-      "filters": [
-        { "id": "outdoor_seating", "label": "Outdoor Seating" },
-        { "id": "live_music", "label": "Live Music" },
-        { "id": "pet_friendly", "label": "Pet Friendly" },
-        { "id": "kids_menu", "label": "Kids' Menu" }
-      ]
-    }
-  ]
+  {
+    "title": "Cuisine Types",
+    "filters": [
+      { "id": "italian", "label": "Italian" },
+      { "id": "chinese", "label": "Chinese" },
+      { "id": "indian", "label": "Indian" },
+      { "id": "mexican", "label": "Mexican" },
+      { "id": "vegetarian", "label": "Vegetarian" }
+    ]
+  },
+  {
+    "title": "Price Range",
+    "filters": [
+      { "id": "low", "label": "$" },
+      { "id": "medium", "label": "$$" },
+      { "id": "high", "label": "$$$" }
+    ]
+  },
+  {
+    "title": "Rating",
+    "filters": [
+      { "id": "4_plus", "label": "4+ Stars" },
+      { "id": "3_4", "label": "3-4 Stars" },
+      { "id": "below_3", "label": "Below 3 Stars" }
+    ]
+  }
+]
+
 }

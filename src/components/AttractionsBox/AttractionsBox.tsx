@@ -30,29 +30,109 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
   const [attractions, setAttractions] = useState<any[]>([]);
   const [selectedAttractions, setSelectedAttractions] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
+  // useEffect(() => {
+  //   if (city) {
+  //     handleSearch(city);
+  //   }
+  // }, [city]);
+
+  // const handleSearch = async (searchCity: string) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:5000/api/data/attractions?location=${searchCity}`
+  //     );
+  //     const data = await response.json();
+  //     setAttractions(data);
+  //   } catch (error) {
+  //     console.error("❌ Error fetching attractions:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const handleAddAttraction = (attraction: any) => {
+  //   console.log("🎢 Selected Attraction:", attraction); // Debug
+  
+  //   setSelectedAttractions((prev) => {
+  //     const isAlreadySelected = prev.some((a) => a.title === attraction.title);
+  //     let updatedAttractions;
+  
+  //     if (isAlreadySelected) {
+  //       updatedAttractions = prev.filter((a) => a.title !== attraction.title);
+  //     } else {
+  //       updatedAttractions = [...prev, attraction];
+  //     }
+  
+  //     // Natychmiast aktualizujemy rodzica przez onAttractionSelect
+  //     onAttractionSelect(updatedAttractions);
+  
+  //     return updatedAttractions;
+  //   });
+  // };
+  
+  // const handleFinish = () => {
+  //   console.log("🏁 Final Selected Attractions (AttractionsBox.tsx):", selectedAttractions);
+  
+  //   const sanitizedAttractions = selectedAttractions.map((attraction) => ({
+  //     title: attraction.title || "No title",
+  //     description: attraction.description || "No description",
+  //     thumbnail: attraction.thumbnail || null,
+  //     rating: attraction.rating || 0,
+  //     reviews_original: attraction.reviews_original || "0",
+  //     reviews: attraction.reviews || 0,
+  //     address: attraction.address || "Unknown",
+  //   }));
+  
+  //   console.log("✅ Sanitized Attractions:", sanitizedAttractions);
+  
+  //   onAttractionSelect(sanitizedAttractions);
+  //   onFinish()
+  // };
   useEffect(() => {
-    if (city) {
-      handleSearch(city);
-    }
-  }, [city]);
+    fetchAttractions();
+  }, [city, selectedFilters]);
 
-  const handleSearch = async (searchCity: string) => {
+  const fetchAttractions = async () => {
     setLoading(true);
+    setError(null);
+
     try {
       const response = await fetch(
-        `http://localhost:5000/api/data/attractions?location=${searchCity}`
+        `http://localhost:5000/api/data/attractions?location=${city}&filters=${selectedFilters.join(",")}`
       );
       const data = await response.json();
       setAttractions(data);
-    } catch (error) {
-      console.error("❌ Error fetching attractions:", error);
+    } catch (err) {
+      console.error("❌ Error fetching attractions:", err);
+      setError("Error fetching attractions. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAddAttraction = (attraction: any) => {
+  const handleSearch = (newCity: string) => {
+    setCity(newCity);
+    setAttractions([]);
+    setSelectedFilters([]); // Reset filters on new city search
+  };
+
+  const handleFilterChange = (filters: string[]) => {
+    setSelectedFilters(filters);
+  };
+
+  // const handleAddAttraction = (attraction: any) => {
+  //   setSelectedAttractions((prev) => {
+  //     const isAlreadySelected = prev.some((a) => a.title === attraction.title);
+  //     return isAlreadySelected
+  //       ? prev.filter((a) => a.title !== attraction.title) // Remove if already selected
+  //       : [...prev, attraction];
+  //   });
+  // };
+    const handleAddAttraction = (attraction: any) => {
     console.log("🎢 Selected Attraction:", attraction); // Debug
   
     setSelectedAttractions((prev) => {
@@ -71,10 +151,8 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
       return updatedAttractions;
     });
   };
-  
+
   const handleFinish = () => {
-    console.log("🏁 Final Selected Attractions (AttractionsBox.tsx):", selectedAttractions);
-  
     const sanitizedAttractions = selectedAttractions.map((attraction) => ({
       title: attraction.title || "No title",
       description: attraction.description || "No description",
@@ -84,11 +162,9 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
       reviews: attraction.reviews || 0,
       address: attraction.address || "Unknown",
     }));
-  
-    console.log("✅ Sanitized Attractions:", sanitizedAttractions);
-  
+
     onAttractionSelect(sanitizedAttractions);
-    onFinish()
+    onFinish();
   };
   
   
@@ -112,7 +188,7 @@ const AttractionsBox: React.FC<AttractionsBoxProps> = ({
           </div>
         )}
         </div>
-        <FilterPanel sections={filters.attractions} />
+        <FilterPanel sections={filters.attractions} onFilterChange={handleFilterChange} />
       </div>
 
       {/* Prawa Kolumna */}

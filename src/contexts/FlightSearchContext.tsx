@@ -134,6 +134,7 @@ export const FlightSearchProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [googleFlightsUrl, setGoogleFlightsUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  
 
   const fetchFlights = async () => {
     setLoading(true);

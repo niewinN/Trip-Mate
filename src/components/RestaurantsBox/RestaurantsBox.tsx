@@ -35,33 +35,106 @@ const RestaurantsBox: React.FC<RestaurantsBoxProps> = ({
   const [selectedRestaurants, setSelectedRestaurants] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const restaurantFilters = filters.restaurants;
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
+
+  // useEffect(() => {
+  //   fetchRestaurants();
+  // }, [city, selectedFilters]);
+
+  // const fetchRestaurants = async () => {
+  //   setLoading(true);
+  //   setError(null);
+
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:5000/api/data/restaurants?location=${city}&filters=${selectedFilters.join(",")}`
+  //     );
+  //     const data = await response.json();
+  //     setRestaurants(data);
+  //   } catch (err) {
+  //     setError("Error fetching restaurants. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const handleFilterChange = (filters: string[]) => {
+  //   setSelectedFilters(filters);
+  // };
+
+  // useEffect(() => {
+  //   if (city) {
+  //     handleSearch(city);
+  //   }
+  // }, [city]);
+
+  // const handleSearch = async (city: string) => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch(`http://localhost:5000/api/data/restaurants?location=${city}`);
+  //     const data = await response.json();
+  //     setRestaurants(data);
+  //   } catch (error) {
+  //     console.error("❌ Error fetching restaurants:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const handleAddRestaurant = (restaurant: any) => {
+  //   setSelectedRestaurants((prev) => {
+  //     const isAlreadySelected = prev.some((r) => r.title === restaurant.title);
+  //     if (isAlreadySelected) {
+  //       return prev.filter((r) => r.title !== restaurant.title); // Usuń, jeśli już jest zaznaczone
+  //     }
+  //     return [...prev, restaurant];
+  //   });
+  // };
+
+  // const handleNext = () => {
+  //   selectedRestaurants.forEach((restaurant) => onRestaurantSelect(restaurant));
+  //   onNext(); // Przejdź do kolejnego kroku
+  // };
   useEffect(() => {
-    if (city) {
-      handleSearch(city);
-    }
-  }, [city]);
+    fetchRestaurants();
+  }, [city, selectedFilters]);
 
-  const handleSearch = async (city: string) => {
+  const fetchRestaurants = async () => {
     setLoading(true);
+    setError(null);
+
     try {
-      const response = await fetch(`http://localhost:5000/api/data/restaurants?location=${city}`);
+      const response = await fetch(
+        `http://localhost:5000/api/data/restaurants?location=${city}&filters=${selectedFilters.join(",")}`
+      );
       const data = await response.json();
       setRestaurants(data);
-    } catch (error) {
-      console.error("❌ Error fetching restaurants:", error);
+    } catch (err) {
+      console.error("❌ Error fetching restaurants:", err);
+      setError("Error fetching restaurants. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  const handleSearch = (newCity: string) => {
+    setCity(newCity); // Aktualizacja miasta
+    setRestaurants([]); // Wyczyść listę restauracji przed nowym wyszukiwaniem
+    setSelectedFilters([]); // Zresetuj filtry przy zmianie miasta
+  };
+
+  const handleFilterChange = (filters: string[]) => {
+    setSelectedFilters(filters);
+  };
+
   const handleAddRestaurant = (restaurant: any) => {
     setSelectedRestaurants((prev) => {
       const isAlreadySelected = prev.some((r) => r.title === restaurant.title);
-      if (isAlreadySelected) {
-        return prev.filter((r) => r.title !== restaurant.title); // Usuń, jeśli już jest zaznaczone
-      }
-      return [...prev, restaurant];
+      return isAlreadySelected
+        ? prev.filter((r) => r.title !== restaurant.title) // Usuń, jeśli już jest zaznaczone
+        : [...prev, restaurant];
     });
   };
 
@@ -89,7 +162,7 @@ const RestaurantsBox: React.FC<RestaurantsBoxProps> = ({
             </div>
           )}
         </div>
-        <FilterPanel sections={restaurantFilters} />
+        <FilterPanel sections={restaurantFilters} onFilterChange={handleFilterChange} />
       </div>
 
       {/* Prawa kolumna */}

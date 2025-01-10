@@ -57,11 +57,15 @@ const HotelsBox: React.FC<HotelsBoxProps> = ({
     }
   }, [arrivalCity, departureDate, returnDate, passengers]);
 
-  // Funkcja do pobierania danych hoteli
+  // const hotelFilters = filters.hotels;
+  const [selectedFilters, setSelectedFilters] = useState<string[]>([]); // Stan zaznaczonych filtrów
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+
+
   const fetchHotels = async () => {
     setLoading(true);
     setError(null);
-
+  
     try {
       const response = await axios.get('http://localhost:5000/api/data/hotels', {
         params: {
@@ -70,6 +74,7 @@ const HotelsBox: React.FC<HotelsBoxProps> = ({
           check_out_date: checkOutDate,
           guests,
           rooms,
+          filters: activeFilters.join(','), // Dodaj filtry jako parametr
         },
       });
       setHotels(response.data);
@@ -79,6 +84,45 @@ const HotelsBox: React.FC<HotelsBoxProps> = ({
       setLoading(false);
     }
   };
+  
+
+  // const handleFilterChange = (filters: string[]) => {
+  //   setSelectedFilters(filters);
+  //   fetchHotels(); // Pobierz dane na nowo, uwzględniając nowe filtry
+  // };
+  // const handleFilterChange = (filter: string, isChecked: boolean) => {
+  //   setActiveFilters((prevFilters) =>
+  //     isChecked
+  //       ? [...prevFilters, filter] // Dodaj filtr
+  //       : prevFilters.filter((f) => f !== filter) // Usuń filtr
+  //   );
+  // };
+  const handleFilterChange = (filters: string[]) => {
+    setActiveFilters(filters);
+  };
+
+  // Funkcja do pobierania danych hoteli
+  // const fetchHotels = async () => {
+  //   setLoading(true);
+  //   setError(null);
+
+  //   try {
+  //     const response = await axios.get('http://localhost:5000/api/data/hotels', {
+  //       params: {
+  //         q: query,
+  //         check_in_date: checkInDate,
+  //         check_out_date: checkOutDate,
+  //         guests,
+  //         rooms,
+  //       },
+  //     });
+  //     setHotels(response.data);
+  //   } catch (err) {
+  //     setError('Błąd podczas pobierania hoteli');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleSearch = () => {
     fetchHotels();
@@ -108,7 +152,7 @@ const HotelsBox: React.FC<HotelsBoxProps> = ({
             onSearch={handleSearch}
           />
         </div>
-        <FilterPanel sections={hotelFilters} />
+        <FilterPanel sections={hotelFilters} onFilterChange={handleFilterChange} />
       </div>
       <div className={styles.second}>
         <div className={styles.displayDesktop}>

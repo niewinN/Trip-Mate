@@ -11,8 +11,6 @@ import filters from "../../data/filters.json";
 import PlanButton from "../PlanButton/PlanButton";
 
 interface FlightsBoxProps {
-  onOutboundFlightSelect: (flight: any) => void;
-  onReturnFlightSelect: (flight: any) => void;
   onFlightSelect: (flight: any) => void;
   initialDepartureCity: string;
   initialArrivalCity: string;
