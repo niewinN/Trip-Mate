@@ -4,20 +4,19 @@
 }
 
 .title {
-    font-size: 1.8rem; /* Zwiększony rozmiar czcionki */
+    font-size: 1.8rem;
     font-weight: bold;
     color: #007bff;
-    margin-bottom: 50px; /* Mniejszy odstęp */
+    margin-bottom: 50px; 
 }
 
 .axis {
     display: flex;
     align-items: center;
-    justify-content: space-around; /* Równomierne rozmieszczenie */
-    width: 100%; /* Ustaw szerokość osi */
-    /* margin: 0 auto; */
+    justify-content: space-around;
+    width: 100%; 
     position: relative;
-    height: 6px; /* Większa wysokość osi dla lepszej widoczności */
+    height: 6px;
     background-color: #ccc;
     border-radius: 3px;
     margin-top: 70px;
@@ -29,7 +28,7 @@
     display: flex;
     justify-content: space-between;
     height: 4px;
-    flex-grow: 1; /* Równe proporcje dla segmentów */
+    flex-grow: 1;
 }
 
 .segment::before {
@@ -40,17 +39,17 @@
     height: 100%;
     width: 100%;
     background-color: transparent;
-    border-radius: 3px; /* Zaokrąglone końce aktywnego segmentu */
+    border-radius: 3px;
 }
 
 .active {
-    background-color: #007bff; /* Kolor aktywnego segmentu */
+    background-color: #007bff; 
     z-index: 1;
 }
 
 .label {
     position: absolute;
-    top: -35px; /* Większy odstęp nad osią */
+    top: -35px;
     font-size: 1.2rem;
     font-weight: bold;
     color: #555;

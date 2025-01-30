@@ -16,7 +16,7 @@ const MultimediaCard: React.FC<MultimediaCardProps> = ({ mediaUrl, mediaType: in
   // const { travelId } = useParams<{ travelId: string }>();
   const [mediaPreview, setMediaPreview] = useState<string | null>(mediaUrl || null);
   const [mediaType, setMediaType] = useState<'image' | 'video' | null>(initialMediaType || null);
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  // const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [isCameraActive, setIsCameraActive] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
   const [showToast, setShowToast] = useState<boolean>(false);
@@ -29,12 +29,12 @@ const MultimediaCard: React.FC<MultimediaCardProps> = ({ mediaUrl, mediaType: in
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunks = useRef<Blob[]>([]);
 
-  const handleUpload = async (file: File | Blob) => {
-    if (onUpload) {
-      await onUpload(file);
-      setIsUploaded(true); // Dezaktywuj kartę po przesłaniu
-    }
-  };
+  // const handleUpload = async (file: File | Blob) => {
+  //   if (onUpload) {
+  //     await onUpload(file);
+  //     setIsUploaded(true); // Dezaktywuj kartę po przesłaniu
+  //   }
+  // };
 
   /** 🎥 Aktywacja kamery */
   const startCamera = () => {
@@ -54,13 +54,11 @@ const capturePhoto = async () => {
         const blob = await response.blob();
         const file = new File([blob], `photo-${Date.now()}.png`, { type: 'image/png' });
 
-        console.log('✅ Photo captured successfully');
-
         if (onUpload && !isUploading) {
           await onUpload(file);
-          setIsUploaded(true); // Oznacz jako przesłane
-          setMediaPreview(null); // Wyczyść podgląd
-          setMediaType(null); // Wyczyść typ multimediów
+          setIsUploaded(true);
+          setMediaPreview(null); 
+          setMediaType(null); 
         }
       } catch (error) {
         console.error('❌ Error capturing photo:', error);
@@ -71,15 +69,18 @@ const capturePhoto = async () => {
   }
 };
 
+
+
 /** 📁 Dodawanie pliku z komputera */
+
 const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
   const file = event.target.files?.[0];
   if (file && onUpload) {
     try {
       await onUpload(file);
       setIsUploaded(true);
-      setMediaPreview(null); // Wyczyść podgląd
-      setMediaType(null); // Wyczyść typ multimediów
+      setMediaPreview(null);
+      setMediaType(null);
     } catch (error) {
       console.error('❌ Error handling file upload in parent:', error);
     }
@@ -88,12 +89,15 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 
+
+
   /** 🎥 Rozpoczęcie nagrywania */
+
   const startRecording = () => {
     if (webcamRef.current && webcamRef.current.stream) {
       recordedChunks.current = [];
       const mediaRecorder = new MediaRecorder(webcamRef.current.stream, {
-        mimeType: 'video/webm',
+        mimeType: 'video/webm;codecs=vp8,opus',
       });
       mediaRecorderRef.current = mediaRecorder;
       mediaRecorder.start();
@@ -103,7 +107,6 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
           recordedChunks.current.push(event.data);
         }
       };
-
       setIsRecording(true);
     }
   };
@@ -119,16 +122,13 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setMediaType('video');
   
         try {
-          console.log('✅ Video recording stopped successfully');
-  
-          // Przekazanie pliku do funkcji `onUpload`
           const file = new File([blob], `video-${Date.now()}.webm`, { type: 'video/webm' });
   
           if (onUpload) {
             await onUpload(file);
-      setIsUploaded(true);
-      setMediaPreview(null); // Wyczyść podgląd
-      setMediaType(null); // Wyczyść typ multimediów
+            setIsUploaded(true);
+            setMediaPreview(null);
+            setMediaType(null);
           }
         } catch (error) {
           console.error('❌ Error processing video:', error);
@@ -140,6 +140,7 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     }
   };
   
+
 
   /** 🛑 Zatrzymanie kamery */
   const stopCamera = () => {
@@ -217,7 +218,7 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
       {/* Kamera */}
       {isCameraActive && (
         <div className={styles.cameraOverlay}>
-          <Webcam ref={webcamRef} screenshotFormat="image/png" className={styles.cameraLargePreview} />
+          <Webcam ref={webcamRef} screenshotFormat="image/png" className={styles.cameraLargePreview} audio={true} />
           <div className={styles.cameraControls}>
             {!isRecording ? (
               <>
@@ -246,7 +247,7 @@ const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         <div className={styles.mediaContainer} onClick={toggleFullscreenPreview}>
           {mediaType === 'video' ? (
             <video controls className={styles.mediaPreview}>
-              <source src={mediaPreview} type="video/mp4" />
+              <source src={mediaPreview} type="video/webm" />
             </video>
           ) : (
             <img src={mediaPreview} alt="Uploaded Media" className={styles.mediaPreview} />

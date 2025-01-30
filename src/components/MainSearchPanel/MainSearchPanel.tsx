@@ -19,22 +19,22 @@ const MainSearchPanel: React.FC = () => {
 				<SearchField
 					label='Flying from'
 					value={flyingFrom}
-					onChange={e => setFlyingFrom(e.target.value)} // Dynamicznie zmienia wartość
+					onChange={e => setFlyingFrom(e.target.value)}
 				/>
 				<SearchField
 					label='Flying to'
 					value={flyingTo}
-					onChange={e => setFlyingTo(e.target.value)} // Dynamicznie zmienia wartość
+					onChange={e => setFlyingTo(e.target.value)} 
 				/>
 				<DateField
 					label='Depart'
-					value={departDate ? departDate.toISOString().split("T")[0] : ""} // Formatowanie daty jako 'YYYY-MM-DD'
-					onChange={(date: Date) => setDepartDate(date)} // Ustawienie daty jako obiekt Date
+					value={departDate ? departDate.toISOString().split("T")[0] : ""} 
+					onChange={(date: Date) => setDepartDate(date)} 
 				/>
 				<DateField
 					label='Return'
-					value={returnDate ? returnDate.toISOString().split("T")[0] : ""} // Formatowanie daty jako 'YYYY-MM-DD'
-					onChange={(date: Date) => setReturnDate(date)} // Ustawienie daty jako obiekt Date
+					value={returnDate ? returnDate.toISOString().split("T")[0] : ""}
+					onChange={(date: Date) => setReturnDate(date)} 
 				/>
 				<StartButton />
 			</div>

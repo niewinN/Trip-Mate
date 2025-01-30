@@ -253,66 +253,6 @@ export const createTravel = async (req: AuthenticatedRequest, res: Response, nex
       );
     }
 
-   // ✅ **Zapisz loty**
-  //  if (req.body.flight && req.body.flight.length > 0) {
-  //   console.log('✈️ Flights Data Received:', req.body.flight);
-  
-  //   const mappedFlights = req.body.flight.map((flight: FlightData) => {
-  //     const segments = Array.isArray(flight.segments)
-  //       ? flight.segments
-  //       : flight.segments
-  //       ? JSON.parse(flight.segments)
-  //       : [];
-  
-  //     const departureTime = flight.departure_time
-  //       ? new Date(flight.departure_time).toISOString()
-  //       : segments[0]?.departure?.time
-  //       ? new Date(segments[0].departure.time).toISOString()
-  //       : null;
-  
-  //     const arrivalTime = flight.arrival_time
-  //       ? new Date(flight.arrival_time).toISOString()
-  //       : segments[segments.length - 1]?.arrival?.time
-  //       ? new Date(segments[segments.length - 1].arrival.time).toISOString()
-  //       : null;
-  
-  //     if (!departureTime || !arrivalTime) {
-  //       throw new Error('🛑 Missing required departure_time or arrival_time');
-  //     }
-  
-  //     console.log('🛠️ Final Mapped Flight Data:', {
-  //       travel_id: newTravel.id,
-  //       airline: flight.airline,
-  //       airline_logo: flight.airline_logo,
-  //       price: flight.price,
-  //       departure_airport: flight.departure_airport || segments[0]?.departure?.airport || 'N/A',
-  //       arrival_airport: flight.arrival_airport || segments[segments.length - 1]?.arrival?.airport || 'N/A',
-  //       departure_time: departureTime,
-  //       arrival_time: arrivalTime,
-  //       total_duration: flight.total_duration || 0,
-  //       segments: JSON.stringify(segments),
-  //     });
-  
-  //     return {
-  //       travel_id: newTravel.id,
-  //       airline: flight.airline || 'N/A',
-  //       airline_logo: flight.airline_logo || null,
-  //       price: flight.price || 0,
-  //       departure_airport:
-  //         flight.departure_airport || segments[0]?.departure?.airport || 'N/A',
-  //       arrival_airport:
-  //         flight.arrival_airport || segments[segments.length - 1]?.arrival?.airport || 'N/A',
-  //       departure_time: departureTime,
-  //       arrival_time: arrivalTime,
-  //       total_duration: flight.total_duration || 0,
-  //       segments: JSON.stringify(segments),
-  //     };
-  //   });
-  
-  //   console.log('✈️ Flights ready for bulkCreate:', mappedFlights);
-  
-  //   await Flight.bulkCreate(mappedFlights, { transaction });
-  // }
   if (flights && flights.length > 0) {
     console.log('✈️ Flights Data Received:', flights);
   

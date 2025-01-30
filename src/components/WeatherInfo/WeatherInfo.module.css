@@ -1,38 +1,3 @@
-/* .container {
-	position: relative;
-	display: flex;
-	flex-direction: row;
-	color: #fff;
-	font-size: 1.6rem;
-	align-items: center;
-	justify-content: space-around;
-	font-weight: bold;
-	padding: 1rem 0;
-}
-
-.container::before {
-	top: 0;
-	display: block;
-	position: absolute;
-	content: "";
-	height: 2px;
-	width: 95%;
-	background-color: #fff;
-}
-
-.container::after {
-	bottom: 0;
-	display: block;
-	position: absolute;
-	content: "";
-	height: 2px;
-	width: 95%;
-	background-color: #fff;
-}
-
-.container div {
-	text-align: center;
-} */
 .container {
 	display: flex;
 	flex-direction: column;

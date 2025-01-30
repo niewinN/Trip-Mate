@@ -1,47 +1,41 @@
-/* Kontener dla hamburgera i menu */
 html, body {
-    overflow-x: hidden; /* Zapobieganie przewijaniu poziomemu */
+    overflow-x: hidden; 
     margin: 0;
     padding: 0;
   }
   
   html.no-scroll, body.no-scroll {
-    overflow: hidden; /* Ukrycie przewijania, gdy menu jest otwarte */
+    overflow: hidden; 
   }
 
 .container {
     position: relative;
   }
   
-  /* Hamburger wrapper z przyciskiem */
   .hamburgerWrapper {
     position: relative;
-    /* padding-right: 20px; */
-    z-index: 1001;  /* Hamburger na wierzchu */
+    z-index: 1001; 
   }
-  
-  /* Warstwa zakrywająca całą stronę (overlay) */
+
   .overlay {
     position: fixed;
     top: 0;
-    right: -110%; /* Początkowa pozycja, poza ekranem */
-    width: 100vw; /* Użyj 100vw, aby szerokość była dokładnie na szerokość okna */
-    height: 100vh; /* Użyj 100vh, aby wysokość była dokładnie na wysokość okna */
+    right: -110%;
+    width: 100vw; 
+    height: 100vh; 
     background-color: rgba(42, 47, 211, 0.92);
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: right 0.3s ease; /* Animacja przesuwania menu z prawej */
+    transition: right 0.3s ease; 
     z-index: 1000;
-    overflow: hidden; /* Zablokowanie przewijania w overlay */
+    overflow: hidden; 
   }
   
-  /* Po kliknięciu - menu wysuwa się z prawej strony */
   .overlay.open {
-    right: 0;  /* Menu pojawia się na ekranie */
+    right: 0;  
   }
   
-  /* Nawigacja w wysuwanym menu */
   .nav {
     text-align: center;
   }

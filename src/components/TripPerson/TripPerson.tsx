@@ -30,7 +30,7 @@ const TripPerson: React.FC<TripPersonProps> = ({ initialName = 'Name...', onName
       }
 
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" }, // Przednia kamera na telefonach
+        video: { facingMode: "user" },
       });
 
       const video = document.createElement("video");
@@ -46,7 +46,7 @@ const TripPerson: React.FC<TripPersonProps> = ({ initialName = 'Name...', onName
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageData = canvas.toDataURL("image/png");
         setImage(imageData); // Aktualizacja lokalnego stanu
-        onImageChange(imageData); // Przekazanie zdjęcia do głównego komponentu
+        onImageChange(imageData);
       }
 
       stream.getTracks().forEach((track) => track.stop());

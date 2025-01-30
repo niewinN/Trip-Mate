@@ -7,16 +7,16 @@
   }
   
   .icon {
-    font-size: 4rem; /* Rozmiar ikonki */
-    color: #007bff; /* Kolor ikonki */
+    font-size: 4rem;
+    color: #007bff;
     text-align: right;
     margin-right: 20px;
   }
   
   .title {
-    font-size: 4rem; /* Rozmiar tekstu */
+    font-size: 4rem;
     font-weight: bold;
-    color: #007bff; /* Kolor tekstu */
-    text-transform: uppercase; /* Duże litery */
+    color: #007bff; 
+    text-transform: uppercase; 
   }
   

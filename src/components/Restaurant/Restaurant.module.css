@@ -17,10 +17,6 @@
   box-shadow: 0 0 10px #007bff;
 }
 
-.restaurantCard:hover {
-  /* transform: scale(1.02); */
-}
-
 /* Dodaj przycisk w prawym górnym rogu */
 .addToPlan {
   position: absolute;

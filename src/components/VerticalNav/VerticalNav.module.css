@@ -1,13 +1,12 @@
 .verticalNav {
-    position: absolute; /* Teraz jest pozycjonowane względem rodzica (Wrapper) */
-    right: 1%; /* Przyklej do prawej strony kontenera */
-    bottom: 8%; /* Wyśrodkowanie w pionie */
-    /* transform: translateY(-50%); */
+    position: absolute;
+    right: 1%;
+    bottom: 8%; 
     display: flex;
-    flex-direction: column; /* Ikonki jedna pod drugą */
-    align-items: center; /* Wyśrodkowanie ikon poziomo */
-    gap: 40px; /* Odstęp między ikonami */
-    z-index: 10; /* Zapewnienie, że będzie nad innymi elementami w obrębie Wrappera */
+    flex-direction: column; 
+    align-items: center; 
+    gap: 40px;
+    z-index: 10; 
 }
 
 .navItem {

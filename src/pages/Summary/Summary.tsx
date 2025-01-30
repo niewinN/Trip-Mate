@@ -9,6 +9,8 @@ import Navbar from "../../components/Navbar/Navbar";
 import Wrapper from "../../components/Wrapper/Wrapper";
 import MultimediaCard from "../../components/MultimediaCard/MultimediaCard";
 import axios from "axios";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 interface TripPersonProps {
   name: string;
@@ -25,6 +27,30 @@ const Summary: React.FC = () => {
   const [multimediaList, setMultimediaList] = useState<any[]>([]);
   // const [multimediaFiles, setMultimediaFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false); // Flaga stanu
+
+  const generatePDF = async () => {
+    const content = document.getElementById("summaryContent");
+    if (!content) {
+      console.error("Nie znaleziono elementu o ID 'summaryContent'.");
+      return;
+    }
+
+    try {
+      // Tworzenie obrazu canvas z HTML
+      const canvas = await html2canvas(content);
+      const imgData = canvas.toDataURL("image/png");
+      
+      // Generowanie PDF
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`${tripName || "Summary"}.pdf`);
+    } catch (error) {
+      console.error("❌ Błąd generowania PDF:", error);
+    }
+  };
 
 
   useEffect(() => {
@@ -400,6 +426,9 @@ const handleMediaUpload = async (file: File) => {
               ➕ Dodaj więcej
             </button>
           </div>
+          {/* <button className={styles.pdfButton} onClick={generatePDF}>
+          📄 Pobierz PDF
+        </button> */}
         </section>
       </Wrapper>
     </div>

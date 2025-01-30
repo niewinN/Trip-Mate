@@ -2,10 +2,6 @@
     position: relative;
     width: 100%;
     background-color: #fff;
-    /* margin-top: 60px; */
-    /* padding: 1rem; */
-    /* border-top-left-radius: 12px;
-    border-top-right-radius: 12px; */
 
     @media (min-width: 992px) {
         min-width: 400px;
